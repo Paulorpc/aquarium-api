@@ -10,7 +10,7 @@ CREATE TABLE Aquario
  `dtAquisicao`   datetime(3) NULL ,
  `dtInicio`      datetime(3) NOT NULL ,
  `dtFinal`       datetime(3) NULL ,
- `tipoAgua`      char(1) NULL ,
+ `tipoAgua`      enum('Doce', 'Salgada') NOT NULL ,
  `tamanho`       int NULL ,
  `volume`        int NULL ,
  `iluminacao`    varchar(50) NULL ,
@@ -47,19 +47,19 @@ CREATE TABLE Biota
  `idBiota`        int NOT NULL ,
  `nome`           varbinary(50) NOT NULL ,
  `dtAquisicao`    datetime(3) NOT NULL ,
+ `dtNascimento`   datetime(3) NOT NULL ,
+ `dtObito`        datetime(3) NOT NULL ,
  `idAquario`      int NOT NULL ,
  `tipoBiota`      int NULL ,
  `genero`         char(1) NULL ,
  `vlrUnitario`    decimal(15,4) NULL ,
  `qtde`           smallint NULL ,
- `status`         varchar(50) NULL ,
  `foto`           longblob NULL ,
- `nota`           decimal(4,2) NULL ,
+ `avaliacao`      decimal(4,2) NULL ,
  `observacao`     longtext NULL ,
  `familia`        varchar(50) NULL ,
  `nomeCientifico` varchar(50) NULL ,
  `nomePopular`    varchar(50) NULL ,
- `dtNascimento`   datetime(3) NULL ,
  `dtCadastro`     datetime(3) NOT NULL ,
  `dtAtualizacao`  datetime(3) NOT NULL ,
 
@@ -154,24 +154,27 @@ CREATE TABLE Parametro
 
 -- ************************************** [FaunaFlora]
 
-CREATE TABLE FaunaFlora
+CREATE TABLE Organismo
 (
- `idFaunaFlora`    int NOT NULL ,
+ `idOrganismo`    int NOT NULL ,
  `nome`            varchar(50) NOT NULL ,
  `nomeCientifico`  varchar(50) NULL ,
  `nomePopular`     varchar(50) NULL ,
- `familia`         varchar(50) NULL ,
- `nota`            decimal(4,2) NULL ,
+ `avaliacao`       decimal(4,2) NULL ,
  `foto`            longblob NULL ,
- `características` longtext NULL ,
- `porte`           char(1) NULL ,
- `tipoAgua`        char(1) NOT NULL ,
- `dtCadastro`      datetime(3) NOT NULL ,
- `dtAtualizacao`   datetime(3) NOT NULL ,
- `observacao`      longtext NULL ,
+ `tipoAgua`         enum('Doce', 'Salgada') NOT NULL,
+ `nivelCuidado`     enum('Iniciante', 'Intermediário', 'Avançado') NULL,
+ `disposicao`       enum('Pacífico', 'Semiagressivo', 'Agressivo') NULL,
+ `volumeMinAquario` int NULL,
+ `alimentacao`      varchar(50) NULL ,
+ `regiao`		    varchar(50) NULL ,
+ `tamanho`          enum('Pequeno', 'Médio', 'Grande') NULL,
+ `observacao`       longtext NULL ,
+ `dtCadastro`       datetime(3) NOT NULL ,
+ `dtAtualizacao`    datetime(3) NOT NULL , 
 
 
- CONSTRAINT `PK_faunaflora` PRIMARY KEY (`idFaunaFlora` ASC)
+ CONSTRAINT `PK_organismo` PRIMARY KEY (`idOrganismo` ASC)
 );
 
 
@@ -228,7 +231,7 @@ CREATE TABLE TipoAquario
 (
  `idTipoAquario` int NOT NULL ,
  `tipo`          varchar(50) NOT NULL ,
- `tipoAgua`      char(1) NOT NULL ,
+ `tipoAgua`      enum('Doce', 'Salgada') NOT NULL ,
  `status`        tinyint NOT NULL ,
  `descricao`     longtext NOT NULL ,
  `dtCadastro`    datetime(3) NOT NULL ,
