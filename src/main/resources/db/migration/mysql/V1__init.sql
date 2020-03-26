@@ -7,7 +7,6 @@ CREATE TABLE Aquario
 (
  `idAquario`     int NOT NULL ,
  `nome`          varchar(50) NOT NULL ,
- `dtAquisicao`   datetime(3) NULL ,
  `dtInicio`      datetime(3) NOT NULL ,
  `dtFinal`       datetime(3) NULL ,
  `tipoAgua`      enum('Doce', 'Salgada') NOT NULL ,

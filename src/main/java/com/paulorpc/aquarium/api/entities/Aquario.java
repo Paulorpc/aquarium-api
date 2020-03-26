@@ -1,35 +1,67 @@
 package com.paulorpc.aquarium.api.entities;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import javax.persistence.*;
+
+
+@Entity
 public class Aquario {
 
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int idAquario;
+	
+	@Column(name="nome", nullable=false)
 	private String nome;
-	private LocalDate dtAquisicao;
+	
+	@Column(name="dtInicio", nullable=false)
 	private LocalDateTime dtInicio;
+	
+	@Column(name="dtFinal", nullable=true)
 	private LocalDateTime dtFinal;
+	
+	@Column(name="tipoAgua", nullable=true)
 	private String tipoAgua;
+	
+	@Column(name="tamanho", nullable=true)
 	private int tamanho;
+	
+	@Column(name="volume", nullable=true)
 	private int volume;
+	
+	@Column(name="iluminacao", nullable=true)
 	private String iluminacao;
+	
+	@Column(name="filtragem", nullable=true)
 	private String filtragem;
+	
+	@Column(name="sistemaCO2", nullable=true)
 	private String sistemaCO2;
+	
+	@Column(name="dosagem", nullable=true)
 	private String dosagem;
+	
+	@Column(name="substrato", nullable=true)
 	private String substrato;
+	
 	// private parametros;
-	private int status;
 	// private foto;
+	
+	@Column(name="observacao", nullable=true)
 	private String observacao;
+	
+	@Column(name="idTipoAquario", nullable=true)
 	private int idTipoAquario;
-	private LocalDateTime dtCadastro;
+	
+	@Column(name="dtCadastro", nullable=false)
+	private LocalDateTime dtCadastro;	
+	
+	@Column(name="dtAtualizacao", nullable=false)
 	private LocalDateTime dtAtualizacao;
 	
 	
-	public Aquario() {
-		
-	}
+	public Aquario() {}
 	
 	
 	public int getIdAquario() {
@@ -46,14 +78,6 @@ public class Aquario {
 
 	public void setNome(String nome) {
 		this.nome = nome;
-	}
-
-	public LocalDate getDtAquisicao() {
-		return dtAquisicao;
-	}
-
-	public void setDtAquisicao(LocalDate dtAquisicao) {
-		this.dtAquisicao = dtAquisicao;
 	}
 
 	public LocalDateTime getDtInicio() {
@@ -136,14 +160,6 @@ public class Aquario {
 		this.substrato = substrato;
 	}
 
-	public int getStatus() {
-		return status;
-	}
-
-	public void setStatus(int status) {
-		this.status = status;
-	}
-
 	public String getObservacao() {
 		return observacao;
 	}
@@ -175,5 +191,29 @@ public class Aquario {
 	public void setDtAtualizacao(LocalDateTime dtAtualizacao) {
 		this.dtAtualizacao = dtAtualizacao;
 	}
+	
+	@PreUpdate
+	public void preUpdate() {
+		dtAtualizacao = LocalDateTime.now();
+	}
+
+	@PrePersist
+	public void prePersist() {
+		LocalDateTime hojeHora = LocalDateTime.now();
+		dtCadastro = hojeHora;
+		dtAtualizacao = hojeHora;
+	}
+
+
+	@Override
+	public String toString() {
+		return "Aquario [idAquario=" + idAquario + ", nome=" + nome + ", dtInicio=" + dtInicio + ", dtFinal=" + dtFinal
+				+ ", tipoAgua=" + tipoAgua + ", tamanho=" + tamanho + ", volume=" + volume + ", iluminacao="
+				+ iluminacao + ", filtragem=" + filtragem + ", sistemaCO2=" + sistemaCO2 + ", dosagem=" + dosagem
+				+ ", substrato=" + substrato + ", observacao=" + observacao + ", idTipoAquario=" + idTipoAquario
+				+ ", dtCadastro=" + dtCadastro + ", dtAtualizacao=" + dtAtualizacao + "]";
+	}
+	
+	
 
 }
