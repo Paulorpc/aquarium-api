@@ -1,264 +1,151 @@
--- ****************** SqlDBM: MySQL ******************
--- ******************************************************************
+-- ****************** SqlDBM: MySQL ******************;
+-- ***************************************************;
 
--- ************************************** [Aquario]
 
-CREATE TABLE Aquario
+-- ************************************** `TipoAquario`
+
+CREATE TABLE IF NOT EXISTS `TipoAquario`
 (
- `idAquario`     int NOT NULL ,
- `nome`          varchar(50) NOT NULL ,
- `dtAquisicao`   datetime(3) NULL ,
- `dtInicio`      datetime(3) NOT NULL ,
- `dtFinal`       datetime(3) NULL ,
- `tipoAgua`      char(1) NULL ,
- `tamanho`       int NULL ,
+ `idTipoAquario` INT NOT NULL AUTO_INCREMENT ,
+ `tipo`          varchar(45) NOT NULL ,
+ `tipoAgua`      enum('doce', 'salgada') NOT NULL ,
+ `status`        bit NOT NULL ,
+ `descricao`     text NOT NULL ,
+ `dtCadastro`    datetime NOT NULL ,
+ `dtAtualizacao` datetime NOT NULL ,
+ 
+ PRIMARY KEY (`idTipoAquario`)
+);
+
+-- ************************************** `Aquario`
+
+CREATE TABLE IF NOT EXISTS `Aquario`
+(
+ `idAquario`     int NOT NULL AUTO_INCREMENT ,
+ `nome`          varchar(45) NOT NULL ,
+ `dtAquisicao`   datetime NULL ,
+ `dtInicio`      datetime NOT NULL ,
+ `dtFinal`       datetime NULL ,
+ `idTipoAquario` int NOT NULL ,
+ `tipoAgua`      enum('doce', 'salgada') NULL ,
+ `tamanho`       varchar(45) NULL ,
  `volume`        int NULL ,
- `iluminacao`    varchar(50) NULL ,
- `filtragem`     varchar(50) NULL ,
- `sistemaCO2`    varchar(50) NULL ,
- `dosagem`       varchar(50) NULL ,
- `substrato`     varchar(50) NULL ,
+ `iluminacao`    varchar(45) NULL ,
+ `filtragem`     varchar(45) NULL ,
+ `sistemaCO2`    varchar(45) NULL ,
+ `dosagem`       varchar(45) NULL ,
+ `substrato`     varchar(45) NULL ,
  `parametros`    int NULL ,
- `status`        tinyint NULL ,
+ `status`        bit NULL ,
  `foto`          int NULL ,
- `observacao`    longtext NULL ,
- `idTipoAquario` int NOT NULL ,
- `dtCadastro`    datetime(3) NOT NULL ,
- `dtAtualizacao` datetime(3) NOT NULL ,
+ `observacao`    text NULL ,
+ `dtCadastro`    datetime NOT NULL ,
+ `dtAtualizacao` datetime NOT NULL ,
 
-
- CONSTRAINT `PK_Aquario` PRIMARY KEY (`idAquario` ASC),
- CONSTRAINT `FK_152` FOREIGN KEY (`idTipoAquario`)  REFERENCES TipoAquario(`idTipoAquario`)
+PRIMARY KEY (`idAquario`),
+CONSTRAINT `FK_170` FOREIGN KEY (`idTipoAquario`) REFERENCES `TipoAquario` (`idTipoAquario`)
 );
 
 
-CREATE NONCLUSTERED INDEX `fkIdx_152` ON [Aquario] 
- (
-  `idTipoAquario` ASC
- )
+-- ************************************** `Biota`
 
-GO
-
-
--- ************************************** [Biota]
-
-CREATE TABLE Biota
+CREATE TABLE IF NOT EXISTS `Biota`
 (
- `idBiota`        int NOT NULL ,
- `nome`           varbinary(50) NOT NULL ,
- `dtAquisicao`    datetime(3) NOT NULL ,
+ `idBiota`        int NOT NULL AUTO_INCREMENT ,
  `idAquario`      int NOT NULL ,
- `tipoBiota`      int NULL ,
- `genero`         char(1) NULL ,
- `vlrUnitario`    decimal(15,4) NULL ,
+ `nome`           varchar(45) NOT NULL ,
+ `nomePopular`    varchar(45) NULL ,
+ `nomeCientifico` varchar(45) NULL ,
+ `familia`        varchar(45) NULL ,
+ `dtAquisicao`    datetime NULL ,
+ `dtNascimento`   datetime NULL ,
+ `tipoBiota`      varchar(45) NULL ,
+ `genero`         enum('m', 'f') NULL ,
+ `vlrUnitario`    decimal(10,4) NULL ,
  `qtde`           smallint NULL ,
- `status`         varchar(50) NULL ,
- `foto`           longblob NULL ,
+ `status`         bit NULL ,
+ `foto`           int NULL ,
  `nota`           decimal(4,2) NULL ,
- `observacao`     longtext NULL ,
- `familia`        varchar(50) NULL ,
- `nomeCientifico` varchar(50) NULL ,
- `nomePopular`    varchar(50) NULL ,
- `dtNascimento`   datetime(3) NULL ,
- `dtCadastro`     datetime(3) NOT NULL ,
- `dtAtualizacao`  datetime(3) NOT NULL ,
+ `observacao`     text NULL ,
+ `dtCadastro`     datetime NOT NULL ,
+ `dtAtualizacao`  datetime NOT NULL ,
 
-
- CONSTRAINT `PK_Biota` PRIMARY KEY (`idBiota` ASC),
- CONSTRAINT `FK_42` FOREIGN KEY (`idAquario`)  REFERENCES Aquario(`idAquario`)
+PRIMARY KEY (`idBiota`),
+CONSTRAINT `FK_195` FOREIGN KEY (`idAquario`) REFERENCES `Aquario` (`idAquario`)
 );
 
 
-CREATE NONCLUSTERED INDEX `fkIdx_42` ON [Biota] 
- (
-  `idAquario` ASC
- )
+-- ************************************** `Equipamento`
 
-GO
-
--- ************************************** [Equipamento]
-
-CREATE TABLE Equipamento
+CREATE TABLE IF NOT EXISTS `Equipamento`
 (
- `idEquipamento`  int NOT NULL ,
- `nome`           varchar(50) NOT NULL ,
- `dtAquisicao`    datetime(3) NULL ,
- `tipo`           varchar(50) NULL ,
- `vlrUnitario`    decimal(15,4) NULL ,
- `qtde`           smallint NOT NULL ,
- `foto`           longblob NULL ,
- `modelo`         varchar(50) NULL ,
- `fabricante`     varchar(50) NULL ,
- `dtSubstituicao` datetime(3) NULL ,
- `potencia`       smallint NULL ,
- `observacao`     longtext NULL ,
- `dtCadastro`     datetime(3) NOT NULL ,
- `dtAtualizacao`  datetime(3) NOT NULL ,
+ `idEquipamento`  int NOT NULL AUTO_INCREMENT ,
+ `nome`           varchar(45) NOT NULL ,
+ `dtAquisicao`    datetime NULL ,
+ `tipo`           varchar(45) NULL ,
+ `vlrUnitario`    decimal(10,4) NULL ,
+ `qtde`           smallint NULL ,
+ `foto`           int NULL ,
+ `modelo`         varchar(45) NULL ,
+ `fabricante`     varchar(45) NULL ,
+ `dtSubstituicao` datetime NULL ,
+ `potencia`       varchar(45) NULL ,
+ `observacao`     text NULL ,
+ `dtCadastro`     datetime NOT NULL ,
+ `dtAtualizacao`  datetime NOT NULL ,
 
-
- CONSTRAINT `PK_equipamento` PRIMARY KEY (`idEquipamento` ASC)
+PRIMARY KEY (`idEquipamento`)
 );
 
 
--- ************************************** [EquipamentoAquario]
+-- ************************************** `EquipamentoAquario`
 
-CREATE TABLE EquipamentoAquario
+CREATE TABLE IF NOT EXISTS `EquipamentoAquario`
 (
- `id`             NOT NULL ,
- `idAquario`     int NOT NULL ,
- `idEquipamento` int NOT NULL ,
- `dtInicio`      datetime(3) NOT NULL ,
- `dtFim`         datetime(3) NULL ,
- `dtAtualizacao` datetime(3) NOT NULL ,
+ `idEquipamAquario` int NOT NULL AUTO_INCREMENT ,
+ `idAquario`        int NOT NULL ,
+ `idEquipamento`    int NOT NULL ,
+ `dtInicio`         datetime NULL ,
+ `dtFim`            datetime NULL ,
+ `dtCadastro`       datetime NOT NULL ,
+ `dtAtualizacao`    datetime NOT NULL ,
 
-
- CONSTRAINT `PK_equipamentoAquario` PRIMARY KEY (`id` ASC),
- CONSTRAINT `FK_82` FOREIGN KEY (`idAquario`)  REFERENCES Aquario(`idAquario`),
- CONSTRAINT `FK_88` FOREIGN KEY (`idEquipamento`)  REFERENCES Equipamento(`idEquipamento`)
+PRIMARY KEY (`idEquipamAquario`),
+CONSTRAINT `FK_63` FOREIGN KEY (`idEquipamento`) REFERENCES `Equipamento` (`idEquipamento`),
+CONSTRAINT `FK_66` FOREIGN KEY (`idAquario`) REFERENCES `Aquario` (`idAquario`)
 );
 
 
-CREATE NONCLUSTERED INDEX `fkIdx_82` ON [EquipamentoAquario] 
- (
-  `idAquario` ASC
- )
+-- ************************************** `parametro`
 
-GO
-
-CREATE NONCLUSTERED INDEX `fkIdx_88` ON [EquipamentoAquario] 
- (
-  `idEquipamento` ASC
- )
-
-GO
-
-
--- ************************************** [Parametro]
-
-CREATE TABLE Parametro
+CREATE TABLE IF NOT EXISTS `parametro`
 (
- `idParametro`    int NOT NULL ,
- `nome`           varchar(50) NOT NULL ,
- `abreviacaoNome` char(5) NULL ,
- `escalaInicio`   smallint NULL ,
- `escalaFim`      smallint NULL ,
- `vlrIdealInicio` smallint NULL ,
- `vlrIdealFim`    smallint NULL ,
- `dtCadastro`     datetime(3) NOT NULL ,
- `dtAtualizacao`  datetime(3) NOT NULL ,
+ `idParametro`    int NOT NULL AUTO_INCREMENT ,
+ `nome`           varchar(45) NOT NULL ,
+ `abreviacaoNome` varchar(45) NULL ,
+ `escalaInicio`   decimal(8,4) NULL ,
+ `escalaFim`      decimal(8,4) NULL ,
+ `vlrIdealInicio` decimal(8,4) NULL ,
+ `vlrIdealFim`    decimal(8,4) NULL ,
+ `dtCadastro`     datetime NOT NULL ,
+ `dtAtualizacao`  datetime NOT NULL ,
 
-
- CONSTRAINT `PK_parametro` PRIMARY KEY (`idParametro` ASC)
+PRIMARY KEY (`idParametro`)
 );
 
 
--- ************************************** [FaunaFlora]
+-- ************************************** `ParametroHistorico`
 
-CREATE TABLE FaunaFlora
+CREATE TABLE IF NOT EXISTS `ParametroHistorico`
 (
- `idFaunaFlora`    int NOT NULL ,
- `nome`            varchar(50) NOT NULL ,
- `nomeCientifico`  varchar(50) NULL ,
- `nomePopular`     varchar(50) NULL ,
- `familia`         varchar(50) NULL ,
- `nota`            decimal(4,2) NULL ,
- `foto`            longblob NULL ,
- `características` longtext NULL ,
- `porte`           char(1) NULL ,
- `tipoAgua`        char(1) NOT NULL ,
- `dtCadastro`      datetime(3) NOT NULL ,
- `dtAtualizacao`   datetime(3) NOT NULL ,
- `observacao`      longtext NULL ,
+ `idParamHistorico` int NOT NULL AUTO_INCREMENT ,
+ `idParametro`      int NOT NULL ,
+ `idAquario`        int NOT NULL ,
+ `vlrMedido`        decimal(8,4) NULL ,
+ `dtCadastro`       datetime NOT NULL ,
+ `dtAtualizacao`    datetime NOT NULL ,
 
-
- CONSTRAINT `PK_faunaflora` PRIMARY KEY (`idFaunaFlora` ASC)
+PRIMARY KEY (`idParamHistorico`),
+CONSTRAINT `FK_164` FOREIGN KEY (`idParametro`) REFERENCES `parametro` (`idParametro`),
+CONSTRAINT `FK_167` FOREIGN KEY (`idAquario`) REFERENCES `Aquario` (`idAquario`)
 );
-
-
--- ************************************** [ParametroSistema]
-
-CREATE TABLE ParametroSistema
-(
- `idParametroSistema` int NOT NULL ,
- `nome`               varchar(50) NOT NULL ,
- `modulo`             varchar(50) NOT NULL ,
- `dtCadastro`         datetime(3) NOT NULL ,
- `dtAtualizacao`      datetime(3) NOT NULL ,
-
-
- CONSTRAINT `PK_ParametroSistema` PRIMARY KEY (`idParametroSistema` ASC)
-);
-
-
--- ************************************** [ParametroHistorico]
-
-CREATE TABLE ParametroHistorico
-(
- `idParametroHistorico` int NOT NULL ,
- `idParametro`          int NOT NULL ,
- `dtCadastro`           datetime(3) NOT NULL ,
- `vlrMedido`            smallint NOT NULL ,
- `idAquario`            int NOT NULL ,
-
-
- CONSTRAINT `PK_parametroHistorico` PRIMARY KEY (`idParametroHistorico` ASC),
- CONSTRAINT `FK_113` FOREIGN KEY (`idParametro`)  REFERENCES Parametro(`idParametro`),
- CONSTRAINT `FK_126` FOREIGN KEY (`idAquario`)  REFERENCES Aquario(`idAquario`)
-);
-
-
-CREATE NONCLUSTERED INDEX `fkIdx_113` ON [ParametroHistorico] 
- (
-  `idParametro` ASC
- )
-
-GO
-
-CREATE NONCLUSTERED INDEX `fkIdx_126` ON [ParametroHistorico] 
- (
-  `idAquario` ASC
- )
-
-GO
-
-
--- ************************************** [TipoAquario]
-
-CREATE TABLE TipoAquario
-(
- `idTipoAquario` int NOT NULL ,
- `tipo`          varchar(50) NOT NULL ,
- `tipoAgua`      char(1) NOT NULL ,
- `status`        tinyint NOT NULL ,
- `descricao`     longtext NOT NULL ,
- `dtCadastro`    datetime(3) NOT NULL ,
- `dtAtualizacao` datetime(3) NOT NULL ,
-
-
- CONSTRAINT `PK_TipoAquario` PRIMARY KEY (`idTipoAquario` ASC)
-);
-
-
--- ************************************** [ParametroSistemaValor]
-
-CREATE TABLE ParametroSistemaValor
-(
- `idParamSisValor`    int NOT NULL ,
- `idParametroSistema` int NOT NULL ,
- `valor`              varchar(50) NOT NULL ,
- `descricao`          varchar(50) NULL ,
- `dtCadastro`         datetime(3) NOT NULL ,
- `dtAtualizacao`      datetime(3) NOT NULL ,
-
-
- CONSTRAINT `PK_ParametroSistemaValor` PRIMARY KEY (`idParamSisValor` ASC),
- CONSTRAINT `FK_140` FOREIGN KEY (`idParametroSistema`)  REFERENCES ParametroSistema(`idParametroSistema`)
-);
-
-
-CREATE NONCLUSTERED INDEX `fkIdx_140` ON [ParametroSistemaValor] 
- (
-  `idParametroSistema` ASC
- )
-
-GO
