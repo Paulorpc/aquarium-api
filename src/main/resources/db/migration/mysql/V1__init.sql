@@ -4,7 +4,7 @@
 
 -- ************************************** `TipoAquario`
 
-CREATE TABLE `TipoAquario`
+CREATE TABLE IF NOT EXISTS `TipoAquario`
 (
  `idTipoAquario` INT NOT NULL AUTO_INCREMENT ,
  `tipo`          varchar(45) NOT NULL ,
@@ -19,7 +19,7 @@ CREATE TABLE `TipoAquario`
 
 -- ************************************** `Aquario`
 
-CREATE TABLE `Aquario`
+CREATE TABLE IF NOT EXISTS `Aquario`
 (
  `idAquario`     int NOT NULL AUTO_INCREMENT ,
  `nome`          varchar(45) NOT NULL ,
@@ -28,7 +28,7 @@ CREATE TABLE `Aquario`
  `dtFinal`       datetime NULL ,
  `idTipoAquario` int NOT NULL ,
  `tipoAgua`      enum('doce', 'salgada') NULL ,
- `tamanho`       int NULL ,
+ `tamanho`       varchar(45) NULL ,
  `volume`        int NULL ,
  `iluminacao`    varchar(45) NULL ,
  `filtragem`     varchar(45) NULL ,
@@ -49,7 +49,7 @@ CONSTRAINT `FK_170` FOREIGN KEY (`idTipoAquario`) REFERENCES `TipoAquario` (`idT
 
 -- ************************************** `Biota`
 
-CREATE TABLE `Biota`
+CREATE TABLE IF NOT EXISTS `Biota`
 (
  `idBiota`        int NOT NULL AUTO_INCREMENT ,
  `idAquario`      int NOT NULL ,
@@ -77,7 +77,7 @@ CONSTRAINT `FK_195` FOREIGN KEY (`idAquario`) REFERENCES `Aquario` (`idAquario`)
 
 -- ************************************** `Equipamento`
 
-CREATE TABLE `Equipamento`
+CREATE TABLE IF NOT EXISTS `Equipamento`
 (
  `idEquipamento`  int NOT NULL AUTO_INCREMENT ,
  `nome`           varchar(45) NOT NULL ,
@@ -100,7 +100,7 @@ PRIMARY KEY (`idEquipamento`)
 
 -- ************************************** `EquipamentoAquario`
 
-CREATE TABLE `EquipamentoAquario`
+CREATE TABLE IF NOT EXISTS `EquipamentoAquario`
 (
  `idEquipamAquario` int NOT NULL AUTO_INCREMENT ,
  `idAquario`        int NOT NULL ,
@@ -118,7 +118,7 @@ CONSTRAINT `FK_66` FOREIGN KEY (`idAquario`) REFERENCES `Aquario` (`idAquario`)
 
 -- ************************************** `parametro`
 
-CREATE TABLE `parametro`
+CREATE TABLE IF NOT EXISTS `parametro`
 (
  `idParametro`    int NOT NULL AUTO_INCREMENT ,
  `nome`           varchar(45) NOT NULL ,
@@ -136,7 +136,7 @@ PRIMARY KEY (`idParametro`)
 
 -- ************************************** `ParametroHistorico`
 
-CREATE TABLE `ParametroHistorico`
+CREATE TABLE IF NOT EXISTS `ParametroHistorico`
 (
  `idParamHistorico` int NOT NULL AUTO_INCREMENT ,
  `idParametro`      int NOT NULL ,
