@@ -6,6 +6,7 @@ import javax.persistence.*;
 
 
 @Entity
+@Table(name = "Aquario")
 public class Aquario {
 
 	@Id
@@ -25,7 +26,7 @@ public class Aquario {
 	private String tipoAgua;
 	
 	@Column(name="tamanho", nullable=true)
-	private int tamanho;
+	private String tamanho;
 	
 	@Column(name="volume", nullable=true)
 	private int volume;
@@ -104,11 +105,11 @@ public class Aquario {
 		this.tipoAgua = tipoAgua;
 	}
 
-	public int getTamanho() {
+	public String getTamanho() {
 		return tamanho;
 	}
 
-	public void setTamanho(int tamanho) {
+	public void setTamanho(String tamanho) {
 		this.tamanho = tamanho;
 	}
 
