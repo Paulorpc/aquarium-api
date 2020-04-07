@@ -1,6 +1,7 @@
 package com.paulorpc.aquarium.api.entities;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 import javax.persistence.*;
 
@@ -17,10 +18,10 @@ public class Aquario {
 	private String nome;
 	
 	@Column(name="dtInicio", nullable=false)
-	private LocalDateTime dtInicio;
+	private Date dtInicio;
 	
 	@Column(name="dtFinal", nullable=true)
-	private LocalDateTime dtFinal;
+	private Date dtFinal;
 	
 	@Column(name="tipoAgua", nullable=true)
 	private String tipoAgua;
@@ -52,6 +53,9 @@ public class Aquario {
 	@Column(name="observacao", nullable=true)
 	private String observacao;
 	
+	@Column(name="status", nullable=true)
+	private boolean status;
+	
 	@Column(name="idTipoAquario", nullable=true)
 	private int idTipoAquario;
 	
@@ -81,19 +85,19 @@ public class Aquario {
 		this.nome = nome;
 	}
 
-	public LocalDateTime getDtInicio() {
+	public Date getDtInicio() {
 		return dtInicio;
 	}
 
-	public void setDtInicio(LocalDateTime dtInicio) {
+	public void setDtInicio(Date dtInicio) {
 		this.dtInicio = dtInicio;
 	}
 
-	public LocalDateTime getDtFinal() {
+	public Date getDtFinal() {
 		return dtFinal;
 	}
 
-	public void setDtFinal(LocalDateTime dtFinal) {
+	public void setDtFinal(Date dtFinal) {
 		this.dtFinal = dtFinal;
 	}
 
@@ -167,6 +171,14 @@ public class Aquario {
 
 	public void setObservacao(String observacao) {
 		this.observacao = observacao;
+	}
+
+	public boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(boolean status) {
+		this.status = status;
 	}
 
 	public int getIdTipoAquario() {

@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS `TipoAquario`
  `dtAtualizacao` datetime NOT NULL ,
  
  PRIMARY KEY (`idTipoAquario`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ************************************** `Aquario`
 
@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS `Aquario`
  `dosagem`       varchar(45) NULL ,
  `substrato`     varchar(45) NULL ,
  `parametros`    int NULL ,
- `status`        bit NULL ,
+ `status`        boolean NULL ,
  `foto`          int NULL ,
  `observacao`    text NULL ,
  `dtCadastro`    datetime NOT NULL ,
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `Aquario`
 
 PRIMARY KEY (`idAquario`),
 CONSTRAINT `FK_170` FOREIGN KEY (`idTipoAquario`) REFERENCES `TipoAquario` (`idTipoAquario`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 -- ************************************** `Biota`
@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS `Biota`
 
 PRIMARY KEY (`idBiota`),
 CONSTRAINT `FK_195` FOREIGN KEY (`idAquario`) REFERENCES `Aquario` (`idAquario`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 -- ************************************** `Equipamento`
@@ -95,7 +95,7 @@ CREATE TABLE IF NOT EXISTS `Equipamento`
  `dtAtualizacao`  datetime NOT NULL ,
 
 PRIMARY KEY (`idEquipamento`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 -- ************************************** `EquipamentoAquario`
@@ -113,7 +113,7 @@ CREATE TABLE IF NOT EXISTS `EquipamentoAquario`
 PRIMARY KEY (`idEquipamAquario`),
 CONSTRAINT `FK_63` FOREIGN KEY (`idEquipamento`) REFERENCES `Equipamento` (`idEquipamento`),
 CONSTRAINT `FK_66` FOREIGN KEY (`idAquario`) REFERENCES `Aquario` (`idAquario`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 -- ************************************** `parametro`
@@ -131,7 +131,7 @@ CREATE TABLE IF NOT EXISTS `parametro`
  `dtAtualizacao`  datetime NOT NULL ,
 
 PRIMARY KEY (`idParametro`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 -- ************************************** `ParametroHistorico`
@@ -148,4 +148,4 @@ CREATE TABLE IF NOT EXISTS `ParametroHistorico`
 PRIMARY KEY (`idParamHistorico`),
 CONSTRAINT `FK_164` FOREIGN KEY (`idParametro`) REFERENCES `parametro` (`idParametro`),
 CONSTRAINT `FK_167` FOREIGN KEY (`idAquario`) REFERENCES `Aquario` (`idAquario`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
