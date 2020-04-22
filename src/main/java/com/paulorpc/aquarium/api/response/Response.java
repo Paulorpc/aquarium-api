@@ -25,7 +25,7 @@ public class Response<T> {
 		this.data = data;
 	}
 
-	public ArrayList<String> getErrors() {
+	public ArrayList<String> getIssues() {
 		return issues;
 	}
 
@@ -38,7 +38,7 @@ public class Response<T> {
 	 * @param result resulado da validação
 	 */
 	public void setIssuesFromResultErrors(BindingResult result) {
-		result.getAllErrors().forEach(e->getErrors().add(e.getDefaultMessage()));
+		result.getAllErrors().forEach(e->getIssues().add(e.getDefaultMessage()));
 	}
 	
 	
