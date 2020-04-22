@@ -40,6 +40,7 @@ public class AquarioService {
 	 * @return Aquario
 	 */
 	public Aquario persistirAquario(Aquario aquario) {
+		aquario.setStatus(true);
 		return aquarioRepository.save(aquario);
 	}
 	
@@ -50,14 +51,13 @@ public class AquarioService {
 	 * @return Optional<Aquario>
 	 */
 	public Optional<Aquario> deletarAquario(int id) {
-		Optional<Aquario> aquario = aquarioRepository.findByIdAquarioAndStatusIsTrue(id);
-		aquario.ifPresent(a -> {
-									a.setDtFinal(new Date());
-									a.setStatus(false);
-									aquarioRepository.save(a);
-								});
-		return aquario;
+		return aquarioRepository
+					.findByIdAquarioAndStatusIsTrue(id)
+					.map(a -> {						
+							a.setDtFinal(new Date());
+							a.setStatus(false);
+							return aquarioRepository.save(a);
+					});
 	}
-	
 
 }
