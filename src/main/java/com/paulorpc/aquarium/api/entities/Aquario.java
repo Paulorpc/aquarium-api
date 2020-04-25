@@ -1,5 +1,6 @@
 package com.paulorpc.aquarium.api.entities;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -8,7 +9,9 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "Aquario")
-public class Aquario {
+public class Aquario implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)

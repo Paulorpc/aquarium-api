@@ -32,15 +32,19 @@ public class AquarioController {
 	private AquarioService aquarioService;
 	
 	@GetMapping
-	public ResponseEntity<List<Aquario>> buscarTodos() {
+	public ResponseEntity<Response<List<Aquario>>> buscarTodos() {
+		Response<List<Aquario>> response = new Response<>();
 		List<Aquario> aquarios = aquarioService.buscarTodos();
-		return ResponseEntity.ok(aquarios);
+		response.setData(aquarios);
+		return ResponseEntity.ok(response);
 	}
 	
 	@GetMapping(value="/ativos")
-	public ResponseEntity<List<Aquario>> buscarTodosAtivos() {
+	public ResponseEntity<Response<List<Aquario>>> buscarTodosAtivos() {
+		Response<List<Aquario>> response = new Response<>();
 		List<Aquario> aquarios = aquarioService.buscarTodosAtivos();
-		return ResponseEntity.ok(aquarios);
+		response.setData(aquarios);
+		return ResponseEntity.ok(response);
 	}
 	
 	@PostMapping
@@ -61,6 +65,7 @@ public class AquarioController {
 		response.setData(ConverteAquarioToAquarioDto(novoAquario));		
         return ResponseEntity.created(uri).body(response);
 	}
+		
 	
 	/***
 	 * Método de deleção de aquários.
