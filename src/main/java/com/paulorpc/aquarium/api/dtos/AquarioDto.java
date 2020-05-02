@@ -1,6 +1,5 @@
 package com.paulorpc.aquarium.api.dtos;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Optional;
 
@@ -8,6 +7,8 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Positive;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 
 public class AquarioDto {
@@ -28,8 +29,8 @@ public class AquarioDto {
 	private Optional<String> observacao = Optional.empty();
 	private Optional<Boolean> status = Optional.empty();
 	private Optional<Integer> idTipoAquario = Optional.empty();
-	private Optional<LocalDateTime> dtCadastro = Optional.empty();
-	private Optional<LocalDateTime> dtAtualizacao = Optional.empty();
+	private Optional<Date> dtCadastro = Optional.empty();
+	private Optional<Date> dtAtualizacao = Optional.empty();
 	
 	public interface Cadastrar {}
 	public interface Alterar {}
@@ -46,6 +47,8 @@ public class AquarioDto {
 	public void setNome(Optional<String> nome) {
 		this.nome = nome;
 	}
+	
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	public Optional<@PastOrPresent(message="Campo 'dtInicio' não pode ser posterior a data atual.", groups= {Cadastrar.class})
 					@NotNull(message="Campo 'dtInicio' não pode ser nulo.", groups= {Cadastrar.class}) Date> getDtInicio() {
 		return dtInicio;
@@ -53,6 +56,8 @@ public class AquarioDto {
 	public void setDtInicio(Optional<Date> dtInicio) {
 		this.dtInicio = dtInicio;
 	}
+	
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	public Optional<Date> getDtFinal() {
 		return dtFinal;
 	}
@@ -131,11 +136,20 @@ public class AquarioDto {
 	public void setIdTipoAquario(Optional<Integer> idTipoAquario) {
 		this.idTipoAquario = idTipoAquario;
 	}
-	public Optional<LocalDateTime> getDtCadastro() {
-		return dtCadastro;
-	}	
-	public Optional<LocalDateTime> getDtAtualizacao() {
-		return dtAtualizacao;
-	}	
 	
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+	public Optional<Date> getDtCadastro() {
+		return dtCadastro;
+	}
+	public void setDtCadastro(Optional<Date> dtCadastro) {
+		this.dtCadastro = dtCadastro;
+	}
+	
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+	public Optional<Date> getDtAtualizacao() {		
+		return dtAtualizacao;
+	}
+	public void setDtAtualizacao(Optional<Date> dtAtualizacao) {
+		this.dtAtualizacao = dtAtualizacao;
+	}
 }

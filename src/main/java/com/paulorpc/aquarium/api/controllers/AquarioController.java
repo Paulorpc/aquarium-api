@@ -3,6 +3,7 @@ package com.paulorpc.aquarium.api.controllers;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,20 +41,30 @@ public class AquarioController {
 	
 	
 	@GetMapping
-	public ResponseEntity<Response<List<Aquario>>> buscarTodos() {		
+	public ResponseEntity<Response<List<AquarioDto>>> buscarTodos() {		
 		log.info("Requisição para buscar todos aquários - buscarTodos()");
-		Response<List<Aquario>> response = new Response<>();
+		Response<List<AquarioDto>> response = new Response<>();
+		
 		List<Aquario> aquarios = aquarioService.buscarTodos();
-		response.setData(aquarios);
+		List<AquarioDto> aquariosDto = aquarios.stream().map(a -> {
+			return converteObjetoParaDto(a);
+		}).collect(Collectors.toList());
+		
+		response.setData(aquariosDto);
 		return ResponseEntity.ok(response);
 	}
 	
 	@GetMapping(value="/ativos")
-	public ResponseEntity<Response<List<Aquario>>> buscarTodosAtivos() {
+	public ResponseEntity<Response<List<AquarioDto>>> buscarTodosAtivos() {
 		log.info("Requisição para buscar todos aquários ativos - buscarTodosAtivos()");
-		Response<List<Aquario>> response = new Response<>();
+		Response<List<AquarioDto>> response = new Response<>();
+		
 		List<Aquario> aquarios = aquarioService.buscarTodosAtivos();
-		response.setData(aquarios);
+		List<AquarioDto> aquariosDto = aquarios.stream().map(a->{
+			return converteObjetoParaDto(a);
+		}).collect(Collectors.toList());
+		
+		response.setData(aquariosDto);
 		return ResponseEntity.ok(response);
 	}
 	
@@ -189,7 +200,9 @@ public class AquarioController {
 		dto.setSubstrato(Optional.ofNullable(aquario.getSubstrato()));
 		dto.setObservacao(Optional.ofNullable(aquario.getObservacao()));
 		dto.setStatus(Optional.ofNullable(aquario.getStatus()));
-		dto.setIdTipoAquario(Optional.ofNullable(aquario.getIdTipoAquario()));		
+		dto.setIdTipoAquario(Optional.ofNullable(aquario.getIdTipoAquario()));
+		dto.setDtCadastro(Optional.ofNullable(aquario.getDtCadastro()));
+		dto.setDtAtualizacao(Optional.ofNullable(aquario.getDtCadastro()));
 		return dto;
 	}
 }

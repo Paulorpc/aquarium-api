@@ -1,7 +1,6 @@
 package com.paulorpc.aquarium.api.entities;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.*;
@@ -64,10 +63,10 @@ public class Aquario implements Serializable {
 	private int idTipoAquario;
 	
 	@Column(name="dtCadastro", nullable=false)
-	private LocalDateTime dtCadastro;	
+	private Date dtCadastro;	
 	
 	@Column(name="dtAtualizacao", nullable=false)
-	private LocalDateTime dtAtualizacao;
+	private Date dtAtualizacao;
 	
 	
 	public Aquario() {}
@@ -193,30 +192,30 @@ public class Aquario implements Serializable {
 		this.idTipoAquario = idTipoAquario;
 	}
 
-	public LocalDateTime getDtCadastro() {
+	public Date getDtCadastro() {
 		return dtCadastro;
 	}
 
-	public void setDtCadastro(LocalDateTime dtCadastro) {
+	public void setDtCadastro(Date dtCadastro) {
 		this.dtCadastro = dtCadastro;
 	}
 
-	public LocalDateTime getDtAtualizacao() {
+	public Date getDtAtualizacao() {
 		return dtAtualizacao;
 	}
 
-	public void setDtAtualizacao(LocalDateTime dtAtualizacao) {
+	public void setDtAtualizacao(Date dtAtualizacao) {
 		this.dtAtualizacao = dtAtualizacao;
 	}
 	
 	@PreUpdate
 	public void preUpdate() {
-		dtAtualizacao = LocalDateTime.now();
+		dtAtualizacao = new Date();
 	}
 
 	@PrePersist
 	public void prePersist() {
-		LocalDateTime hojeHora = LocalDateTime.now();
+		Date hojeHora = new Date();
 		dtCadastro = hojeHora;
 		dtAtualizacao = hojeHora;
 	}
