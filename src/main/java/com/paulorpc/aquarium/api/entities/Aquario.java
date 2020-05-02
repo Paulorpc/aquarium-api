@@ -15,7 +15,8 @@ public class Aquario implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int idAquario;
+	@Column(name="idAquario")
+	private int id;
 	
 	@Column(name="nome", nullable=false)
 	private String nome;
@@ -72,12 +73,12 @@ public class Aquario implements Serializable {
 	public Aquario() {}
 	
 	
-	public int getIdAquario() {
-		return idAquario;
+	public int getId() {
+		return id;
 	}
 
-	public void setIdAquario(int idAquario) {
-		this.idAquario = idAquario;
+	public void setId(int idAquario) {
+		this.id = idAquario;
 	}
 
 	public String getNome() {
@@ -223,7 +224,7 @@ public class Aquario implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Aquario [idAquario=" + idAquario + ", nome=" + nome + ", dtInicio=" + dtInicio + ", dtFinal=" + dtFinal
+		return "Aquario [idAquario=" + id + ", nome=" + nome + ", dtInicio=" + dtInicio + ", dtFinal=" + dtFinal
 				+ ", tipoAgua=" + tipoAgua + ", tamanho=" + tamanho + ", volume=" + volume + ", iluminacao="
 				+ iluminacao + ", filtragem=" + filtragem + ", sistemaCO2=" + sistemaCO2 + ", dosagem=" + dosagem
 				+ ", substrato=" + substrato + ", observacao=" + observacao + ", idTipoAquario=" + idTipoAquario

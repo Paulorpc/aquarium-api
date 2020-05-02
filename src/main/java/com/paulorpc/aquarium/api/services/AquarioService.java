@@ -1,5 +1,6 @@
 package com.paulorpc.aquarium.api.services;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -7,6 +8,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.paulorpc.aquarium.api.controllers.AquarioController;
+import com.paulorpc.aquarium.api.dtos.AquarioDto;
 import com.paulorpc.aquarium.api.entities.Aquario;
 import com.paulorpc.aquarium.api.repositories.AquarioRepository;
 
@@ -35,13 +38,28 @@ public class AquarioService {
 	
 	
 	/***
-	 * Cadastro um novo aquário
+	 * Cadastra novo aquário
 	 * @param aquario
 	 * @return Aquario
 	 */
-	public Aquario persistirAquario(Aquario aquario) {
+	public Aquario cadastrarAquario(Aquario aquario) {
 		aquario.setStatus(true);
 		return aquarioRepository.save(aquario);
+	}
+	
+	
+	/***
+	 * Atualiza cadastro de aquário
+	 * @param aquario
+	 * @return Aquario
+	 */
+	public Optional<Aquario> alterarAquario(AquarioDto aquario) {
+		Optional<Aquario> aquarioOpt = aquarioRepository.findByIdAndStatusIsTrue(aquario.getId().get());
+		if(aquarioOpt.isPresent()) {
+			Aquario aquarioUpd = AquarioController.converteDtoParaObjeto(aquario, aquarioOpt.get());			
+			aquarioOpt = Optional.of(aquarioRepository.save(aquarioUpd));		
+		}			
+		return aquarioOpt;
 	}
 	
 	
@@ -52,7 +70,7 @@ public class AquarioService {
 	 */
 	public Optional<Aquario> deletarAquario(int id) {
 		return aquarioRepository
-					.findByIdAquarioAndStatusIsTrue(id)
+					.findByIdAndStatusIsTrue(id)
 					.map(a -> {						
 							a.setDtFinal(new Date());
 							a.setStatus(false);
