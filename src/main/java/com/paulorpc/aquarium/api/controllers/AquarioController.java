@@ -4,6 +4,8 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -31,11 +33,15 @@ import com.paulorpc.aquarium.api.services.AquarioService;
 @SessionAttributes("aquario")
 public class AquarioController {
 	
+	Logger log = LoggerFactory.getLogger(AquarioController.class);
+	
 	@Autowired
 	private AquarioService aquarioService;
 	
+	
 	@GetMapping
-	public ResponseEntity<Response<List<Aquario>>> buscarTodos() {
+	public ResponseEntity<Response<List<Aquario>>> buscarTodos() {		
+		log.info("Requisição para buscar todos aquários - buscarTodos()");
 		Response<List<Aquario>> response = new Response<>();
 		List<Aquario> aquarios = aquarioService.buscarTodos();
 		response.setData(aquarios);
@@ -44,6 +50,7 @@ public class AquarioController {
 	
 	@GetMapping(value="/ativos")
 	public ResponseEntity<Response<List<Aquario>>> buscarTodosAtivos() {
+		log.info("Requisição para buscar todos aquários ativos - buscarTodosAtivos()");
 		Response<List<Aquario>> response = new Response<>();
 		List<Aquario> aquarios = aquarioService.buscarTodosAtivos();
 		response.setData(aquarios);
@@ -52,6 +59,7 @@ public class AquarioController {
 	
 	@PostMapping
 	public ResponseEntity<Response<AquarioDto>> cadastrarAquario(@Validated(AquarioDto.Cadastrar.class) @RequestBody AquarioDto aquarioDto, BindingResult result) {
+		log.info("Requisição para cadastrar um novo aquário - cadastrarAquario()");
 		Response<AquarioDto> response = new Response<>();
 		
 		if(result.hasErrors()) {			
@@ -72,7 +80,8 @@ public class AquarioController {
 
 	
 	@PutMapping
-	public ResponseEntity<Response<AquarioDto>> alterarAquarioTESTE(@Validated(AquarioDto.Alterar.class) @RequestBody AquarioDto aquarioDto, BindingResult result) {
+	public ResponseEntity<Response<AquarioDto>> alterarAquario(@Validated(AquarioDto.Alterar.class) @RequestBody AquarioDto aquarioDto, BindingResult result) {
+		log.info("Requisição para alterar um aquaário existente - alterarAquario()");
 		Response<AquarioDto> response = new Response<>();
 		if(result.hasErrors()) {
 			response.setIssuesFromResultErrors(result);
@@ -99,6 +108,7 @@ public class AquarioController {
 	 */
 	@DeleteMapping(value="/{id}")
 	public ResponseEntity<Response<AquarioDto>> deletarAquario(@PathVariable int id) {
+		log.info("Requisição para deletar um aquário - deletarAquario()");
 		Response<AquarioDto> response = new Response<>();
 		
 		/*
@@ -179,9 +189,7 @@ public class AquarioController {
 		dto.setSubstrato(Optional.ofNullable(aquario.getSubstrato()));
 		dto.setObservacao(Optional.ofNullable(aquario.getObservacao()));
 		dto.setStatus(Optional.ofNullable(aquario.getStatus()));
-		dto.setIdTipoAquario(Optional.ofNullable(aquario.getIdTipoAquario()));
-		dto.setDtCadastro(Optional.ofNullable(aquario.getDtCadastro()));
-		dto.setDtAtualizacao(Optional.ofNullable(aquario.getDtAtualizacao()));
+		dto.setIdTipoAquario(Optional.ofNullable(aquario.getIdTipoAquario()));		
 		return dto;
 	}
 }

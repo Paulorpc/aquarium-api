@@ -1,10 +1,11 @@
 package com.paulorpc.aquarium.api.services;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,8 @@ import com.paulorpc.aquarium.api.repositories.AquarioRepository;
 @Service
 public class AquarioService {
 	
+	Logger log = LoggerFactory.getLogger(AquarioService.class);
+	
 	@Autowired
 	private AquarioRepository aquarioRepository;
 	
@@ -24,6 +27,7 @@ public class AquarioService {
 	 * @return List<Aquario>
 	 */
 	public List<Aquario> buscarTodos() {
+		log.info("Buscando todos aquários.");
 		return aquarioRepository.findAll(); 
 		 
 	}
@@ -33,6 +37,7 @@ public class AquarioService {
 	 * @return List<Aquario>
 	 */
 	public List<Aquario> buscarTodosAtivos() {
+		log.info("Buscando todos aquários ativos.");
 		return aquarioRepository.findByStatusIsTrue(); 
 	}
 	
@@ -43,6 +48,7 @@ public class AquarioService {
 	 * @return Aquario
 	 */
 	public Aquario cadastrarAquario(Aquario aquario) {
+		log.info("Cadastrando um novo aquário.");
 		aquario.setStatus(true);
 		return aquarioRepository.save(aquario);
 	}
@@ -54,6 +60,7 @@ public class AquarioService {
 	 * @return Aquario
 	 */
 	public Optional<Aquario> alterarAquario(AquarioDto aquario) {
+		log.info("Alterando um aquário.");
 		Optional<Aquario> aquarioOpt = aquarioRepository.findByIdAndStatusIsTrue(aquario.getId().get());
 		if(aquarioOpt.isPresent()) {
 			Aquario aquarioUpd = AquarioController.converteDtoParaObjeto(aquario, aquarioOpt.get());			
@@ -69,6 +76,7 @@ public class AquarioService {
 	 * @return Optional<Aquario>
 	 */
 	public Optional<Aquario> deletarAquario(int id) {
+		log.info("Deletando um aquário.");
 		return aquarioRepository
 					.findByIdAndStatusIsTrue(id)
 					.map(a -> {						
