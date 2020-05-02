@@ -129,9 +129,8 @@ public class AquarioController {
 	 * @param dto
 	 * @return Aquario
 	 */
-	private static Aquario converteDtoParaObjeto(AquarioDto dto) {
-		Aquario aquario = new Aquario();
-		return converteDtoParaObjeto(dto,aquario);
+	private static Aquario converteDtoParaObjeto(AquarioDto dto) {		
+		return converteDtoParaObjeto(dto, new Aquario());
 	}
 	
 	/***
