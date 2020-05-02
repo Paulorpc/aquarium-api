@@ -6,13 +6,13 @@ Sistema de controle de aquários
 
 Logging padrão do springboot. Para ajustar configurações específicas do log, acessar application.properties. 
 
-'''java
+```java
 logger.trace("A TRACE Message");
 logger.debug("A DEBUG Message");
 logger.info("An INFO Message");
 logger.warn("A WARN Message");
 logger.error("An ERROR Message");
-'''
+```
 
 ##### Documentação API - SWAGGER
 
