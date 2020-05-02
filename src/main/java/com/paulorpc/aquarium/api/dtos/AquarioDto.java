@@ -133,15 +133,9 @@ public class AquarioDto {
 	}
 	public Optional<LocalDateTime> getDtCadastro() {
 		return dtCadastro;
-	}
-	public void setDtCadastro(Optional<LocalDateTime> dtCadastro) {
-		this.dtCadastro = dtCadastro;
-	}
+	}	
 	public Optional<LocalDateTime> getDtAtualizacao() {
 		return dtAtualizacao;
-	}
-	public void setDtAtualizacao(Optional<LocalDateTime> dtAtualizacao) {
-		this.dtAtualizacao = dtAtualizacao;
-	}
+	}	
 	
 }
