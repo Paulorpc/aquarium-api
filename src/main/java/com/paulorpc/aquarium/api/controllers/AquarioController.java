@@ -63,7 +63,7 @@ public class AquarioController {
 		Response<AquarioDto> response = new Response<>();
 		
 		if(result.hasErrors()) {			
-			response.setIssuesFromResultErrors(result);
+			response.setIssuesFromResultErrors(result, log);
 			return ResponseEntity.badRequest().body(response);
 		}
 		
@@ -84,7 +84,7 @@ public class AquarioController {
 		log.info("Requisição para alterar um aquaário existente - alterarAquario()");
 		Response<AquarioDto> response = new Response<>();
 		if(result.hasErrors()) {
-			response.setIssuesFromResultErrors(result);
+			response.setIssuesFromResultErrors(result, log);
 			return ResponseEntity.badRequest().body(response);
 		}	
 		

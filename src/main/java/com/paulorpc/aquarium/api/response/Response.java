@@ -2,6 +2,7 @@ package com.paulorpc.aquarium.api.response;
 
 import java.util.ArrayList;
 
+import org.slf4j.Logger;
 import org.springframework.validation.BindingResult;
 
 
@@ -32,14 +33,25 @@ public class Response<T> {
 	public void setIssues(ArrayList<String> errors) {
 		this.issues = errors;
 	}
-
+	
+	
 	/***
-	 * Adiciona os erros do result para a lista do response.
+	 * Adiciona os erros da validação para a lista de informações (issues) retornadas ao client. Esse método irá fazer o logging do tipo WARN.
+	 * @param result resulado da validação
+	 * @param Logger Instancia para log de erros
+	 */	
+	public void setIssuesFromResultErrors(BindingResult result, Logger log) {
+		result.getAllErrors().forEach(e->getIssues().add(e.getDefaultMessage()));
+		log.warn("Requisição continha erros: " +getIssues().toString());
+	}
+
+	
+	/***
+	 * Adiciona os erros da validação para a lista de informações (issues) retornadas ao client. 
 	 * @param result resulado da validação
 	 */
 	public void setIssuesFromResultErrors(BindingResult result) {
 		result.getAllErrors().forEach(e->getIssues().add(e.getDefaultMessage()));
 	}
-	
 	
 }
