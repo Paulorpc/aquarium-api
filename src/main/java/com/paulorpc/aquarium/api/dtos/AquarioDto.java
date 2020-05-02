@@ -1,128 +1,147 @@
 package com.paulorpc.aquarium.api.dtos;
 
+import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.Optional;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.Positive;
 
 
 public class AquarioDto {
 	
-	private int idAquario;
-	private String nome;
-	private Date dtInicio;
-	private Date dtFinal;
-	private String tipoAgua;
-	private String tamanho;
-	private int volume;
-	private String iluminacao;
-	private String filtragem;
-	private String sistemaCO2;
-	private String dosagem;
-	private String substrato;
-	private String observacao;
-	private boolean status;
-	private int idTipoAquario;
+	private Optional<Integer> id = Optional.empty();
+	private Optional<String> nome = Optional.empty();
+	private Optional<Date> dtInicio = Optional.empty();
+	private Optional<Date> dtFinal = Optional.empty();
+	private Optional<String> tipoAgua = Optional.empty();
+	private Optional<String> tamanho = Optional.empty();
+	private Optional<Integer> volume = Optional.empty();
+	private Optional<String> iluminacao = Optional.empty();
+	private Optional<String> filtragem = Optional.empty();
+	private Optional<String> sistemaCO2 = Optional.empty();
+	private Optional<String> dosagem = Optional.empty();
+	private Optional<String> substrato = Optional.empty();
+	private Optional<String> foto = Optional.empty();
+	private Optional<String> observacao = Optional.empty();
+	private Optional<Boolean> status = Optional.empty();
+	private Optional<Integer> idTipoAquario = Optional.empty();
+	private Optional<LocalDateTime> dtCadastro = Optional.empty();
+	private Optional<LocalDateTime> dtAtualizacao = Optional.empty();
 	
+	public interface Cadastrar {}
+	public interface Alterar {}
 	
-	public int getIdAquario() {
-		return idAquario;
+	public Optional<@NotNull(message="Campo 'id' obrigatório para método de alteração.", groups= {Alterar.class}) Integer> getId() {
+		return id;
 	}
-	public void setIdAquario(int idAquario) {
-		this.idAquario = idAquario;
+	public void setId(Optional<Integer> id) {
+		this.id = id;
 	}
-	
-	@NotEmpty(message="Campo 'nome' não pode ser nulo.")
-	public String getNome() {
+	public Optional<@NotEmpty(message="Campo 'nome' é obrigatório.", groups= {Cadastrar.class}) String> getNome() {
 		return nome;
 	}
-	public void setNome(String nome) {
+	public void setNome(Optional<String> nome) {
 		this.nome = nome;
 	}
-	
-	@PastOrPresent(message="Campo 'dtInicio' não pode ser posterior a data atual.")
-	@NotNull(message="Campo 'dtInicio' não pode ser nulo.")	
-	public Date getDtInicio() {
+	public Optional<@PastOrPresent(message="Campo 'dtInicio' não pode ser posterior a data atual.", groups= {Cadastrar.class})
+					@NotNull(message="Campo 'dtInicio' não pode ser nulo.", groups= {Cadastrar.class}) Date> getDtInicio() {
 		return dtInicio;
 	}
-	public void setDtInicio(Date dtInicio) {
+	public void setDtInicio(Optional<Date> dtInicio) {
 		this.dtInicio = dtInicio;
 	}
-	public Date getDtFinal() {
+	public Optional<Date> getDtFinal() {
 		return dtFinal;
 	}
-	public void setDtFinal(Date dtFinal) {
+	public void setDtFinal(Optional<Date> dtFinal) {
 		this.dtFinal = dtFinal;
 	}
-	public String getTipoAgua() {
+	public Optional<String> getTipoAgua() {
 		return tipoAgua;
 	}
-	public void setTipoAgua(String tipoAgua) {
+	public void setTipoAgua(Optional<String> tipoAgua) {
 		this.tipoAgua = tipoAgua;
 	}
-	
-	public String getTamanho() {
+	public Optional<String> getTamanho() {
 		return tamanho;
 	}
-	public void setTamanho(String tamanho) {
+	public void setTamanho(Optional<String> tamanho) {
 		this.tamanho = tamanho;
 	}
-	
-	@Positive(message="Campo 'volume' deve ser maior que zero.")	
-	public int getVolume() {
+	public Optional<@Positive(message="Campo 'volume' deve ser maior que zero.", groups= {Cadastrar.class}) Integer> getVolume() {
 		return volume;
 	}
-	public void setVolume(int volume) {
+	public void setVolume(Optional<Integer> volume) {
 		this.volume = volume;
 	}
-	public String getIluminacao() {
+	public Optional<String> getIluminacao() {
 		return iluminacao;
 	}
-	public void setIluminacao(String iluminacao) {
+	public void setIluminacao(Optional<String> iluminacao) {
 		this.iluminacao = iluminacao;
 	}
-	public String getFiltragem() {
+	public Optional<String> getFiltragem() {
 		return filtragem;
 	}
-	public void setFiltragem(String filtragem) {
+	public void setFiltragem(Optional<String> filtragem) {
 		this.filtragem = filtragem;
 	}
-	public String getSistemaCO2() {
+	public Optional<String> getSistemaCO2() {
 		return sistemaCO2;
 	}
-	public void setSistemaCO2(String sistemaCO2) {
+	public void setSistemaCO2(Optional<String> sistemaCO2) {
 		this.sistemaCO2 = sistemaCO2;
 	}
-	public String getDosagem() {
+	public Optional<String> getDosagem() {
 		return dosagem;
 	}
-	public void setDosagem(String dosagem) {
+	public void setDosagem(Optional<String> dosagem) {
 		this.dosagem = dosagem;
 	}
-	public String getSubstrato() {
+	public Optional<String> getSubstrato() {
 		return substrato;
 	}
-	public void setSubstrato(String substrato) {
+	public void setSubstrato(Optional<String> substrato) {
 		this.substrato = substrato;
 	}
-	public String getObservacao() {
+	public Optional<String> getFoto() {
+		return foto;
+	}
+	public void setFoto(Optional<String> foto) {
+		this.foto = foto;
+	}
+	public Optional<String> getObservacao() {
 		return observacao;
 	}
-	public void setObservacao(String observacao) {
+	public void setObservacao(Optional<String> observacao) {
 		this.observacao = observacao;
 	}
-	
-	@NotNull(message="Campo 'status' não pode ser nulo.")
-	public boolean getStatus() {
+	public Optional<@NotNull(message="Campo 'status' não pode ser nulo.", groups= {Cadastrar.class}) Boolean> getStatus() {
 		return status;
 	}
-	
-	public void setStatus(boolean status) {
+	public void setStatus(Optional<Boolean> status) {
 		this.status = status;
 	}
-	public int getIdTipoAquario() {
+	public Optional<Integer> getIdTipoAquario() {
 		return idTipoAquario;
 	}
-	public void setIdTipoAquario(int idTipoAquario) {
+	public void setIdTipoAquario(Optional<Integer> idTipoAquario) {
 		this.idTipoAquario = idTipoAquario;
 	}
+	public Optional<LocalDateTime> getDtCadastro() {
+		return dtCadastro;
+	}
+	public void setDtCadastro(Optional<LocalDateTime> dtCadastro) {
+		this.dtCadastro = dtCadastro;
+	}
+	public Optional<LocalDateTime> getDtAtualizacao() {
+		return dtAtualizacao;
+	}
+	public void setDtAtualizacao(Optional<LocalDateTime> dtAtualizacao) {
+		this.dtAtualizacao = dtAtualizacao;
+	}
+	
 }
