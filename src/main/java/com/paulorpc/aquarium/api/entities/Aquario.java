@@ -1,6 +1,6 @@
 package com.paulorpc.aquarium.api.entities;
 
-import java.time.LocalDateTime;
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.*;
@@ -8,11 +8,14 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "Aquario")
-public class Aquario {
+public class Aquario implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int idAquario;
+	@Column(name="idAquario")
+	private int id;
 	
 	@Column(name="nome", nullable=false)
 	private String nome;
@@ -60,21 +63,21 @@ public class Aquario {
 	private int idTipoAquario;
 	
 	@Column(name="dtCadastro", nullable=false)
-	private LocalDateTime dtCadastro;	
+	private Date dtCadastro;	
 	
 	@Column(name="dtAtualizacao", nullable=false)
-	private LocalDateTime dtAtualizacao;
+	private Date dtAtualizacao;
 	
 	
 	public Aquario() {}
 	
 	
-	public int getIdAquario() {
-		return idAquario;
+	public int getId() {
+		return id;
 	}
 
-	public void setIdAquario(int idAquario) {
-		this.idAquario = idAquario;
+	public void setId(int idAquario) {
+		this.id = idAquario;
 	}
 
 	public String getNome() {
@@ -189,30 +192,30 @@ public class Aquario {
 		this.idTipoAquario = idTipoAquario;
 	}
 
-	public LocalDateTime getDtCadastro() {
+	public Date getDtCadastro() {
 		return dtCadastro;
 	}
 
-	public void setDtCadastro(LocalDateTime dtCadastro) {
+	public void setDtCadastro(Date dtCadastro) {
 		this.dtCadastro = dtCadastro;
 	}
 
-	public LocalDateTime getDtAtualizacao() {
+	public Date getDtAtualizacao() {
 		return dtAtualizacao;
 	}
 
-	public void setDtAtualizacao(LocalDateTime dtAtualizacao) {
+	public void setDtAtualizacao(Date dtAtualizacao) {
 		this.dtAtualizacao = dtAtualizacao;
 	}
 	
 	@PreUpdate
 	public void preUpdate() {
-		dtAtualizacao = LocalDateTime.now();
+		dtAtualizacao = new Date();
 	}
 
 	@PrePersist
 	public void prePersist() {
-		LocalDateTime hojeHora = LocalDateTime.now();
+		Date hojeHora = new Date();
 		dtCadastro = hojeHora;
 		dtAtualizacao = hojeHora;
 	}
@@ -220,7 +223,7 @@ public class Aquario {
 
 	@Override
 	public String toString() {
-		return "Aquario [idAquario=" + idAquario + ", nome=" + nome + ", dtInicio=" + dtInicio + ", dtFinal=" + dtFinal
+		return "Aquario [idAquario=" + id + ", nome=" + nome + ", dtInicio=" + dtInicio + ", dtFinal=" + dtFinal
 				+ ", tipoAgua=" + tipoAgua + ", tamanho=" + tamanho + ", volume=" + volume + ", iluminacao="
 				+ iluminacao + ", filtragem=" + filtragem + ", sistemaCO2=" + sistemaCO2 + ", dosagem=" + dosagem
 				+ ", substrato=" + substrato + ", observacao=" + observacao + ", idTipoAquario=" + idTipoAquario

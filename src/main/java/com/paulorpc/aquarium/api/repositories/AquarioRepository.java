@@ -11,7 +11,7 @@ import com.paulorpc.aquarium.api.entities.Aquario;
 @Repository
 public interface AquarioRepository extends JpaRepository<Aquario, Integer> {
 	
-	Optional<Aquario> findByIdAquarioAndStatusIsTrue(int id);
+	Optional<Aquario> findByIdAndStatusIsTrue(int id);
 	
 	List<Aquario> findByStatusIsTrue();
 
