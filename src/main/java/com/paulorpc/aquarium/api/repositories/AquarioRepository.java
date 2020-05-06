@@ -10,9 +10,11 @@ import com.paulorpc.aquarium.api.entities.Aquario;
 
 @Repository
 public interface AquarioRepository extends JpaRepository<Aquario, Integer> {
-	
-	Optional<Aquario> findByIdAndStatusIsTrue(int id);
-	
-	List<Aquario> findByStatusIsTrue();
+
+  // TODO ALTERAR O PADRÃO DE FIND/FINDALL COM STATUS=TRUE IMPLICITO
+
+  Optional<Aquario> findByIdAndStatusIsTrue(int id);
+
+  List<Aquario> findByStatusIsTrue();
 
 }

@@ -3,233 +3,223 @@ package com.paulorpc.aquarium.api.entities;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.*;
-
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "Aquario")
 public class Aquario implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="idAquario")
-	private int id;
-	
-	@Column(name="nome", nullable=false)
-	private String nome;
-	
-	@Column(name="dtInicio", nullable=false)
-	private Date dtInicio;
-	
-	@Column(name="dtFinal", nullable=true)
-	private Date dtFinal;
-	
-	@Column(name="tipoAgua", nullable=true)
-	private String tipoAgua;
-	
-	@Column(name="tamanho", nullable=true)
-	private String tamanho;
-	
-	@Column(name="volume", nullable=true)
-	private int volume;
-	
-	@Column(name="iluminacao", nullable=true)
-	private String iluminacao;
-	
-	@Column(name="filtragem", nullable=true)
-	private String filtragem;
-	
-	@Column(name="sistemaCO2", nullable=true)
-	private String sistemaCO2;
-	
-	@Column(name="dosagem", nullable=true)
-	private String dosagem;
-	
-	@Column(name="substrato", nullable=true)
-	private String substrato;
-	
-	// private parametros;
-	// private foto;
-	
-	@Column(name="observacao", nullable=true)
-	private String observacao;
-	
-	@Column(name="status", nullable=true)
-	private boolean status;
-	
-	@Column(name="idTipoAquario", nullable=true)
-	private int idTipoAquario;
-	
-	@Column(name="dtCadastro", nullable=false)
-	private Date dtCadastro;	
-	
-	@Column(name="dtAtualizacao", nullable=false)
-	private Date dtAtualizacao;
-	
-	
-	public Aquario() {}
-	
-	
-	public int getId() {
-		return id;
-	}
+  private int id;
+  private String nome;
+  private Date dtInicio;
+  private Date dtFinal;
+  private String tipoAgua;
+  private String tamanho;
+  private int volume;
+  private String iluminacao;
+  private String filtragem;
+  private String sistemaCO2;
+  private String dosagem;
+  private String substrato;
+  // private foto;
+  private String observacao;
+  private boolean status;
+  private Date dtCadastro;
+  private Date dtAtualizacao;
 
-	public void setId(int idAquario) {
-		this.id = idAquario;
-	}
+  private TipoAquario tipoAquario;
+  // private Parametro parametros;
 
-	public String getNome() {
-		return nome;
-	}
+  public Aquario() {}
 
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "idAquario")
+  public int getId() {
+    return id;
+  }
 
-	public Date getDtInicio() {
-		return dtInicio;
-	}
+  public void setId(int idAquario) {
+    this.id = idAquario;
+  }
 
-	public void setDtInicio(Date dtInicio) {
-		this.dtInicio = dtInicio;
-	}
+  @Column(name = "nome", nullable = false)
+  public String getNome() {
+    return nome;
+  }
 
-	public Date getDtFinal() {
-		return dtFinal;
-	}
+  public void setNome(String nome) {
+    this.nome = nome;
+  }
 
-	public void setDtFinal(Date dtFinal) {
-		this.dtFinal = dtFinal;
-	}
+  @Column(name = "dtInicio", nullable = false)
+  public Date getDtInicio() {
+    return dtInicio;
+  }
 
-	public String getTipoAgua() {
-		return tipoAgua;
-	}
+  public void setDtInicio(Date dtInicio) {
+    this.dtInicio = dtInicio;
+  }
 
-	public void setTipoAgua(String tipoAgua) {
-		this.tipoAgua = tipoAgua;
-	}
+  @Column(name = "dtFinal", nullable = true)
+  public Date getDtFinal() {
+    return dtFinal;
+  }
 
-	public String getTamanho() {
-		return tamanho;
-	}
+  public void setDtFinal(Date dtFinal) {
+    this.dtFinal = dtFinal;
+  }
 
-	public void setTamanho(String tamanho) {
-		this.tamanho = tamanho;
-	}
+  @Column(name = "tipoAgua", nullable = true)
+  public String getTipoAgua() {
+    return tipoAgua;
+  }
 
-	public int getVolume() {
-		return volume;
-	}
+  public void setTipoAgua(String tipoAgua) {
+    this.tipoAgua = tipoAgua;
+  }
 
-	public void setVolume(int volume) {
-		this.volume = volume;
-	}
+  @Column(name = "tamanho", nullable = true)
+  public String getTamanho() {
+    return tamanho;
+  }
 
-	public String getIluminacao() {
-		return iluminacao;
-	}
+  public void setTamanho(String tamanho) {
+    this.tamanho = tamanho;
+  }
 
-	public void setIluminacao(String iluminacao) {
-		this.iluminacao = iluminacao;
-	}
+  @Column(name = "volume", nullable = true)
+  public int getVolume() {
+    return volume;
+  }
 
-	public String getFiltragem() {
-		return filtragem;
-	}
+  public void setVolume(int volume) {
+    this.volume = volume;
+  }
 
-	public void setFiltragem(String filtragem) {
-		this.filtragem = filtragem;
-	}
+  @Column(name = "iluminacao", nullable = true)
+  public String getIluminacao() {
+    return iluminacao;
+  }
 
-	public String getSistemaCO2() {
-		return sistemaCO2;
-	}
+  public void setIluminacao(String iluminacao) {
+    this.iluminacao = iluminacao;
+  }
 
-	public void setSistemaCO2(String sistemaCO2) {
-		this.sistemaCO2 = sistemaCO2;
-	}
+  @Column(name = "filtragem", nullable = true)
+  public String getFiltragem() {
+    return filtragem;
+  }
 
-	public String getDosagem() {
-		return dosagem;
-	}
+  public void setFiltragem(String filtragem) {
+    this.filtragem = filtragem;
+  }
 
-	public void setDosagem(String dosagem) {
-		this.dosagem = dosagem;
-	}
+  @Column(name = "sistemaCO2", nullable = true)
+  public String getSistemaCO2() {
+    return sistemaCO2;
+  }
 
-	public String getSubstrato() {
-		return substrato;
-	}
+  public void setSistemaCO2(String sistemaCO2) {
+    this.sistemaCO2 = sistemaCO2;
+  }
 
-	public void setSubstrato(String substrato) {
-		this.substrato = substrato;
-	}
+  @Column(name = "dosagem", nullable = true)
+  public String getDosagem() {
+    return dosagem;
+  }
 
-	public String getObservacao() {
-		return observacao;
-	}
+  public void setDosagem(String dosagem) {
+    this.dosagem = dosagem;
+  }
 
-	public void setObservacao(String observacao) {
-		this.observacao = observacao;
-	}
+  @Column(name = "substrato", nullable = true)
+  public String getSubstrato() {
+    return substrato;
+  }
 
-	public boolean getStatus() {
-		return status;
-	}
+  public void setSubstrato(String substrato) {
+    this.substrato = substrato;
+  }
 
-	public void setStatus(boolean status) {
-		this.status = status;
-	}
+  @Column(name = "observacao", nullable = true)
+  public String getObservacao() {
+    return observacao;
+  }
 
-	public int getIdTipoAquario() {
-		return idTipoAquario;
-	}
+  public void setObservacao(String observacao) {
+    this.observacao = observacao;
+  }
 
-	public void setIdTipoAquario(int idTipoAquario) {
-		this.idTipoAquario = idTipoAquario;
-	}
+  @Column(name = "status", nullable = false)
+  public boolean getStatus() {
+    return status;
+  }
 
-	public Date getDtCadastro() {
-		return dtCadastro;
-	}
+  public void setStatus(boolean status) {
+    this.status = status;
+  }
 
-	public void setDtCadastro(Date dtCadastro) {
-		this.dtCadastro = dtCadastro;
-	}
+  @Column(name = "dtCadastro", nullable = false)
+  public Date getDtCadastro() {
+    return dtCadastro;
+  }
 
-	public Date getDtAtualizacao() {
-		return dtAtualizacao;
-	}
+  public void setDtCadastro(Date dtCadastro) {
+    this.dtCadastro = dtCadastro;
+  }
 
-	public void setDtAtualizacao(Date dtAtualizacao) {
-		this.dtAtualizacao = dtAtualizacao;
-	}
-	
-	@PreUpdate
-	public void preUpdate() {
-		dtAtualizacao = new Date();
-	}
+  @Column(name = "dtAtualizacao", nullable = false)
+  public Date getDtAtualizacao() {
+    return dtAtualizacao;
+  }
 
-	@PrePersist
-	public void prePersist() {
-		Date hojeHora = new Date();
-		dtCadastro = hojeHora;
-		dtAtualizacao = hojeHora;
-	}
+  public void setDtAtualizacao(Date dtAtualizacao) {
+    this.dtAtualizacao = dtAtualizacao;
+  }
 
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "idTipoAquario")
+  public TipoAquario getTipoAquario() {
+    return tipoAquario;
+  }
 
-	@Override
-	public String toString() {
-		return "Aquario [idAquario=" + id + ", nome=" + nome + ", dtInicio=" + dtInicio + ", dtFinal=" + dtFinal
-				+ ", tipoAgua=" + tipoAgua + ", tamanho=" + tamanho + ", volume=" + volume + ", iluminacao="
-				+ iluminacao + ", filtragem=" + filtragem + ", sistemaCO2=" + sistemaCO2 + ", dosagem=" + dosagem
-				+ ", substrato=" + substrato + ", observacao=" + observacao + ", idTipoAquario=" + idTipoAquario
-				+ ", dtCadastro=" + dtCadastro + ", dtAtualizacao=" + dtAtualizacao + "]";
-	}
-	
-	
+  public void setTipoAquario(TipoAquario tipoAquario) {
+    this.tipoAquario = tipoAquario;
+  }
+
+  @PreUpdate
+  public void preUpdate() {
+    dtAtualizacao = new Date();
+  }
+
+  @PrePersist
+  public void prePersist() {
+    Date hojeHora = new Date();
+    dtCadastro = hojeHora;
+    dtAtualizacao = hojeHora;
+  }
+
+  @Override
+  public String toString() {
+    return "Aquario [id=" + id + ", nome=" + nome + ", dtInicio=" + dtInicio + ", dtFinal="
+        + dtFinal + ", tipoAgua=" + tipoAgua + ", tamanho=" + tamanho + ", volume=" + volume
+        + ", iluminacao=" + iluminacao + ", filtragem=" + filtragem + ", sistemaCO2=" + sistemaCO2
+        + ", dosagem=" + dosagem + ", substrato=" + substrato + ", observacao=" + observacao
+        + ", status=" + status + ", dtCadastro=" + dtCadastro + ", dtAtualizacao=" + dtAtualizacao
+        + ", tipoAquario=" + tipoAquario + "]";
+  }
 
 }
