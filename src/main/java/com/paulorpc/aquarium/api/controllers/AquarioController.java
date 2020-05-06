@@ -25,184 +25,201 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.paulorpc.aquarium.api.dtos.AquarioDto;
 import com.paulorpc.aquarium.api.entities.Aquario;
+import com.paulorpc.aquarium.api.entities.TipoAquario;
 import com.paulorpc.aquarium.api.response.Response;
 import com.paulorpc.aquarium.api.services.AquarioService;
+import com.paulorpc.aquarium.api.services.TipoAquarioService;
+import com.paulorpc.aquarium.api.util.Global;
 
 @RestController
 @RequestMapping("/api/aquario")
 @CrossOrigin("*")
 @SessionAttributes("aquario")
 public class AquarioController {
-	
-	Logger log = LoggerFactory.getLogger(AquarioController.class);
-	
-	@Autowired
-	private AquarioService aquarioService;
-	
-	
-	@GetMapping
-	public ResponseEntity<Response<List<AquarioDto>>> buscarTodos() {		
-		log.info("Requisição para buscar todos aquários - buscarTodos()");
-		Response<List<AquarioDto>> response = new Response<>();
-		
-		List<Aquario> aquarios = aquarioService.buscarTodos();
-		List<AquarioDto> aquariosDto = aquarios.stream().map(a -> {
-			return converteObjetoParaDto(a);
-		}).collect(Collectors.toList());
-		
-		response.setData(aquariosDto);
-		return ResponseEntity.ok(response);
-	}
-	
-	@GetMapping(value="/ativos")
-	public ResponseEntity<Response<List<AquarioDto>>> buscarTodosAtivos() {
-		log.info("Requisição para buscar todos aquários ativos - buscarTodosAtivos()");
-		Response<List<AquarioDto>> response = new Response<>();
-		
-		List<Aquario> aquarios = aquarioService.buscarTodosAtivos();
-		List<AquarioDto> aquariosDto = aquarios.stream().map(a->{
-			return converteObjetoParaDto(a);
-		}).collect(Collectors.toList());
-		
-		response.setData(aquariosDto);
-		return ResponseEntity.ok(response);
-	}
-	
-	@PostMapping
-	public ResponseEntity<Response<AquarioDto>> cadastrarAquario(@Validated(AquarioDto.Cadastrar.class) @RequestBody AquarioDto aquarioDto, BindingResult result) {
-		log.info("Requisição para cadastrar um novo aquário - cadastrarAquario()");
-		Response<AquarioDto> response = new Response<>();
-		
-		if(result.hasErrors()) {			
-			response.setIssuesFromResultErrors(result, log);
-			return ResponseEntity.badRequest().body(response);
-		}
-		
-		if(!aquarioDto.getStatus().get().booleanValue())
-				response.getIssues().add("O campo 'status' foi alterado para true pelo sistema, pois o método POST sempre considera true o 'status' de um novo registro.");
-		
-		
-		Aquario novoAquario = aquarioService.cadastrarAquario(converteDtoParaObjeto(aquarioDto));		
-		
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(novoAquario.getId()).toUri();
-		response.setData(converteObjetoParaDto(novoAquario));		
-        return ResponseEntity.created(uri).body(response);
-	}
 
-	
-	@PutMapping
-	public ResponseEntity<Response<AquarioDto>> alterarAquario(@Validated(AquarioDto.Alterar.class) @RequestBody AquarioDto aquarioDto, BindingResult result) {
-		log.info("Requisição para alterar um aquaário existente - alterarAquario()");
-		Response<AquarioDto> response = new Response<>();
-		if(result.hasErrors()) {
-			response.setIssuesFromResultErrors(result, log);
-			return ResponseEntity.badRequest().body(response);
-		}	
-		
-		Optional<Aquario> aquarioOpt = aquarioService.alterarAquario(aquarioDto);
-		
-		if(!aquarioOpt.isPresent()) {
-			response.getIssues().add("Não foi possível localizar o aquário, id: " + aquarioDto.getId());
-			return ResponseEntity.badRequest().body(response);
-		}
-			
-		response.setData(converteObjetoParaDto(aquarioOpt.get()));
-		return ResponseEntity.ok(response);
-	}
-	
-	
-	/***
-	 * Método de deleção de aquários.
-	 * Obs: Feito método utilizando estilo funcional para aprendizado.
-	 * @param id
-	 * @return
-	 */
-	@DeleteMapping(value="/{id}")
-	public ResponseEntity<Response<AquarioDto>> deletarAquario(@PathVariable int id) {
-		log.info("Requisição para deletar um aquário - deletarAquario()");
-		Response<AquarioDto> response = new Response<>();
-		
-		/*
-		Optional<Aquario> aquario = aquarioService.deletarAquario(id);
-		if(!aquario.isPresent())
-			return ResponseEntity.notFound().build();
-			
-		//response.setData(ConverteAquarioToAquarioDto(aquario.get()));
-		//return ResponseEntity.ok(response);
-		*/
-		
-		return aquarioService
-					.deletarAquario(id)
-					.map(aquario -> {
-						response.setData(converteObjetoParaDto(aquario));
-						return ResponseEntity.ok(response);
-					})
-					.orElse(ResponseEntity.notFound().build());
-	
-	}
-	
-	
-	/************* CONVERSORES OBJETO/DTO *************/ 
-	
-	
-	/***
-	 * Converte objeto Aquario para AquarioDTO
-	 * @param dto
-	 * @return Aquario
-	 */
-	private static Aquario converteDtoParaObjeto(AquarioDto dto) {		
-		return converteDtoParaObjeto(dto, new Aquario());
-	}
-	
-	/***
-	 * Converte objeto Aquario para AquarioDTO
-	 * @param dto
-	 * @return Aquario
-	 */
-	public static Aquario converteDtoParaObjeto(AquarioDto dto, Aquario aquario) {	
-		dto.getId().ifPresent(v->aquario.setId(v));
-		dto.getNome().ifPresent(v->aquario.setNome(v));
-		dto.getDtInicio().ifPresent(v->aquario.setDtInicio(v));
-		dto.getDtFinal().ifPresent(v->aquario.setDtFinal(v));
-		dto.getTipoAgua().ifPresent(v->aquario.setTipoAgua(v));
-		dto.getTamanho().ifPresent(v->aquario.setTamanho(v));
-		dto.getVolume().ifPresent(v->aquario.setVolume(v));
-		dto.getIluminacao().ifPresent(v->aquario.setIluminacao(v));
-		dto.getFiltragem().ifPresent(v->aquario.setFiltragem(v));
-		dto.getSistemaCO2().ifPresent(v->aquario.setSistemaCO2(v));
-		dto.getDosagem().ifPresent(v->aquario.setDosagem(v));
-		dto.getSubstrato().ifPresent(v->aquario.setSubstrato(v));
-		dto.getObservacao().ifPresent(v->aquario.setObservacao(v));
-		dto.getStatus().ifPresent(v->aquario.setStatus(v));
-		dto.getIdTipoAquario().ifPresent(v->aquario.setIdTipoAquario(v));
-		return aquario;
-	}
-	
-	
-	/***
-	 * Converte objeto Aquario para AquarioDTO
-	 * @param aquario
-	 * @return aquarioDto
-	 */
-	private static AquarioDto converteObjetoParaDto(Aquario aquario) {
-		AquarioDto dto = new AquarioDto();
-		dto.setId(Optional.ofNullable(aquario.getId()));
-		dto.setNome(Optional.ofNullable(aquario.getNome()));
-		dto.setDtInicio(Optional.ofNullable(aquario.getDtInicio()));
-		dto.setDtFinal(Optional.ofNullable(aquario.getDtFinal()));
-		dto.setTipoAgua(Optional.ofNullable(aquario.getTipoAgua()));
-		dto.setTamanho(Optional.ofNullable(aquario.getTamanho()));
-		dto.setVolume(Optional.ofNullable(aquario.getVolume()));
-		dto.setIluminacao(Optional.ofNullable(aquario.getIluminacao()));
-		dto.setFiltragem(Optional.ofNullable(aquario.getFiltragem()));
-		dto.setSistemaCO2(Optional.ofNullable(aquario.getSistemaCO2()));
-		dto.setDosagem(Optional.ofNullable(aquario.getDosagem()));
-		dto.setSubstrato(Optional.ofNullable(aquario.getSubstrato()));
-		dto.setObservacao(Optional.ofNullable(aquario.getObservacao()));
-		dto.setStatus(Optional.ofNullable(aquario.getStatus()));
-		dto.setIdTipoAquario(Optional.ofNullable(aquario.getIdTipoAquario()));
-		dto.setDtCadastro(Optional.ofNullable(aquario.getDtCadastro()));
-		dto.setDtAtualizacao(Optional.ofNullable(aquario.getDtCadastro()));
-		return dto;
-	}
+  private final Logger log = LoggerFactory.getLogger(AquarioController.class);
+  private Global gb = new Global();
+
+  @Autowired
+  private AquarioService aquarioService;
+  @Autowired
+  private TipoAquarioService tipoAquarioService;
+
+  @GetMapping(value = "/{id}")
+  public ResponseEntity<Response<AquarioDto>> buscarAquario(@PathVariable int id) {
+    log.info("Requisição para buscar aquário - buscarAquario(). Id: " + id);
+    Response<AquarioDto> response = new Response<>();
+
+    return aquarioService.buscarAquario(id).map(aquario -> {
+      response.setData(converteObjetoParaDto(aquario));
+      return ResponseEntity.ok(response);
+    }).orElse(ResponseEntity.notFound().build());
+  }
+
+  @GetMapping
+  public ResponseEntity<Response<List<AquarioDto>>> buscarTodos() {
+    log.info("Requisição para buscar todos aquários - buscarTodos()");
+    Response<List<AquarioDto>> response = new Response<>();
+
+    List<Aquario> aquarios = aquarioService.buscarTodos();
+    List<AquarioDto> aquariosDto = aquarios.stream().map(a -> {
+      return converteObjetoParaDto(a);
+    }).collect(Collectors.toList());
+
+    response.setData(aquariosDto);
+    return ResponseEntity.ok(response);
+  }
+
+  @GetMapping(value = "/ativos")
+  public ResponseEntity<Response<List<AquarioDto>>> buscarTodosAtivos() {
+    log.info("Requisição para buscar todos aquários ativos - buscarTodosAtivos()");
+    Response<List<AquarioDto>> response = new Response<>();
+
+    List<Aquario> aquarios = aquarioService.buscarTodosAtivos();
+    List<AquarioDto> aquariosDto = aquarios.stream().map(a -> {
+      return converteObjetoParaDto(a);
+    }).collect(Collectors.toList());
+
+    response.setData(aquariosDto);
+    return ResponseEntity.ok(response);
+  }
+
+  @PostMapping
+  public ResponseEntity<Response<AquarioDto>> cadastrarAquario(
+      @Validated(AquarioDto.Cadastrar.class) @RequestBody AquarioDto aquarioDto,
+      BindingResult result) {
+    log.info("Requisição para cadastrar um novo aquário - cadastrarAquario()");
+    Response<AquarioDto> response = new Response<>();
+    String issueMsg = new String();
+
+    if (result.hasErrors()) {
+      response.setIssuesFromResultErrors(result, log);
+      return ResponseEntity.badRequest().body(response);
+    }
+
+    Aquario novoAquario = new Aquario();
+    Optional<TipoAquario> tipoAquario =
+        aquarioDto.getIdTipoAquario().flatMap(id -> tipoAquarioService.buscarTipoAquario(id));
+
+    if (tipoAquario.isPresent())
+      novoAquario.setTipoAquario(tipoAquario.get());
+    else if (aquarioDto.getIdTipoAquario().isPresent()) {
+      issueMsg = "O campo 'idTipoAquario' informado não foi localizado. IdTipoAquario: "
+          + gb.nullToEmpty(aquarioDto.getIdTipoAquario().get());
+      response.addIssue(issueMsg, log);
+    }
+
+    issueMsg =
+        "O campo 'status' foi alterado para true pelo sistema, pois o método POST sempre considera true o 'status' de um novo registro.";
+    aquarioDto.getStatus().orElse(response.addIssue(issueMsg, log));
+
+    novoAquario = aquarioService.cadastrarAquario(converteDtoParaObjeto(aquarioDto, novoAquario));
+    URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+        .buildAndExpand(novoAquario.getId()).toUri();
+    response.setData(converteObjetoParaDto(novoAquario));
+    return ResponseEntity.created(uri).body(response);
+  }
+
+  @PutMapping
+  public ResponseEntity<Response<AquarioDto>> alterarAquario(
+      @Validated(AquarioDto.Alterar.class) @RequestBody AquarioDto aquarioDto,
+      BindingResult result) {
+    log.info("Requisição para alterar um aquaário existente - alterarAquario()");
+    Response<AquarioDto> response = new Response<>();
+    if (result.hasErrors()) {
+      response.setIssuesFromResultErrors(result, log);
+      return ResponseEntity.badRequest().body(response);
+    }
+
+    Optional<Aquario> aquarioOpt = aquarioService.alterarAquario(aquarioDto);
+
+    if (!aquarioOpt.isPresent()) {
+      response.getIssues().add("Não foi possível localizar o aquário, id: " + aquarioDto.getId());
+      return ResponseEntity.notFound().build();
+    }
+
+    response.setData(converteObjetoParaDto(aquarioOpt.get()));
+    return ResponseEntity.ok(response);
+  }
+
+  /***
+   * Método de deleção de aquários. Obs: Feito método utilizando estilo funcional para aprendizado.
+   * 
+   * @param id
+   * @return
+   */
+  @DeleteMapping(value = "/{id}")
+  public ResponseEntity<Response<AquarioDto>> deletarAquario(@PathVariable int id) {
+    log.info("Requisição para deletar um aquário - deletarAquario()");
+    Response<AquarioDto> response = new Response<>();
+
+    /*
+     * Optional<Aquario> aquario = aquarioService.deletarAquario(id); if(!aquario.isPresent())
+     * return ResponseEntity.notFound().build();
+     * 
+     * //response.setData(ConverteAquarioToAquarioDto(aquario.get())); //return
+     * ResponseEntity.ok(response);
+     */
+
+    return aquarioService.deletarAquario(id).map(aquario -> {
+      response.setData(converteObjetoParaDto(aquario));
+      return ResponseEntity.ok(response);
+    }).orElse(ResponseEntity.notFound().build());
+
+  }
+
+  /************* CONVERSORES OBJETO/DTO *************/
+
+  /***
+   * Converte objeto Aquario para AquarioDTO
+   * 
+   * @param dto
+   * @return Aquario
+   */
+  public static Aquario converteDtoParaObjeto(AquarioDto dto, Aquario obj) {
+    dto.getId().ifPresent(v -> obj.setId(v));
+    dto.getNome().ifPresent(v -> obj.setNome(v));
+    dto.getDtInicio().ifPresent(v -> obj.setDtInicio(v));
+    dto.getDtFinal().ifPresent(v -> obj.setDtFinal(v));
+    dto.getTipoAgua().ifPresent(v -> obj.setTipoAgua(v));
+    dto.getTamanho().ifPresent(v -> obj.setTamanho(v));
+    dto.getVolume().ifPresent(v -> obj.setVolume(v));
+    dto.getIluminacao().ifPresent(v -> obj.setIluminacao(v));
+    dto.getFiltragem().ifPresent(v -> obj.setFiltragem(v));
+    dto.getSistemaCO2().ifPresent(v -> obj.setSistemaCO2(v));
+    dto.getDosagem().ifPresent(v -> obj.setDosagem(v));
+    dto.getSubstrato().ifPresent(v -> obj.setSubstrato(v));
+    dto.getObservacao().ifPresent(v -> obj.setObservacao(v));
+    dto.getStatus().ifPresent(v -> obj.setStatus(v));
+    return obj;
+  }
+
+  /***
+   * Converte objeto Aquario para AquarioDTO
+   * 
+   * @param obj
+   * @return aquarioDto
+   */
+  private static AquarioDto converteObjetoParaDto(Aquario obj) {
+    AquarioDto dto = new AquarioDto();
+    dto.setId(Optional.ofNullable(obj.getId()));
+    dto.setNome(Optional.ofNullable(obj.getNome()));
+    dto.setDtInicio(Optional.ofNullable(obj.getDtInicio()));
+    dto.setDtFinal(Optional.ofNullable(obj.getDtFinal()));
+    dto.setTipoAgua(Optional.ofNullable(obj.getTipoAgua()));
+    dto.setTamanho(Optional.ofNullable(obj.getTamanho()));
+    dto.setVolume(Optional.ofNullable(obj.getVolume()));
+    dto.setIluminacao(Optional.ofNullable(obj.getIluminacao()));
+    dto.setFiltragem(Optional.ofNullable(obj.getFiltragem()));
+    dto.setSistemaCO2(Optional.ofNullable(obj.getSistemaCO2()));
+    dto.setDosagem(Optional.ofNullable(obj.getDosagem()));
+    dto.setSubstrato(Optional.ofNullable(obj.getSubstrato()));
+    dto.setObservacao(Optional.ofNullable(obj.getObservacao()));
+    dto.setStatus(Optional.ofNullable(obj.getStatus()));
+    dto.setDtCadastro(obj.getDtCadastro());
+    dto.setDtAtualizacao(obj.getDtAtualizacao());
+    Optional.ofNullable(obj.getTipoAquario())
+        .ifPresent(v -> dto.setIdTipoAquario(Optional.of(v.getId())));
+    return dto;
+  }
 }
