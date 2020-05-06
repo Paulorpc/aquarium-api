@@ -55,7 +55,7 @@ public class TipoAquarioDto {
   }
 
   public Optional<@NotNull(message = "Campo 'status' é obrigatório.",
-      groups = {Cadastrar.class}) Boolean> isStatus() {
+      groups = {Cadastrar.class}) Boolean> getStatus() {
     return status;
   }
 
