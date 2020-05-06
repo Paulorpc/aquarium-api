@@ -132,7 +132,7 @@ public class TipoAquarioController {
   }
 
   @DeleteMapping(value = "/{id}")
-  public ResponseEntity<Response<TipoAquarioDto>> deletarAquario(@PathVariable int id) {
+  public ResponseEntity<Response<TipoAquarioDto>> deletarTipoAquario(@PathVariable int id) {
     log.info("Requisição para deletar um aquário - deletarAquario()");
     Response<TipoAquarioDto> response = new Response<>();
 
