@@ -3,6 +3,7 @@ Sistema de controle de aquários
 
 
 Na raiz do projeto está disponibilizado o arquivo <eclipse-java-google-style.xml>. Arquivo responsável por fazer a formatação do código segundo o padrão adotado pelo Google.
+- Google Style Guide: https://github.com/google/styleguide
 - Configuração: Project properties -> Java Code Style -> Formatter -> Import 
   
 
