@@ -1,73 +1,92 @@
 package com.paulorpc.aquarium.api.entities;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "Taxonomia")
 public abstract class Taxonomia {
-	
-	private String reino;
-	private String filo;
-	private String classe;
-	private String ordem;
-	private String família;
-	private String gênero;
-	private String espécie;
 
-	public Taxonomia() {}
+  private String dominio;
+  private String reino;
+  private String filo;
+  private String classe;
+  private String ordem;
+  private String família;
+  private String gênero;
+  private String espécie;
 
-	public String getReino() {
-		return reino;
-	}
+  public Taxonomia() {}
 
-	public void setReino(String reino) {
-		this.reino = reino;
-	}
+  public String getDominio() {
+    return dominio;
+  }
 
-	public String getFilo() {
-		return filo;
-	}
+  public void setDominio(String dominio) {
+    this.dominio = dominio;
+  }
 
-	public void setFilo(String filo) {
-		this.filo = filo;
-	}
+  public String getReino() {
+    return reino;
+  }
 
-	public String getClasse() {
-		return classe;
-	}
+  public void setReino(String reino) {
+    this.reino = reino;
+  }
 
-	public void setClasse(String classe) {
-		this.classe = classe;
-	}
+  public String getFilo() {
+    return filo;
+  }
 
-	public String getOrdem() {
-		return ordem;
-	}
+  public void setFilo(String filo) {
+    this.filo = filo;
+  }
 
-	public void setOrdem(String ordem) {
-		this.ordem = ordem;
-	}
+  public String getClasse() {
+    return classe;
+  }
 
-	public String getFamília() {
-		return família;
-	}
+  public void setClasse(String classe) {
+    this.classe = classe;
+  }
 
-	public void setFamília(String família) {
-		this.família = família;
-	}
+  public String getOrdem() {
+    return ordem;
+  }
 
-	public String getGênero() {
-		return gênero;
-	}
+  public void setOrdem(String ordem) {
+    this.ordem = ordem;
+  }
 
-	public void setGênero(String gênero) {
-		this.gênero = gênero;
-	}
+  public String getFamília() {
+    return família;
+  }
 
-	public String getEspécie() {
-		return espécie;
-	}
+  public void setFamília(String família) {
+    this.família = família;
+  }
 
-	public void setEspécie(String espécie) {
-		this.espécie = espécie;
-	}
-	
-	
+  public String getGênero() {
+    return gênero;
+  }
+
+  public void setGênero(String gênero) {
+    this.gênero = gênero;
+  }
+
+  public String getEspécie() {
+    return espécie;
+  }
+
+  public void setEspécie(String espécie) {
+    this.espécie = espécie;
+  }
+
+  @Override
+  public String toString() {
+    return "Taxonomia [dominio=" + dominio + ", reino=" + reino + ", filo=" + filo + ", classe="
+        + classe + ", ordem=" + ordem + ", família=" + família + ", gênero=" + gênero + ", espécie="
+        + espécie + "]";
+  }
 
 }

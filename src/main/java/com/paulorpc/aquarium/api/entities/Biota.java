@@ -1,118 +1,228 @@
 package com.paulorpc.aquarium.api.entities;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
+@Entity
+@Table(name = "Biota")
 public class Biota {
-	
-	 private int idBiota;
-	 private int idAquario;
-	 //private Organismo organismo;
-	 private LocalDate dtAquisicao;
-	 private LocalDate dtNascimento;
-	 //private LocalDate dtObito;	 	 
-	 //private tipoBiota;
-	 private String genero;
-	 private BigDecimal vlrUnitario;
-	 private int qtde;
-	 //private foto;
-	 private Double avaliacao;
-	 private String observacao;	 		
-	 private LocalDateTime dtCadastro;
-	 private LocalDateTime dtAtualizacao;
 
-	public Biota() {}
+  private int idBiota;
 
-	public int getIdBiota() {
-		return idBiota;
-	}
+  private String nomePopular;
 
-	public void setIdBiota(int idBiota) {
-		this.idBiota = idBiota;
-	}
+  private String nomeCientifico;
 
-	public int getIdAquario() {
-		return idAquario;
-	}
+  private Enum tipoAgua;
 
-	public void setIdAquario(int idAquario) {
-		this.idAquario = idAquario;
-	}
+  // 3 a 5 níveis no máximo. Talvez 3.
+  private Enum nivelCuidado;
 
-	public LocalDate getDtAquisicao() {
-		return dtAquisicao;
-	}
+  private int volumeMinAquario;
 
-	public void setDtAquisicao(LocalDate dtAquisicao) {
-		this.dtAquisicao = dtAquisicao;
-	}
+  private String alimentação;
 
-	public LocalDate getDtNascimento() {
-		return dtNascimento;
-	}
+  private String habitat;
 
-	public void setDtNascimento(LocalDate dtNascimento) {
-		this.dtNascimento = dtNascimento;
-	}
+  private String regiao;
 
-	public String getGenero() {
-		return genero;
-	}
+  // tabelas de tamanhos, permitindo add tamanhos personalizados
+  private String tamanho;
 
-	public void setGenero(String genero) {
-		this.genero = genero;
-	}
+  // Segundo iucnredlist.org
+  private Enum estadoConservacao;
 
-	public BigDecimal getVlrUnitario() {
-		return vlrUnitario;
-	}
+  private String infoAdicional;
 
-	public void setVlrUnitario(BigDecimal vlrUnitario) {
-		this.vlrUnitario = vlrUnitario;
-	}
+  private Taxonomia taxonomia;
 
-	public int getQtde() {
-		return qtde;
-	}
+  private List<String> fotos;
 
-	public void setQtde(int qtde) {
-		this.qtde = qtde;
-	}
+  private Double avaliacao;
 
-	public Double getAvaliacao() {
-		return avaliacao;
-	}
+  private boolean excluido;
 
-	public void setAvaliacao(Double avaliacao) {
-		this.avaliacao = avaliacao;
-	}
+  private Date dtCadastro;
 
-	public String getObservacao() {
-		return observacao;
-	}
+  private Date dtAtualizacao;
 
-	public void setObservacao(String observacao) {
-		this.observacao = observacao;
-	}
+  private String usuarioAtualizacao;
 
-	public LocalDateTime getDtCadastro() {
-		return dtCadastro;
-	}
+  private boolean bloqueadoAlteracao;
 
-	public void setDtCadastro(LocalDateTime dtCadastro) {
-		this.dtCadastro = dtCadastro;
-	}
+  public int getIdBiota() {
+    return idBiota;
+  }
 
-	public LocalDateTime getDtAtualizacao() {
-		return dtAtualizacao;
-	}
+  public void setIdBiota(int idBiota) {
+    this.idBiota = idBiota;
+  }
 
-	public void setDtAtualizacao(LocalDateTime dtAtualizacao) {
-		this.dtAtualizacao = dtAtualizacao;
-	}
+  public String getNomePopular() {
+    return nomePopular;
+  }
 
-	
-	
+  public void setNomePopular(String nomePopular) {
+    this.nomePopular = nomePopular;
+  }
+
+  public String getNomeCientifico() {
+    return nomeCientifico;
+  }
+
+  public void setNomeCientifico(String nomeCientifico) {
+    this.nomeCientifico = nomeCientifico;
+  }
+
+  public Enum getTipoAgua() {
+    return tipoAgua;
+  }
+
+  public void setTipoAgua(Enum tipoAgua) {
+    this.tipoAgua = tipoAgua;
+  }
+
+  public Enum getNivelCuidado() {
+    return nivelCuidado;
+  }
+
+  public void setNivelCuidado(Enum nivelCuidado) {
+    this.nivelCuidado = nivelCuidado;
+  }
+
+  public int getVolumeMinAquario() {
+    return volumeMinAquario;
+  }
+
+  public void setVolumeMinAquario(int volumeMinAquario) {
+    this.volumeMinAquario = volumeMinAquario;
+  }
+
+  public String getAlimentação() {
+    return alimentação;
+  }
+
+  public void setAlimentação(String alimentação) {
+    this.alimentação = alimentação;
+  }
+
+  public String getHabitat() {
+    return habitat;
+  }
+
+  public void setHabitat(String habitat) {
+    this.habitat = habitat;
+  }
+
+  public String getRegiao() {
+    return regiao;
+  }
+
+  public void setRegiao(String regiao) {
+    this.regiao = regiao;
+  }
+
+  public String getTamanho() {
+    return tamanho;
+  }
+
+  public void setTamanho(String tamanho) {
+    this.tamanho = tamanho;
+  }
+
+  public Enum getEstadoConservacao() {
+    return estadoConservacao;
+  }
+
+  public void setEstadoConservacao(Enum estadoConservacao) {
+    this.estadoConservacao = estadoConservacao;
+  }
+
+  public String getInfoAdicional() {
+    return infoAdicional;
+  }
+
+  public void setInfoAdicional(String infoAdicional) {
+    this.infoAdicional = infoAdicional;
+  }
+
+  public Taxonomia getTaxonomia() {
+    return taxonomia;
+  }
+
+  public void setTaxonomia(Taxonomia taxonomia) {
+    this.taxonomia = taxonomia;
+  }
+
+  public List<String> getFotos() {
+    return fotos;
+  }
+
+  public void setFotos(List<String> fotos) {
+    this.fotos = fotos;
+  }
+
+  public Double getAvaliacao() {
+    return avaliacao;
+  }
+
+  public void setAvaliacao(Double avaliacao) {
+    this.avaliacao = avaliacao;
+  }
+
+  public boolean isExcluido() {
+    return excluido;
+  }
+
+  public void setExcluido(boolean excluido) {
+    this.excluido = excluido;
+  }
+
+  public Date getDtCadastro() {
+    return dtCadastro;
+  }
+
+  public void setDtCadastro(Date dtCadastro) {
+    this.dtCadastro = dtCadastro;
+  }
+
+  public Date getDtAtualizacao() {
+    return dtAtualizacao;
+  }
+
+  public void setDtAtualizacao(Date dtAtualizacao) {
+    this.dtAtualizacao = dtAtualizacao;
+  }
+
+  public String getUsuarioAtualizacao() {
+    return usuarioAtualizacao;
+  }
+
+  public void setUsuarioAtualizacao(String usuarioAtualizacao) {
+    this.usuarioAtualizacao = usuarioAtualizacao;
+  }
+
+  public boolean isBloqueadoAlteracao() {
+    return bloqueadoAlteracao;
+  }
+
+  public void setBloqueadoAlteracao(boolean bloqueadoAlteracao) {
+    this.bloqueadoAlteracao = bloqueadoAlteracao;
+  }
+
+  @Override
+  public String toString() {
+    return "Biota [idBiota=" + idBiota + ", nomePopular=" + nomePopular + ", nomeCientifico="
+        + nomeCientifico + ", tipoAgua=" + tipoAgua + ", nivelCuidado=" + nivelCuidado
+        + ", volumeMinAquario=" + volumeMinAquario + ", alimentação=" + alimentação + ", habitat="
+        + habitat + ", regiao=" + regiao + ", tamanho=" + tamanho + ", estadoConservacao="
+        + estadoConservacao + ", infoAdicional=" + infoAdicional + ", taxonomia=" + taxonomia
+        + ", fotos=" + fotos + ", avaliacao=" + avaliacao + ", excluido=" + excluido
+        + ", dtCadastro=" + dtCadastro + ", dtAtualizacao=" + dtAtualizacao
+        + ", usuarioAtualizacao=" + usuarioAtualizacao + ", bloqueadoAlteracao="
+        + bloqueadoAlteracao + "]";
+  }
 
 }
