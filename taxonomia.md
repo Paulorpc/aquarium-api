@@ -1,6 +1,17 @@
+Sites para referência:
+- https://www.iucnredlist.org/species/177972/1507676
+- https://masna.org/masna-programs/palette-surgeonfish/
+- https://www.fishbase.de/summary/6017
+- https://www.fishbase.de/ComNames/CommonNameSearchList.php
+- https://www.fishbase.de/Summary/SpeciesSummary.php?ID=6017&AT=blue+tang
+- https://www.fishbase.de/summary/FamilySummary.php?ID=412
+- https://www.georgiaaquarium.org/animal/palette-surgeonfish/
+
+
 Nome Popular: Hepatus, Blue Tang, DCirurgião-patela, Dori
 Alimentação: Herbivoro
 Ecosistema: Corais e Rochas de Recifes
+https://www.iucnredlist.org/species/177972/1507676
 
 ##### TAXONOMIA [LINK](https://pt.wikipedia.org/wiki/Taxonomia)
 - Domínio:
