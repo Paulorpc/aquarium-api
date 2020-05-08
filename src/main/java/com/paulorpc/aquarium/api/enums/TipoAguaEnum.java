@@ -1,4 +1,4 @@
-package enums;
+package com.paulorpc.aquarium.api.enums;
 
 import java.util.Arrays;
 import java.util.Optional;

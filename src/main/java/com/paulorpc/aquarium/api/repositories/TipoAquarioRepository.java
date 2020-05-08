@@ -7,8 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.paulorpc.aquarium.api.entities.TipoAquario;
-
-import enums.TipoAguaEnum;
+import com.paulorpc.aquarium.api.enums.TipoAguaEnum;
 
 @Repository
 public interface TipoAquarioRepository extends JpaRepository<TipoAquario, Integer> {

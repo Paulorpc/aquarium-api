@@ -16,8 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-
-import enums.TipoAguaEnum;
+import com.paulorpc.aquarium.api.enums.TipoAguaEnum;
 
 @Entity
 @Table(name = "TipoAquario")

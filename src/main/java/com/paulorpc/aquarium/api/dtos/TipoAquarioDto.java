@@ -8,8 +8,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-
-import enums.TipoAguaEnum;
+import com.paulorpc.aquarium.api.enums.TipoAguaEnum;
 
 public class TipoAquarioDto {
 

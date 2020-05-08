@@ -9,9 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.paulorpc.aquarium.api.entities.TipoAquario;
+import com.paulorpc.aquarium.api.enums.TipoAguaEnum;
 import com.paulorpc.aquarium.api.repositories.TipoAquarioRepository;
-
-import enums.TipoAguaEnum;
 
 @Service
 public class TipoAquarioService {
