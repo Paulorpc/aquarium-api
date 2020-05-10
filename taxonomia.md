@@ -1,4 +1,4 @@
-Sites para referência:
+Sites para referência taxonomia / caracteristicas:
 - https://www.iucnredlist.org/species/177972/1507676
 - https://masna.org/masna-programs/palette-surgeonfish/
 - https://www.fishbase.de/summary/6017
@@ -6,6 +6,8 @@ Sites para referência:
 - https://www.fishbase.de/Summary/SpeciesSummary.php?ID=6017&AT=blue+tang
 - https://www.fishbase.de/summary/FamilySummary.php?ID=412
 - https://www.georgiaaquarium.org/animal/palette-surgeonfish/
+
+https://www.thesprucepets.com/lemonpeel-angelfish-species-facts-2920626
 
 
 Nome Popular: Hepatus, Blue Tang, DCirurgião-patela, Dori
