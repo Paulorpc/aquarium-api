@@ -1,56 +1,96 @@
+
 package com.paulorpc.aquarium.api.entities;
 
 import java.util.Date;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import com.paulorpc.aquarium.api.enums.NivelCuidadoEnum;
+import com.paulorpc.aquarium.api.enums.RiscoExtincaoEnum;
+import com.paulorpc.aquarium.api.enums.TamanhoBiotaEnum;
+import com.paulorpc.aquarium.api.enums.TipoAguaEnum;
 
 @Entity
 @Table(name = "Biota")
 public class Biota {
 
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "idBiota", nullable = false)
   private int idBiota;
 
+  @Column(name = "nomePopular", nullable = false)
   private String nomePopular;
 
+  @Column(name = "nomeCientifico", nullable = true)
   private String nomeCientifico;
 
-  private Enum tipoAgua;
+  @Column(name = "nomeCientifico", nullable = true)
+  private TipoAguaEnum tipoAgua;
 
-  // 3 a 5 níveis no máximo. Talvez 3.
-  private Enum nivelCuidado;
+  @Column(name = "nivelCuidado", nullable = true)
+  private NivelCuidadoEnum nivelCuidado;
 
+  @Column(name = "volumeMinAquario", nullable = true)
   private int volumeMinAquario;
 
-  private String alimentação;
+  @Column(name = "alimentacao", nullable = true)
+  private String alimentacao;
 
+  @Column(name = "habitat", nullable = true)
   private String habitat;
 
+  @Column(name = "regiao", nullable = true)
   private String regiao;
 
-  // tabelas de tamanhos, permitindo add tamanhos personalizados
-  private String tamanho;
+  @Column(name = "tamanho", nullable = true)
+  private TamanhoBiotaEnum tamanho;
 
-  // Segundo iucnredlist.org
-  private Enum estadoConservacao;
+  @Column(name = "riscoExtincao", nullable = true)
+  private RiscoExtincaoEnum riscoExtincao;
 
+  @Column(name = "infoAdicional", nullable = true)
   private String infoAdicional;
 
+  @OneToOne
   private Taxonomia taxonomia;
 
+  @ManyToMany(fetch = FetchType.LAZY)
+  //@JoinColumn
   private List<String> fotos;
 
+  @Column(name = "avaliacao", nullable = true)
   private Double avaliacao;
 
+  @Column(name = "excluido", nullable = true)
   private boolean excluido;
 
+  @Column(name = "dtCadastro", nullable = false)
   private Date dtCadastro;
 
+  @Column(name = "dtAtualizacao", nullable = true)
   private Date dtAtualizacao;
 
+  @Column(name = "usuarioAtualizacao", nullable = true)
   private String usuarioAtualizacao;
 
+  @Column(name = "bloqueadoAlteracao", nullable = true)
   private boolean bloqueadoAlteracao;
+  
+  //@oneToMany(fetch = FetchType.LAZY)
+  //@JoinColumn
+  //private List<?> aquarioBiota;
 
   public int getIdBiota() {
     return idBiota;
@@ -76,19 +116,19 @@ public class Biota {
     this.nomeCientifico = nomeCientifico;
   }
 
-  public Enum getTipoAgua() {
+  public TipoAguaEnum getTipoAgua() {
     return tipoAgua;
   }
 
-  public void setTipoAgua(Enum tipoAgua) {
+  public void setTipoAgua(TipoAguaEnum tipoAgua) {
     this.tipoAgua = tipoAgua;
   }
 
-  public Enum getNivelCuidado() {
+  public NivelCuidadoEnum getNivelCuidado() {
     return nivelCuidado;
   }
 
-  public void setNivelCuidado(Enum nivelCuidado) {
+  public void setNivelCuidado(NivelCuidadoEnum nivelCuidado) {
     this.nivelCuidado = nivelCuidado;
   }
 
@@ -100,12 +140,12 @@ public class Biota {
     this.volumeMinAquario = volumeMinAquario;
   }
 
-  public String getAlimentação() {
-    return alimentação;
+  public String getAlimentacao() {
+    return alimentacao;
   }
 
-  public void setAlimentação(String alimentação) {
-    this.alimentação = alimentação;
+  public void setAlimentacao(String alimentacao) {
+    this.alimentacao = alimentacao;
   }
 
   public String getHabitat() {
@@ -124,20 +164,20 @@ public class Biota {
     this.regiao = regiao;
   }
 
-  public String getTamanho() {
+  public TamanhoBiotaEnum getTamanho() {
     return tamanho;
   }
 
-  public void setTamanho(String tamanho) {
+  public void setTamanho(TamanhoBiotaEnum tamanho) {
     this.tamanho = tamanho;
   }
 
-  public Enum getEstadoConservacao() {
-    return estadoConservacao;
+  public RiscoExtincaoEnum getRiscoExtincao() {
+    return riscoExtincao;
   }
 
-  public void setEstadoConservacao(Enum estadoConservacao) {
-    this.estadoConservacao = estadoConservacao;
+  public void setRiscoExtincao(RiscoExtincaoEnum riscoExtincao) {
+    this.riscoExtincao = riscoExtincao;
   }
 
   public String getInfoAdicional() {
@@ -212,13 +252,28 @@ public class Biota {
     this.bloqueadoAlteracao = bloqueadoAlteracao;
   }
 
+  @PreUpdate
+  public void preUpdate() {
+    dtAtualizacao = new Date();
+    // usuarioAtualizacao = getSession().getUser().nomeUsuario();
+  }
+
+  @PrePersist
+  public void prePersist() {
+    Date hojeHora = new Date();
+    dtCadastro = hojeHora;
+    dtAtualizacao = hojeHora;
+    // usuarioAtualizacao = getSession().getUser().nomeUsuario();
+  }
+
+
   @Override
   public String toString() {
     return "Biota [idBiota=" + idBiota + ", nomePopular=" + nomePopular + ", nomeCientifico="
         + nomeCientifico + ", tipoAgua=" + tipoAgua + ", nivelCuidado=" + nivelCuidado
-        + ", volumeMinAquario=" + volumeMinAquario + ", alimentação=" + alimentação + ", habitat="
-        + habitat + ", regiao=" + regiao + ", tamanho=" + tamanho + ", estadoConservacao="
-        + estadoConservacao + ", infoAdicional=" + infoAdicional + ", taxonomia=" + taxonomia
+        + ", volumeMinAquario=" + volumeMinAquario + ", alimentacao=" + alimentacao + ", habitat="
+        + habitat + ", regiao=" + regiao + ", tamanho=" + tamanho + ", riscoExtincao="
+        + riscoExtincao + ", infoAdicional=" + infoAdicional + ", taxonomia=" + taxonomia
         + ", fotos=" + fotos + ", avaliacao=" + avaliacao + ", excluido=" + excluido
         + ", dtCadastro=" + dtCadastro + ", dtAtualizacao=" + dtAtualizacao
         + ", usuarioAtualizacao=" + usuarioAtualizacao + ", bloqueadoAlteracao="
