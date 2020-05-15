@@ -3,8 +3,8 @@ package com.paulorpc.aquarium.api.entities;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-@Entity
-@Table(name = "Taxonomia")
+//@Entity
+//@Table(name = "Taxonomia")
 public abstract class Taxonomia {
 
   private String dominio;
