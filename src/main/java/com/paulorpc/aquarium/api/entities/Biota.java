@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -28,7 +30,7 @@ public class Biota {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "idBiota", nullable = false)
-  private int idBiota;
+  private int id;
 
   @Column(name = "nomePopular", nullable = false)
   private String nomePopular;
@@ -36,14 +38,16 @@ public class Biota {
   @Column(name = "nomeCientifico", nullable = true)
   private String nomeCientifico;
 
-  @Column(name = "nomeCientifico", nullable = true)
+  @Enumerated(EnumType.STRING)
+  @Column(name = "tipoAgua", nullable = true)
   private TipoAguaEnum tipoAgua;
 
+  @Enumerated(EnumType.STRING)
   @Column(name = "nivelCuidado", nullable = true)
   private NivelCuidadoEnum nivelCuidado;
 
   @Column(name = "volumeMinAquario", nullable = true)
-  private int volumeMinAquario;
+  private Double volumeMinAquario;
 
   @Column(name = "alimentacao", nullable = true)
   private String alimentacao;
@@ -54,32 +58,34 @@ public class Biota {
   @Column(name = "regiao", nullable = true)
   private String regiao;
 
+  @Enumerated(EnumType.STRING)
   @Column(name = "tamanho", nullable = true)
   private TamanhoBiotaEnum tamanho;
 
+  @Enumerated(EnumType.STRING)
   @Column(name = "riscoExtincao", nullable = true)
   private RiscoExtincaoEnum riscoExtincao;
 
   @Column(name = "infoAdicional", nullable = true)
   private String infoAdicional;
 
-  @OneToOne
-  private Taxonomia taxonomia;
+//  @OneToOne
+//  private Taxonomia taxonomia;
 
-  @ManyToMany(fetch = FetchType.LAZY)
-  //@JoinColumn
-  private List<String> fotos;
+//  @ManyToMany(fetch = FetchType.LAZY)
+//  @JoinColumn
+//  private List<String> fotos;
 
   @Column(name = "avaliacao", nullable = true)
   private Double avaliacao;
 
-  @Column(name = "excluido", nullable = true)
-  private boolean excluido;
+  @Column(name = "deletado", nullable = false)
+  private boolean deletado;
 
   @Column(name = "dtCadastro", nullable = false)
   private Date dtCadastro;
 
-  @Column(name = "dtAtualizacao", nullable = true)
+  @Column(name = "dtAtualizacao", nullable = false)
   private Date dtAtualizacao;
 
   @Column(name = "usuarioAtualizacao", nullable = true)
@@ -92,12 +98,12 @@ public class Biota {
   //@JoinColumn
   //private List<?> aquarioBiota;
 
-  public int getIdBiota() {
-    return idBiota;
+  public int getId() {
+    return id;
   }
 
-  public void setIdBiota(int idBiota) {
-    this.idBiota = idBiota;
+  public void setId(int id) {
+    this.id = id;
   }
 
   public String getNomePopular() {
@@ -132,11 +138,11 @@ public class Biota {
     this.nivelCuidado = nivelCuidado;
   }
 
-  public int getVolumeMinAquario() {
+  public Double getVolumeMinAquario() {
     return volumeMinAquario;
   }
 
-  public void setVolumeMinAquario(int volumeMinAquario) {
+  public void setVolumeMinAquario(Double volumeMinAquario) {
     this.volumeMinAquario = volumeMinAquario;
   }
 
@@ -188,21 +194,21 @@ public class Biota {
     this.infoAdicional = infoAdicional;
   }
 
-  public Taxonomia getTaxonomia() {
-    return taxonomia;
-  }
-
-  public void setTaxonomia(Taxonomia taxonomia) {
-    this.taxonomia = taxonomia;
-  }
-
-  public List<String> getFotos() {
-    return fotos;
-  }
-
-  public void setFotos(List<String> fotos) {
-    this.fotos = fotos;
-  }
+//  public Taxonomia getTaxonomia() {
+//    return taxonomia;
+//  }
+//
+//  public void setTaxonomia(Taxonomia taxonomia) {
+//    this.taxonomia = taxonomia;
+//  }
+//
+//  public List<String> getFotos() {
+//    return fotos;
+//  }
+//
+//  public void setFotos(List<String> fotos) {
+//    this.fotos = fotos;
+//  }
 
   public Double getAvaliacao() {
     return avaliacao;
@@ -212,12 +218,12 @@ public class Biota {
     this.avaliacao = avaliacao;
   }
 
-  public boolean isExcluido() {
-    return excluido;
+  public boolean isDeletado() {
+    return deletado;
   }
 
-  public void setExcluido(boolean excluido) {
-    this.excluido = excluido;
+  public void setDeletado(boolean deletado) {
+    this.deletado = deletado;
   }
 
   public Date getDtCadastro() {
@@ -255,7 +261,6 @@ public class Biota {
   @PreUpdate
   public void preUpdate() {
     dtAtualizacao = new Date();
-    // usuarioAtualizacao = getSession().getUser().nomeUsuario();
   }
 
   @PrePersist
@@ -263,21 +268,20 @@ public class Biota {
     Date hojeHora = new Date();
     dtCadastro = hojeHora;
     dtAtualizacao = hojeHora;
-    // usuarioAtualizacao = getSession().getUser().nomeUsuario();
   }
-
 
   @Override
   public String toString() {
-    return "Biota [idBiota=" + idBiota + ", nomePopular=" + nomePopular + ", nomeCientifico="
+    return "Biota [idBiota=" + id + ", nomePopular=" + nomePopular + ", nomeCientifico="
         + nomeCientifico + ", tipoAgua=" + tipoAgua + ", nivelCuidado=" + nivelCuidado
         + ", volumeMinAquario=" + volumeMinAquario + ", alimentacao=" + alimentacao + ", habitat="
         + habitat + ", regiao=" + regiao + ", tamanho=" + tamanho + ", riscoExtincao="
-        + riscoExtincao + ", infoAdicional=" + infoAdicional + ", taxonomia=" + taxonomia
-        + ", fotos=" + fotos + ", avaliacao=" + avaliacao + ", excluido=" + excluido
-        + ", dtCadastro=" + dtCadastro + ", dtAtualizacao=" + dtAtualizacao
-        + ", usuarioAtualizacao=" + usuarioAtualizacao + ", bloqueadoAlteracao="
+        + riscoExtincao + ", infoAdicional=" + infoAdicional + ", avaliacao=" + avaliacao
+        + ", excluido=" + deletado + ", dtCadastro=" + dtCadastro + ", dtAtualizacao="
+        + dtAtualizacao + ", usuarioAtualizacao=" + usuarioAtualizacao + ", bloqueadoAlteracao="
         + bloqueadoAlteracao + "]";
   }
+
+
 
 }
