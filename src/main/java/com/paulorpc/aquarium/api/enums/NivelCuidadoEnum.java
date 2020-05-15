@@ -6,21 +6,14 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 
 public enum NivelCuidadoEnum {
   
-  iniciante(1, "Iniciante"),
-  intermediario(2, "Intermediário"), 
-  experiente(3, "Experiente");
+  iniciante("Iniciante"), intermediario("Intermediário"), avancado("Avançado");
 
-  private int nivel;
   private String descricao;
 
-  NivelCuidadoEnum(int nivel, String descricao) {
+  NivelCuidadoEnum(String descricao) {
     this.descricao = descricao;
   }
 
-  public int getNivel() {
-    return nivel;
-  }
-  
   public String getDescricao() {
     return descricao;
   }
