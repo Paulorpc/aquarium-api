@@ -40,7 +40,7 @@ public class BiotaController {
     log.info("Requisição para buscar aquário - buscarBiota(). Id: " + id);
     Response<BiotaDto> response = new Response<>();
 
-    return biotaService.buscarBiota(id).map(biota -> {
+    return biotaService.buscar(id).map(biota -> {
       response.setData(converteObjetoParaDto(biota));
       return ResponseEntity.ok(response);
     }).orElse(ResponseEntity.notFound().build());
@@ -85,7 +85,7 @@ public class BiotaController {
       return ResponseEntity.badRequest().body(response);
     }
 
-    Biota novoBiota = biotaService.cadastrarBiota(converteDtoParaObjeto(BiotaDto));
+    Biota novoBiota = biotaService.cadastrar(converteDtoParaObjeto(BiotaDto));
     URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
         .buildAndExpand(novoBiota.getId()).toUri();
     response.setData(converteObjetoParaDto(novoBiota));
@@ -102,7 +102,7 @@ public class BiotaController {
       return ResponseEntity.badRequest().body(response);
     }
 
-    Optional<Biota> aquarioOpt = biotaService.alterarBiota(BiotaDto);
+    Optional<Biota> aquarioOpt = biotaService.alterar(BiotaDto);
 
     if (!aquarioOpt.isPresent()) {
       response.getIssues().add("Não foi possível localizar o aquário, id: " + BiotaDto.getId());
@@ -124,7 +124,7 @@ public class BiotaController {
     log.info("Requisição para deletar um aquário - deletarBiota()");
     Response<BiotaDto> response = new Response<>();
 
-    return biotaService.deletarBiota(id).map(v -> {
+    return biotaService.deletar(id).map(v -> {
       response.setData(converteObjetoParaDto(v));
       return ResponseEntity.ok(response);
     }).orElse(ResponseEntity.notFound().build());
