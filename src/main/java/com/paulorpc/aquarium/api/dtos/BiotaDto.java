@@ -5,6 +5,7 @@ import java.util.Optional;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.paulorpc.aquarium.api.entities.Taxonomia;
 import com.paulorpc.aquarium.api.enums.NivelCuidadoEnum;
 import com.paulorpc.aquarium.api.enums.TipoAguaEnum;
 
@@ -13,9 +14,9 @@ public class BiotaDto {
   Optional<Integer> id = Optional.empty();  
   Optional<String> nomePopular = Optional.empty();
   Optional<String> nomeCientifico = Optional.empty();
+  Optional<Taxonomia> taxonomia = Optional.empty();
   Optional<TipoAguaEnum> tipoAgua = Optional.empty();    
   Optional<NivelCuidadoEnum> nivelCuidado = Optional.empty();    
-  Optional<Boolean> bloqueadoAlteracao = Optional.empty();
   Date dtCadastro;
   Date dtAtualizacao;
 
@@ -49,6 +50,14 @@ public class BiotaDto {
   public void setNomeCientifico(Optional<String> nomeCientifico) {
     this.nomeCientifico = nomeCientifico;
   }
+  
+  public Optional<Taxonomia> getTaxonomia() {
+    return taxonomia;
+  }
+
+  public void setTaxonomia(Optional<Taxonomia> taxonomia) {
+    this.taxonomia = taxonomia;
+  }
 
   public Optional<TipoAguaEnum> getTipoAgua() {
     return tipoAgua;
@@ -64,14 +73,6 @@ public class BiotaDto {
 
   public void setNivelCuidado(Optional<NivelCuidadoEnum> nivelCuidado) {
     this.nivelCuidado = nivelCuidado;
-  }
-
-  public Optional<Boolean> getBloqueadoAlteracao() {
-    return bloqueadoAlteracao;
-  }
-
-  public void setBloqueadoAlteracao(Optional<Boolean> bloqueadoAlteracao) {
-    this.bloqueadoAlteracao = bloqueadoAlteracao;
   }
 
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

@@ -37,7 +37,7 @@ public class BiotaController {
 
   @GetMapping(value = "/{id}")
   public ResponseEntity<Response<BiotaDto>> buscar(@PathVariable int id) {
-    log.info("Requisição para buscar aquário - buscarBiota(). Id: " + id);
+    log.info("Requisição para buscar ser vivo. Id: " + id);
     Response<BiotaDto> response = new Response<>();
 
     return biotaService.buscar(id).map(biota -> {
@@ -48,7 +48,7 @@ public class BiotaController {
 
   @GetMapping
   public ResponseEntity<Response<List<BiotaDto>>> buscarTodos() {
-    log.info("Requisição para buscar todos aquários - buscarTodos()");
+    log.info("Requisição para buscar todos seres vivos");
     Response<List<BiotaDto>> response = new Response<>();
 
     List<Biota> biotas = biotaService.buscarTodos();
@@ -62,7 +62,7 @@ public class BiotaController {
 
   @GetMapping(value = "/ativos")
   public ResponseEntity<Response<List<BiotaDto>>> buscarTodosAtivos() {
-    log.info("Requisição para buscar todos aquários ativos - buscarTodosAtivos()");
+    log.info("Requisição para buscar todos seres vivos ativos");
     Response<List<BiotaDto>> response = new Response<>();
 
     List<Biota> biotas = biotaService.buscarTodosAtivos();
@@ -77,7 +77,7 @@ public class BiotaController {
   @PostMapping
   public ResponseEntity<Response<BiotaDto>> cadastrar(
       @Validated(BiotaDto.Cadastrar.class) @RequestBody BiotaDto BiotaDto, BindingResult result) {
-    log.info("Requisição para cadastrar um novo aquário - cadastrarBiota()");
+    log.info("Requisição para cadastrar ser vivo");
     Response<BiotaDto> response = new Response<>();
 
     if (result.hasErrors()) {
@@ -95,7 +95,7 @@ public class BiotaController {
   @PutMapping
   public ResponseEntity<Response<BiotaDto>> alterar(
       @Validated(BiotaDto.Alterar.class) @RequestBody BiotaDto BiotaDto, BindingResult result) {
-    log.info("Requisição para alterar um aquaário existente - alterarBiota()");
+    log.info("Requisição para alterar ser vivo existente");
     Response<BiotaDto> response = new Response<>();
     if (result.hasErrors()) {
       response.setIssuesFromResultErrors(result, log);
@@ -105,7 +105,7 @@ public class BiotaController {
     Optional<Biota> aquarioOpt = biotaService.alterar(BiotaDto);
 
     if (!aquarioOpt.isPresent()) {
-      response.getIssues().add("Não foi possível localizar o aquário, id: " + BiotaDto.getId());
+      response.getIssues().add("Não foi possível localizar biota. Id: " + BiotaDto.getId());
       return ResponseEntity.notFound().build();
     }
 
@@ -121,7 +121,7 @@ public class BiotaController {
    */
   @DeleteMapping(value = "/{id}")
   public ResponseEntity<Response<BiotaDto>> deletar(@PathVariable int id) {
-    log.info("Requisição para deletar um aquário - deletarBiota()");
+    log.info("Requisição para deletar um ser vivo");
     Response<BiotaDto> response = new Response<>();
 
     return biotaService.deletar(id).map(v -> {
@@ -153,9 +153,9 @@ public class BiotaController {
     dto.getId().ifPresent(v -> obj.setId(v));
     dto.getNomePopular().ifPresent(v -> obj.setNomePopular(v));
     dto.getNomeCientifico().ifPresent(v -> obj.setNomeCientifico(v));
+    dto.getTaxonomia().ifPresent(v -> obj.setTaxonomia(v));
     dto.getTipoAgua().ifPresent(v -> obj.setTipoAgua(v));
     dto.getNivelCuidado().ifPresent(v -> obj.setNivelCuidado(v));
-    dto.getBloqueadoAlteracao().ifPresent(v -> obj.setBloqueadoAlteracao(v));   
     return obj;
   }
 
@@ -170,9 +170,9 @@ public class BiotaController {
     dto.setId(Optional.ofNullable(obj.getId()));
     dto.setNomePopular(Optional.ofNullable(obj.getNomePopular()));
     dto.setNomeCientifico(Optional.ofNullable(obj.getNomeCientifico()));
+    dto.setTaxonomia(Optional.ofNullable(obj.getTaxonomia()));
     dto.setTipoAgua(Optional.ofNullable(obj.getTipoAgua()));
     dto.setNivelCuidado(Optional.ofNullable(obj.getNivelCuidado()));
-    dto.setBloqueadoAlteracao(Optional.ofNullable(obj.isBloqueadoAlteracao()));
     dto.setDtCadastro(obj.getDtCadastro());
     dto.setDtAtualizacao(obj.getDtAtualizacao());
     return dto;

@@ -69,8 +69,9 @@ public class Biota {
   @Column(name = "infoAdicional", nullable = true)
   private String infoAdicional;
 
-//  @OneToOne
-//  private Taxonomia taxonomia;
+  @OneToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "idTaxonomia")
+  private Taxonomia taxonomia;
 
 //  @ManyToMany(fetch = FetchType.LAZY)
 //  @JoinColumn
@@ -91,9 +92,6 @@ public class Biota {
   @Column(name = "usuarioAtualizacao", nullable = true)
   private String usuarioAtualizacao;
 
-  @Column(name = "bloqueadoAlteracao", nullable = true)
-  private boolean bloqueadoAlteracao;
-  
   //@oneToMany(fetch = FetchType.LAZY)
   //@JoinColumn
   //private List<?> aquarioBiota;
@@ -194,18 +192,18 @@ public class Biota {
     this.infoAdicional = infoAdicional;
   }
 
-//  public Taxonomia getTaxonomia() {
-//    return taxonomia;
-//  }
-//
-//  public void setTaxonomia(Taxonomia taxonomia) {
-//    this.taxonomia = taxonomia;
-//  }
-//
+  public Taxonomia getTaxonomia() {
+    return taxonomia;
+  }
+
+  public void setTaxonomia(Taxonomia taxonomia) {
+    this.taxonomia = taxonomia;
+  }
+
 //  public List<String> getFotos() {
 //    return fotos;
 //  }
-//
+
 //  public void setFotos(List<String> fotos) {
 //    this.fotos = fotos;
 //  }
@@ -250,14 +248,6 @@ public class Biota {
     this.usuarioAtualizacao = usuarioAtualizacao;
   }
 
-  public boolean isBloqueadoAlteracao() {
-    return bloqueadoAlteracao;
-  }
-
-  public void setBloqueadoAlteracao(boolean bloqueadoAlteracao) {
-    this.bloqueadoAlteracao = bloqueadoAlteracao;
-  }
-
   @PreUpdate
   public void preUpdate() {
     dtAtualizacao = new Date();
@@ -278,8 +268,7 @@ public class Biota {
         + habitat + ", regiao=" + regiao + ", tamanho=" + tamanho + ", riscoExtincao="
         + riscoExtincao + ", infoAdicional=" + infoAdicional + ", avaliacao=" + avaliacao
         + ", excluido=" + deletado + ", dtCadastro=" + dtCadastro + ", dtAtualizacao="
-        + dtAtualizacao + ", usuarioAtualizacao=" + usuarioAtualizacao + ", bloqueadoAlteracao="
-        + bloqueadoAlteracao + "]";
+        + dtAtualizacao + ", usuarioAtualizacao=" + usuarioAtualizacao + "]";
   }
 
 
