@@ -52,7 +52,7 @@ CONSTRAINT `FK_170` FOREIGN KEY (`idTipoAquario`) REFERENCES `TipoAquario` (`idT
 CREATE TABLE IF NOT EXISTS `Biota`
 (
  `idBiota`        		int NOT NULL AUTO_INCREMENT ,
- `nomePopular`    		varchar(200) NULL ,
+ `nomePopular`    		varchar(200) NOT NULL ,
  `nomeCientifico` 		varchar(100) NULL ,
  `tipoAgua`       		enum('doce', 'salgada') NULL ,
  `nivelCuidado`   		enum('iniciante', 'intermediario', 'avancado') NULL ,
@@ -63,14 +63,12 @@ CREATE TABLE IF NOT EXISTS `Biota`
  `tamanho`   			enum('P', 'M', 'G') NULL ,
  `riscoExtincao`   		enum('NE','DD','LC','NT','VU','EN','CR','EW','EX') NULL ,
  `infoAdicional`        varchar(4000) NULL ,
- `idtaxonomia`        	int NULL ,
+ `idTaxonomia`        	int NULL ,
  `avaliacao`     		decimal(4,2) NULL ,
  `deletado`     		boolean NOT NULL default false ,
  `dtCadastro`     		datetime NOT NULL ,
  `dtAtualizacao` 		datetime NOT NULL ,
- `usuarioAtualizacao` 	varchar(45) NULL ,
- `bloqueadoAlteracao` 	int NULL,
- 
+ `usuarioAtualizacao` 	varchar(45) NULL , 
 
 PRIMARY KEY (`idBiota`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
