@@ -9,26 +9,29 @@ Sites para referência taxonomia / caracteristicas:
 
 https://www.thesprucepets.com/lemonpeel-angelfish-species-facts-2920626
 
-
 Nome Popular: Hepatus, Blue Tang, DCirurgião-patela, Dori
 Alimentação: Herbivoro
 Ecosistema: Corais e Rochas de Recifes
 https://www.iucnredlist.org/species/177972/1507676
 
 ##### TAXONOMIA [LINK](https://pt.wikipedia.org/wiki/Taxonomia)
-- Domínio:
-- Reino:
+- Domínio: Animalia
+- Reino: Animalia
 - Filo:
 - Classe:
-- Ordem:	Acanthuriformes (surgeonfishes and relatives)
+- Ordem: Acanthuriformes (surgeonfishes and relatives)
 - Família:Acanthuridae (Surgeonfishes, tangs, unicornfishes)
-- Gênero:
-- Espécie:Paracanthurus hepatus (Linnaeus, 1766)
+- Gênero: Paracanthurus
+- Espécie: hepatus
 
+
+O sistema atual identifica cada espécie por dois nomes em latim: o primeiro, em maiúscula, é o gênero, o segundo, em minúscula, a espécie. 
+Os dois nomes juntos formam o nome da espécie. Por convenção internacional, o nome do gênero e da espécie é impresso em itálico, 
+grifado ou em negrito, o dos outros táxons não. Ex.: Canis familiares, Canis lupus, Felis catus.
 
 
 ##### Domínio: 
-O domínio é o segundo nível hierárquico de classificação científica dos seres vivos, depois da categoria suprema que enquadra todos os seres vivos, o superdomínio **Biota**.É a designação dada em biologia ao táxon de nível mais elevado utilizado para agrupar os organismos numa classificação científica. O domínio agrupa os diferentes reinos, sendo a mais inclusiva das divisões taxonómicas em que se dividem as espécies que compõem a vida na Terra. Apesar do número de domínios e do respectivo nome ser arbitrário, variando com a evolução do conhecimento científico e com as opiniões dominantes entre os que estudam a sistemática, a estrutura adaptada, por definição, reflete obrigatoriamente as diferenças evolucionárias fundamentais contidas no genoma dos seres vivos, agrupando-os de acordo com a sua estrutura biológica mais básica. Com o aparecimento da cladística, o conceito de domínio aparece associado ao do clado mais inclusivo em que se pretenda dividir o mundo vivo.
+O domínio é o segundo nível hierárquico de classificação científica dos seres vivos, depois da categoria suprema que enquadra todos os seres vivos, o superdomínio **Biota**. É a designação dada em biologia ao táxon de nível mais elevado utilizado para agrupar os organismos numa classificação científica. O domínio agrupa os diferentes reinos, sendo a mais inclusiva das divisões taxonómicas em que se dividem as espécies que compõem a vida na Terra. Apesar do número de domínios e do respectivo nome ser arbitrário, variando com a evolução do conhecimento científico e com as opiniões dominantes entre os que estudam a sistemática, a estrutura adaptada, por definição, reflete obrigatoriamente as diferenças evolucionárias fundamentais contidas no genoma dos seres vivos, agrupando-os de acordo com a sua estrutura biológica mais básica. Com o aparecimento da cladística, o conceito de domínio aparece associado ao do clado mais inclusivo em que se pretenda dividir o mundo vivo.
 
 Com grande aceitação, sendo o sistema de uso mais generalizado, está o sistema dos seis reinos proposto por Cavalier-Smith, no qual os domínios de topo são simplesmente os reinos tradicionais da biologia moderna:
 
