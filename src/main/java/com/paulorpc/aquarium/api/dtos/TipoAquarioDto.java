@@ -12,13 +12,13 @@ import com.paulorpc.aquarium.api.enums.TipoAguaEnum;
 
 public class TipoAquarioDto {
 
-  Optional<Integer> id = Optional.empty();
-  Optional<String> tipo = Optional.empty();
-  Optional<TipoAguaEnum> tipoAgua = Optional.empty();
-  Optional<Boolean> status = Optional.empty();
-  Optional<String> descricao = Optional.empty();
-  Date dtCadastro;
-  Date dtAtualizacao;
+  private Optional<Integer> id = Optional.empty();
+  private Optional<String> tipo = Optional.empty();
+  private Optional<TipoAguaEnum> tipoAgua = Optional.empty();
+  private Optional<Boolean> status = Optional.empty();
+  private Optional<String> descricao = Optional.empty();
+  private Date dtCadastro;
+  private Date dtAtualizacao;
 
   public interface Cadastrar {
   }
