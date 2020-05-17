@@ -45,6 +45,9 @@ public class Biota {
   @Enumerated(EnumType.STRING)
   @Column(name = "nivelCuidado", nullable = true)
   private NivelCuidadoEnum nivelCuidado;
+  
+  @Column(name = "reefSafe", nullable = true)
+  private Boolean reefSafe;
 
   @Column(name = "volumeMinAquario", nullable = true)
   private Double volumeMinAquario;
@@ -81,15 +84,18 @@ public class Biota {
   private Double avaliacao;
 
   @Column(name = "deletado", nullable = false)
-  private boolean deletado;
+  private Boolean deletado;
 
   @Column(name = "dtCadastro", nullable = false)
   private Date dtCadastro;
 
   @Column(name = "dtAtualizacao", nullable = false)
   private Date dtAtualizacao;
+  
+  @Column(name = "usuarioCadastro", nullable = false)
+  private String usuarioCadastro;
 
-  @Column(name = "usuarioAtualizacao", nullable = true)
+  @Column(name = "usuarioAtualizacao", nullable = false)
   private String usuarioAtualizacao;
 
   //@oneToMany(fetch = FetchType.LAZY)
@@ -134,6 +140,14 @@ public class Biota {
 
   public void setNivelCuidado(NivelCuidadoEnum nivelCuidado) {
     this.nivelCuidado = nivelCuidado;
+  }
+  
+  public Boolean isReefSafe() {
+    return reefSafe;
+  }
+
+  public void setReefSafe(Boolean reefSafe) {
+    this.reefSafe = reefSafe;
   }
 
   public Double getVolumeMinAquario() {
@@ -216,11 +230,11 @@ public class Biota {
     this.avaliacao = avaliacao;
   }
 
-  public boolean isDeletado() {
+  public Boolean isDeletado() {
     return deletado;
   }
 
-  public void setDeletado(boolean deletado) {
+  public void setDeletado(Boolean deletado) {
     this.deletado = deletado;
   }
 
@@ -238,6 +252,14 @@ public class Biota {
 
   public void setDtAtualizacao(Date dtAtualizacao) {
     this.dtAtualizacao = dtAtualizacao;
+  }
+  
+  public String getUsuarioCadastro() {
+    return usuarioCadastro;
+  }
+
+  public void setUsuarioCadastro(String usuarioCadastro) {
+    this.usuarioCadastro = usuarioCadastro;
   }
 
   public String getUsuarioAtualizacao() {

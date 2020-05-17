@@ -2,23 +2,37 @@ package com.paulorpc.aquarium.api.dtos;
 
 import java.util.Date;
 import java.util.Optional;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.paulorpc.aquarium.api.entities.Taxonomia;
 import com.paulorpc.aquarium.api.enums.NivelCuidadoEnum;
+import com.paulorpc.aquarium.api.enums.RiscoExtincaoEnum;
+import com.paulorpc.aquarium.api.enums.TamanhoBiotaEnum;
 import com.paulorpc.aquarium.api.enums.TipoAguaEnum;
 
 public class BiotaDto {
-  
-  Optional<Integer> id = Optional.empty();  
-  Optional<String> nomePopular = Optional.empty();
-  Optional<String> nomeCientifico = Optional.empty();
-  Optional<Taxonomia> taxonomia = Optional.empty();
-  Optional<TipoAguaEnum> tipoAgua = Optional.empty();    
-  Optional<NivelCuidadoEnum> nivelCuidado = Optional.empty();    
-  Date dtCadastro;
-  Date dtAtualizacao;
+
+  private Optional<Integer> id = Optional.empty();
+  private Optional<String> nomePopular = Optional.empty();
+  private Optional<String> nomeCientifico = Optional.empty();
+  private Optional<TipoAguaEnum> tipoAgua = Optional.empty();
+  private Optional<NivelCuidadoEnum> nivelCuidado = Optional.empty();
+  private Optional<Boolean> reefSafe = Optional.empty();
+  private Optional<Double> volumeMinAquario = Optional.empty();
+  private Optional<String> alimentacao = Optional.empty();
+  private Optional<String> habitat = Optional.empty();
+  private Optional<String> regiao = Optional.empty();
+  private Optional<TamanhoBiotaEnum> tamanho = Optional.empty();
+  private Optional<RiscoExtincaoEnum> riscoExtincao = Optional.empty();
+  private Optional<String> infoAdicional = Optional.empty();
+  private Optional<Taxonomia> taxonomia = Optional.empty();
+  private Optional<Double> avaliacao = Optional.empty();
+  private Date dtCadastro;
+  private Date dtAtualizacao;
+  private String usuarioCadastro;
+  private String usuarioAtualizacao;
 
   public interface Cadastrar {
   }
@@ -26,16 +40,15 @@ public class BiotaDto {
   public interface Alterar {
   }
 
-  @NotNull(message = "Campo 'id' é obrigatório.", groups = {Alterar.class})
-  public Optional<Integer> getId() {
+  public Optional<@NotNull(message = "Campo 'id' é obrigatório.", groups = {Alterar.class}) Integer> getId() {
     return id;
   }
 
-  public void setId(Optional<Integer> idTipoAquario) {
-    this.id = idTipoAquario;
+  public void setId(Optional<Integer> id) {
+    this.id = id;
   }
   
-  public Optional<String> getNomePopular() {
+  public Optional<@NotEmpty(message = "Campo 'nomePopular' é obrigatório.", groups = {Cadastrar.class, Alterar.class}) String> getNomePopular() {
     return nomePopular;
   }
 
@@ -50,16 +63,8 @@ public class BiotaDto {
   public void setNomeCientifico(Optional<String> nomeCientifico) {
     this.nomeCientifico = nomeCientifico;
   }
-  
-  public Optional<Taxonomia> getTaxonomia() {
-    return taxonomia;
-  }
 
-  public void setTaxonomia(Optional<Taxonomia> taxonomia) {
-    this.taxonomia = taxonomia;
-  }
-
-  public Optional<TipoAguaEnum> getTipoAgua() {
+  public Optional<@NotEmpty(message = "Campo 'nomePopular' é obrigatório.", groups = {Cadastrar.class, Alterar.class}) TipoAguaEnum> getTipoAgua() {
     return tipoAgua;
   }
 
@@ -75,6 +80,86 @@ public class BiotaDto {
     this.nivelCuidado = nivelCuidado;
   }
 
+  public Optional<Boolean> getReefSafe() {
+    return reefSafe;
+  }
+
+  public void setReefSafe(Optional<Boolean> reefSafe) {
+    this.reefSafe = reefSafe;
+  }
+
+  public Optional<Double> getVolumeMinAquario() {
+    return volumeMinAquario;
+  }
+
+  public void setVolumeMinAquario(Optional<Double> volumeMinAquario) {
+    this.volumeMinAquario = volumeMinAquario;
+  }
+
+  public Optional<String> getAlimentacao() {
+    return alimentacao;
+  }
+
+  public void setAlimentacao(Optional<String> alimentacao) {
+    this.alimentacao = alimentacao;
+  }
+
+  public Optional<String> getHabitat() {
+    return habitat;
+  }
+
+  public void setHabitat(Optional<String> habitat) {
+    this.habitat = habitat;
+  }
+
+  public Optional<String> getRegiao() {
+    return regiao;
+  }
+
+  public void setRegiao(Optional<String> regiao) {
+    this.regiao = regiao;
+  }
+
+  public Optional<TamanhoBiotaEnum> getTamanho() {
+    return tamanho;
+  }
+
+  public void setTamanho(Optional<TamanhoBiotaEnum> tamanho) {
+    this.tamanho = tamanho;
+  }
+
+  public Optional<RiscoExtincaoEnum> getRiscoExtincao() {
+    return riscoExtincao;
+  }
+
+  public void setRiscoExtincao(Optional<RiscoExtincaoEnum> riscoExtincao) {
+    this.riscoExtincao = riscoExtincao;
+  }
+
+  public Optional<String> getInfoAdicional() {
+    return infoAdicional;
+  }
+
+  public void setInfoAdicional(Optional<String> infoAdicional) {
+    this.infoAdicional = infoAdicional;
+  }
+
+  public Optional<Taxonomia> getTaxonomia() {
+    return taxonomia;
+  }
+
+  public void setTaxonomia(Optional<Taxonomia> taxonomia) {
+    this.taxonomia = taxonomia;
+  }
+
+  public Optional<Double> getAvaliacao() {
+    return avaliacao;
+  }
+
+  public void setAvaliacao(Optional<Double> avaliacao) {
+    this.avaliacao = avaliacao;
+  }
+
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   @Null(message = "Campo 'dtCadastro' deve ser nulo.", groups = {Cadastrar.class, Alterar.class})
   public Date getDtCadastro() {
@@ -86,7 +171,7 @@ public class BiotaDto {
   }
 
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-  @Null(message = "Campo 'dtCadastro' deve ser nulo.", groups = {Cadastrar.class, Alterar.class})
+  @Null(message = "Campo 'dtAtualizacao' deve ser nulo.", groups = {Cadastrar.class, Alterar.class})
   public Date getDtAtualizacao() {
     return dtAtualizacao;
   }
@@ -95,4 +180,23 @@ public class BiotaDto {
     this.dtAtualizacao = dtAtualizacao;
   }
 
+  @Null(message = "Campo 'usuarioCadastro' deve ser nulo.",
+      groups = {Cadastrar.class, Alterar.class})
+  public String getUsuarioCadastro() {
+    return usuarioCadastro;
+  }
+
+  public void setUsuarioCadastro(String usuarioCadastro) {
+    this.usuarioCadastro = usuarioCadastro;
+  }
+
+  @Null(message = "Campo 'usuarioAtualizacao' deve ser nulo.",
+      groups = {Cadastrar.class, Alterar.class})
+  public String getUsuarioAtualizacao() {
+    return usuarioAtualizacao;
+  }
+
+  public void setUsuarioAtualizacao(String usuarioAtualizacao) {
+    this.usuarioAtualizacao = usuarioAtualizacao;
+  }
 }
