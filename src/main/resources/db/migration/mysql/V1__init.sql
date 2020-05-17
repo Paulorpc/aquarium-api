@@ -56,6 +56,7 @@ CREATE TABLE IF NOT EXISTS `Biota`
  `nomeCientifico` 		varchar(100) NULL ,
  `tipoAgua`       		enum('doce', 'salgada') NULL ,
  `nivelCuidado`   		enum('iniciante', 'intermediario', 'avancado') NULL ,
+ `reefSafe`             boolean NULL ,
  `volumeMinAquario`     decimal(7,2) NULL ,
  `alimentacao`        	varchar(4000) NULL ,
  `habitat`        		varchar(4000) NULL ,
