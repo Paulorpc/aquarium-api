@@ -69,7 +69,8 @@ CREATE TABLE IF NOT EXISTS `Biota`
  `deletado`     		boolean NOT NULL default false ,
  `dtCadastro`     		datetime NOT NULL ,
  `dtAtualizacao` 		datetime NOT NULL ,
- `usuarioAtualizacao` 	varchar(45) NULL , 
+ `usuarioCadastro`		varchar(45) NOT NULL ,
+ `usuarioAtualizacao` 	varchar(45) NOT NULL , 
 
 PRIMARY KEY (`idBiota`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
