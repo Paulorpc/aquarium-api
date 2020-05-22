@@ -6,10 +6,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import com.paulorpc.aquarium.api.controllers.BiotaController;
 import com.paulorpc.aquarium.api.dtos.BiotaDto;
 import com.paulorpc.aquarium.api.entities.Biota;
+import com.paulorpc.aquarium.api.entities.Taxonomia;
 import com.paulorpc.aquarium.api.repositories.BiotaRepository;
+import com.paulorpc.aquarium.api.repositories.TaxonomiaRepository;
 import com.paulorpc.aquarium.api.services.BiotaService;
 
 @Service
@@ -20,9 +23,12 @@ public class BiotaServiceImpl implements BiotaService {
   @Autowired
   private BiotaRepository biotaRep;
 
+  @Autowired
+  private TaxonomiaRepository taxonomiaRep;
+
   /***
    * Busca seres vivos pelo id
-   * 
+   *
    * @return List<Biota>
    */
   public Optional<Biota> buscar(int id) {
@@ -32,7 +38,7 @@ public class BiotaServiceImpl implements BiotaService {
 
   /***
    * Busca todos seres vivos cadastrados
-   * 
+   *
    * @return List<Biota>
    */
   public List<Biota> buscarTodos() {
@@ -43,7 +49,7 @@ public class BiotaServiceImpl implements BiotaService {
 
   /***
    * Busca todos seres vivos ativos (não excluídos pelo usuário)
-   * 
+   *
    * @return List<Biota>
    */
   public List<Biota> buscarTodosAtivos() {
@@ -53,35 +59,47 @@ public class BiotaServiceImpl implements BiotaService {
 
   /***
    * Cadastra novo ser vivo
-   * 
-   * @param Biota
+   *
+   * @param biota
    * @return Biota
+   * @throws Exception
    */
-  public Biota cadastrar(Biota Biota) {
-    log.info("Cadastrando um novo ser vivo. Biota: {}", Biota.toString());
-    return biotaRep.save(Biota);
+  @Transactional
+  // TODO alterar nome de metodo cadastrar para persistir de todos serviço
+  public Biota persistir(Biota biota) throws Exception {
+    log.info("Cadastrando um novo ser vivo. Biota: {}", biota.toString());
+    Taxonomia taxonomia = biota.getTaxonomia();
+    biota.setTaxonomia(null);
+    Biota biotaNovo = biotaRep.save(biota);
+    taxonomia.setId(biotaNovo.getId());
+    taxonomiaRep.save(taxonomia);
+    biota.setTaxonomia(taxonomia);
+    return biota;
   }
 
   /***
-   * Atualiza cadastro de aquário
-   * 
-   * @param Biota
+   * Atualiza cadastro de um ser vivo.
+   *
+   * @param biotaDto
    * @return Biota
    */
-  // TODO corrigir o parametro para int
-  public Optional<Biota> alterar(BiotaDto Biota) {
-    log.info("Alterando um aquário. Biota: {}", Biota.toString());
-    Optional<Biota> BiotaOpt = Biota.getId().flatMap(id -> biotaRep.findByIdAndDeletadoIsFalse(id));
-    if (BiotaOpt.isPresent()) {
-      Biota BiotaUpd = BiotaController.converteDtoParaObjeto(Biota, BiotaOpt.get());
-      BiotaOpt = Optional.of(biotaRep.save(BiotaUpd));
+  public Optional<Biota> alterar(BiotaDto biotaDto) throws Exception {
+    log.info("Alterando um ser vivo. Biota: {}", biotaDto.toString());
+
+    int id = biotaDto.getId().orElse(0);
+    Optional<Biota> biotaOpt = biotaRep.findByIdAndDeletadoIsFalse(id);
+
+    if (biotaOpt.isPresent()) {
+      Biota biotaUpd = BiotaController.converteDtoParaObjeto(biotaDto, biotaOpt.get());
+      biotaOpt = Optional.of(persistir(biotaUpd));
     }
-    return BiotaOpt;
+
+    return biotaOpt;
   }
 
   /***
    * Deleta um Biota cadastrado. Status é alterado para FALSE.
-   * 
+   *
    * @param id
    * @return Optional<Biota>
    */
@@ -92,6 +110,5 @@ public class BiotaServiceImpl implements BiotaService {
       return biotaRep.save(v);
     });
   }
-
 
 }

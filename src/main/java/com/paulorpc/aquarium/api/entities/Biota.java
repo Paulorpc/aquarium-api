@@ -1,23 +1,22 @@
 
 package com.paulorpc.aquarium.api.entities;
 
+import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
+import java.util.Optional;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import org.hibernate.annotations.ColumnDefault;
 import com.paulorpc.aquarium.api.enums.NivelCuidadoEnum;
 import com.paulorpc.aquarium.api.enums.RiscoExtincaoEnum;
 import com.paulorpc.aquarium.api.enums.TamanhoBiotaEnum;
@@ -25,7 +24,9 @@ import com.paulorpc.aquarium.api.enums.TipoAguaEnum;
 
 @Entity
 @Table(name = "Biota")
-public class Biota {
+public class Biota implements Serializable {
+
+  private static final long serialVersionUID = 1L;
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,7 +46,7 @@ public class Biota {
   @Enumerated(EnumType.STRING)
   @Column(name = "nivelCuidado", nullable = true)
   private NivelCuidadoEnum nivelCuidado;
-  
+
   @Column(name = "reefSafe", nullable = true)
   private Boolean reefSafe;
 
@@ -72,35 +73,35 @@ public class Biota {
   @Column(name = "infoAdicional", nullable = true)
   private String infoAdicional;
 
-  @OneToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "idTaxonomia")
+  @OneToOne(mappedBy = "biota", cascade = CascadeType.ALL)
   private Taxonomia taxonomia;
 
-//  @ManyToMany(fetch = FetchType.LAZY)
-//  @JoinColumn
-//  private List<String> fotos;
+  // @ManyToMany(fetch = FetchType.LAZY)
+  // @JoinColumn
+  // private List<String> fotos;
 
   @Column(name = "avaliacao", nullable = true)
   private Double avaliacao;
 
   @Column(name = "deletado", nullable = false)
-  private Boolean deletado;
+  @ColumnDefault(value = "false")
+  private boolean deletado;
 
   @Column(name = "dtCadastro", nullable = false)
   private Date dtCadastro;
 
   @Column(name = "dtAtualizacao", nullable = false)
   private Date dtAtualizacao;
-  
+
   @Column(name = "usuarioCadastro", nullable = false)
   private String usuarioCadastro;
 
   @Column(name = "usuarioAtualizacao", nullable = false)
   private String usuarioAtualizacao;
 
-  //@oneToMany(fetch = FetchType.LAZY)
-  //@JoinColumn
-  //private List<?> aquarioBiota;
+  // @oneToMany(fetch = FetchType.LAZY)
+  // @JoinColumn
+  // private List<?> aquarioBiota;
 
   public int getId() {
     return id;
@@ -141,7 +142,7 @@ public class Biota {
   public void setNivelCuidado(NivelCuidadoEnum nivelCuidado) {
     this.nivelCuidado = nivelCuidado;
   }
-  
+
   public Boolean isReefSafe() {
     return reefSafe;
   }
@@ -211,16 +212,32 @@ public class Biota {
   }
 
   public void setTaxonomia(Taxonomia taxonomia) {
+
+    if (taxonomia != null) {
+
+      Optional<String> genero = Optional.ofNullable(taxonomia.getGenero());
+      Optional<String> especie = Optional.ofNullable(taxonomia.getEspecie());
+      if (!nomeCientifico.isEmpty()) {
+        String[] nomes = nomeCientifico.split(" ");
+        if (nomes.length == 2) {
+          taxonomia.setGenero(genero.orElse(nomes[0].trim()));
+          taxonomia.setEspecie(especie.orElse(nomes[1].trim()));
+        }
+      } else if (genero.isPresent() && especie.isPresent()) {
+        nomeCientifico = genero.get() + " " + especie.get();
+      }
+    }
+
     this.taxonomia = taxonomia;
   }
 
-//  public List<String> getFotos() {
-//    return fotos;
-//  }
+  // public List<String> getFotos() {
+  // return fotos;
+  // }
 
-//  public void setFotos(List<String> fotos) {
-//    this.fotos = fotos;
-//  }
+  // public void setFotos(List<String> fotos) {
+  // this.fotos = fotos;
+  // }
 
   public Double getAvaliacao() {
     return avaliacao;
@@ -230,11 +247,11 @@ public class Biota {
     this.avaliacao = avaliacao;
   }
 
-  public Boolean isDeletado() {
+  public boolean isDeletado() {
     return deletado;
   }
 
-  public void setDeletado(Boolean deletado) {
+  public void setDeletado(boolean deletado) {
     this.deletado = deletado;
   }
 
@@ -253,7 +270,7 @@ public class Biota {
   public void setDtAtualizacao(Date dtAtualizacao) {
     this.dtAtualizacao = dtAtualizacao;
   }
-  
+
   public String getUsuarioCadastro() {
     return usuarioCadastro;
   }
@@ -273,6 +290,7 @@ public class Biota {
   @PreUpdate
   public void preUpdate() {
     dtAtualizacao = new Date();
+    usuarioAtualizacao = "USUARIO_SESSAO";
   }
 
   @PrePersist
@@ -280,19 +298,20 @@ public class Biota {
     Date hojeHora = new Date();
     dtCadastro = hojeHora;
     dtAtualizacao = hojeHora;
+    usuarioCadastro = "USUARIO_SESSAO";
+    usuarioAtualizacao = "USUARIO_SESSAO";
   }
 
   @Override
   public String toString() {
-    return "Biota [idBiota=" + id + ", nomePopular=" + nomePopular + ", nomeCientifico="
-        + nomeCientifico + ", tipoAgua=" + tipoAgua + ", nivelCuidado=" + nivelCuidado
+    return "Biota [id=" + id + ", nomePopular=" + nomePopular + ", nomeCientifico=" + nomeCientifico
+        + ", tipoAgua=" + tipoAgua + ", nivelCuidado=" + nivelCuidado + ", reefSafe=" + reefSafe
         + ", volumeMinAquario=" + volumeMinAquario + ", alimentacao=" + alimentacao + ", habitat="
         + habitat + ", regiao=" + regiao + ", tamanho=" + tamanho + ", riscoExtincao="
-        + riscoExtincao + ", infoAdicional=" + infoAdicional + ", avaliacao=" + avaliacao
-        + ", excluido=" + deletado + ", dtCadastro=" + dtCadastro + ", dtAtualizacao="
-        + dtAtualizacao + ", usuarioAtualizacao=" + usuarioAtualizacao + "]";
+        + riscoExtincao + ", infoAdicional=" + infoAdicional + ", taxonomia=" + taxonomia
+        + ", avaliacao=" + avaliacao + ", deletado=" + deletado + ", dtCadastro=" + dtCadastro
+        + ", dtAtualizacao=" + dtAtualizacao + ", usuarioCadastro=" + usuarioCadastro
+        + ", usuarioAtualizacao=" + usuarioAtualizacao + "]";
   }
-
-
 
 }
