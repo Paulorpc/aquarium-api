@@ -1,6 +1,4 @@
 -- TAXONOMIA
-INSERT INTO BiotaTaxonomia(dominio, reino, filo, classe, ordem, familia, genero, especie) VALUES
-('Animalia', 'Animalia', null, null, 'Acanthuriformes', 'Acanthuridae', 'Paracanthurus', 'hepatus');
-
--- VINCULA BIOTA A SUA TAXONOMIA
-UPDATE Biota SET idTaxonomia = 1 WHERE idBiota = 2;
+INSERT INTO BiotaTaxonomia(idBiota, dominio, reino, filo, classe, ordem, familia, genero, especie) VALUES
+(1, 'Animalia', 'Animalia', null, null, null, null, null, 'tang amarelo'),
+(2, 'Animalia', 'Animalia', null, null, 'Acanthuriformes', 'Acanthuridae', 'Paracanthurus', 'hepatus');

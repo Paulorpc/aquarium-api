@@ -6,7 +6,7 @@
 
 CREATE TABLE IF NOT EXISTS `BiotaTaxonomia`
 (
- `idTaxonomia` int NOT NULL AUTO_INCREMENT ,
+ `idBiota` int NOT NULL ,
  `dominio`     varchar(100) NULL ,
  `reino`       varchar(100) NULL ,
  `filo`        varchar(100) NULL ,
@@ -16,9 +16,6 @@ CREATE TABLE IF NOT EXISTS `BiotaTaxonomia`
  `genero`      varchar(100) NULL ,
  `especie`     varchar(100) NULL , 
 
-PRIMARY KEY (`idTaxonomia`)
+PRIMARY KEY (`idBiota`),
+CONSTRAINT `FK_224` FOREIGN KEY (`idBiota`) REFERENCES `Biota` (`idBiota`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- Adicionar FK na tabela Biota
-ALTER TABLE `Biota` ADD CONSTRAINT `FK_224` 
-FOREIGN KEY (`idTaxonomia`) REFERENCES `BiotaTaxonomia` (`idTaxonomia`);
