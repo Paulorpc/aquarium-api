@@ -26,3 +26,9 @@ logger.error("An ERROR Message");
 Obs: Aplicação deve estar em execução.
 
 - link: http://localhost:8080/swagger-ui.html 
+
+
+##### Spring-Data-Jpa
+- Uso de transação: `@Transactional`
+  - Por padrão, na ocorrência de um **RuntimeException** as alterações realizadas na transação **sofrem Rollback**, já as checked **Exceptions** não **executarão rollback**
+  - Utilizando o **rollbackFor** `@Transactional(rollbackFor = Exception.class)`, será forçado o rollback para qualquer exceção lançada, conforme anotação.  
