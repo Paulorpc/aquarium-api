@@ -31,19 +31,21 @@ public interface BiotaService {
   /***
    * Cadastra novo ser vivo
    *
-   * @param Biota
+   * @param biota
    * @return Biota
+   * @throws Exception 
    */
-  Biota cadastrar(Biota Biota);
+  Biota persistir(Biota biota) throws Exception;
 
   /***
    * Atualiza cadastro de aquário
    *
-   * @param Biota
+   * @param biota
    * @return Biota
+   * @throws Exception 
    */
   // TODO corrigir o parametro para int
-  Optional<Biota> alterar(BiotaDto Biota);
+  Optional<Biota> alterar(BiotaDto biota) throws Exception;
 
   /***
    * Deleta um Biota cadastrado. Status é alterado para FALSE.
