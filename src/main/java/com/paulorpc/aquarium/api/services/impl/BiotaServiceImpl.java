@@ -26,46 +26,23 @@ public class BiotaServiceImpl implements BiotaService {
   @Autowired
   private TaxonomiaRepository taxonomiaRep;
 
-  /***
-   * Busca seres vivos pelo id
-   *
-   * @return List<Biota>
-   */
   public Optional<Biota> buscar(int id) {
     log.info("Buscando seres vivos (biota). Id: {} ", id);
     return biotaRep.findByIdAndDeletadoIsFalse(id);
   }
 
-  /***
-   * Busca todos seres vivos cadastrados
-   *
-   * @return List<Biota>
-   */
   public List<Biota> buscarTodos() {
     log.info("Buscando todos seres vivos.");
     return biotaRep.findAll();
 
   }
 
-  /***
-   * Busca todos seres vivos ativos (não excluídos pelo usuário)
-   *
-   * @return List<Biota>
-   */
   public List<Biota> buscarTodosAtivos() {
     log.info("Buscando todos seres vivos ativos.");
     return biotaRep.findByDeletadoIsFalse();
   }
 
-  /***
-   * Cadastra novo ser vivo
-   *
-   * @param biota
-   * @return Biota
-   * @throws Exception
-   */
   @Transactional
-  // TODO alterar nome de metodo cadastrar para persistir de todos serviço
   public Biota persistir(Biota biota) throws Exception {
     log.info("Cadastrando um novo ser vivo. Biota: {}", biota.toString());
     Taxonomia taxonomia = biota.getTaxonomia();
@@ -77,12 +54,6 @@ public class BiotaServiceImpl implements BiotaService {
     return biota;
   }
 
-  /***
-   * Atualiza cadastro de um ser vivo.
-   *
-   * @param biotaDto
-   * @return Biota
-   */
   public Optional<Biota> alterar(BiotaDto biotaDto) throws Exception {
     log.info("Alterando um ser vivo. Biota: {}", biotaDto.toString());
 
@@ -97,12 +68,6 @@ public class BiotaServiceImpl implements BiotaService {
     return biotaOpt;
   }
 
-  /***
-   * Deleta um Biota cadastrado. Status é alterado para FALSE.
-   *
-   * @param id
-   * @return Optional<Biota>
-   */
   public Optional<Biota> deletar(int id) {
     log.info("Deletando um ser vivo. Id: {}", id);
     return biotaRep.findByIdAndDeletadoIsFalse(id).map(v -> {

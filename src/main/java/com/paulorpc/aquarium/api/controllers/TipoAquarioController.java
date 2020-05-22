@@ -98,7 +98,7 @@ public class TipoAquarioController {
 
     TipoAquario novoTipoAquario = new TipoAquario();
     novoTipoAquario =
-        tipoAquarioService.cadastrar(converteDtoParaObjeto(tipoAquarioDto));
+        tipoAquarioService.persistir(converteDtoParaObjeto(tipoAquarioDto));
     URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
         .buildAndExpand(novoTipoAquario.getId()).toUri();
     response.setData(converteObjetoParaDto(novoTipoAquario));

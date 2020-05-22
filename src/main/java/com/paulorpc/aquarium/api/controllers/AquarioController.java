@@ -111,7 +111,7 @@ public class AquarioController {
         "O campo 'status' foi alterado para true pelo sistema, pois o método POST sempre considera true o 'status' de um novo registro.";
     aquarioDto.getStatus().orElse(response.addIssue(issueMsg, log));
 
-    novoAquario = aquarioService.cadastrar(converteDtoParaObjeto(aquarioDto, novoAquario));
+    novoAquario = aquarioService.persistir(converteDtoParaObjeto(aquarioDto, novoAquario));
     URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
         .buildAndExpand(novoAquario.getId()).toUri();
     response.setData(converteObjetoParaDto(novoAquario));

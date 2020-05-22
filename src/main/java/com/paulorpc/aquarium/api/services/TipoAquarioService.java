@@ -48,7 +48,7 @@ public interface TipoAquarioService {
    * @param TipoAquario
    * @return TipoAquario
    */
-  TipoAquario cadastrar(TipoAquario tipoAquario);
+  TipoAquario persistir(TipoAquario tipoAquario);
 
   /***
    * Atualiza cadastro de Tipo Aquário

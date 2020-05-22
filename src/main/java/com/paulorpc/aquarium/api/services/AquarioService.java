@@ -35,7 +35,7 @@ public interface AquarioService {
    * @param aquario
    * @return Aquario
    */
-  Aquario cadastrar(Aquario aquario);
+  Aquario persistir(Aquario aquario);
 
   /***
    * Atualiza cadastro de aquário

@@ -23,56 +23,28 @@ public class AquarioServiceImpl implements AquarioService {
   @Autowired
   private AquarioRepository aquarioRep;
 
-  /***
-   * Busca aquarios pelo id
-   * 
-   * @return List<Aquario>
-   */
   public Optional<Aquario> buscar(int id) {
     log.info("Buscando aquário. Id: {} ", id);
     return aquarioRep.findByIdAndStatusIsTrue(id);
   }
 
-  /***
-   * Busca todos aquarios cadastrados
-   * 
-   * @return List<Aquario>
-   */
   public List<Aquario> buscarTodos() {
     log.info("Buscando todos aquários.");
     return aquarioRep.findAll();
 
   }
 
-  /***
-   * Busca todos aquarios ativos (não excluídos pelo usuário)
-   * 
-   * @return List<Aquario>
-   */
   public List<Aquario> buscarTodosAtivos() {
     log.info("Buscando todos aquários ativos.");
     return aquarioRep.findByStatusIsTrue();
   }
 
-  /***
-   * Cadastra novo aquário
-   * 
-   * @param aquario
-   * @return Aquario
-   */
-  public Aquario cadastrar(Aquario aquario) {
+  public Aquario persistir(Aquario aquario) {
     log.info("Cadastrando um novo aquário. Aquário: {}", aquario.toString());
     aquario.setStatus(true);
     return aquarioRep.save(aquario);
   }
 
-  /***
-   * Atualiza cadastro de aquário
-   * 
-   * @param aquario
-   * @return Aquario
-   */
-  // TODO corrigir o parametro para int
   public Optional<Aquario> alterar(AquarioDto aquario) {
     log.info("Alterando um aquário. Aquario: {}", aquario.toString());
     Optional<Aquario> aquarioOpt =
@@ -84,12 +56,6 @@ public class AquarioServiceImpl implements AquarioService {
     return aquarioOpt;
   }
 
-  /***
-   * Deleta um aquario cadastrado. Status é alterado para FALSE.
-   * 
-   * @param id
-   * @return Optional<Aquario>
-   */
   public Optional<Aquario> deletar(int id) {
     log.info("Deletando um aquário. Id: {}", id);
     return aquarioRep.findByIdAndStatusIsTrue(id).map(a -> {
