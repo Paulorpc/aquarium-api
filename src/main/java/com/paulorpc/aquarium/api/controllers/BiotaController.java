@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.paulorpc.aquarium.api.dtos.BiotaDto;
+import com.paulorpc.aquarium.api.dtos.TaxonomiaDto;
 import com.paulorpc.aquarium.api.entities.Biota;
 import com.paulorpc.aquarium.api.response.Response;
 import com.paulorpc.aquarium.api.services.BiotaService;
@@ -76,7 +77,8 @@ public class BiotaController {
 
   @PostMapping
   public ResponseEntity<Response<BiotaDto>> cadastrar(
-      @Validated(BiotaDto.Cadastrar.class) @RequestBody BiotaDto BiotaDto, BindingResult result) {
+      @Validated(BiotaDto.Cadastrar.class) @RequestBody BiotaDto biotaDto, BindingResult result)
+      throws Exception {
     log.info("Requisição para cadastrar ser vivo");
     Response<BiotaDto> response = new Response<>();
 
@@ -85,7 +87,7 @@ public class BiotaController {
       return ResponseEntity.badRequest().body(response);
     }
 
-    Biota novoBiota = biotaService.cadastrar(converteDtoParaObjeto(BiotaDto));
+    Biota novoBiota = biotaService.persistir(converteDtoParaObjeto(biotaDto));
     URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
         .buildAndExpand(novoBiota.getId()).toUri();
     response.setData(converteObjetoParaDto(novoBiota));
@@ -94,31 +96,27 @@ public class BiotaController {
 
   @PutMapping
   public ResponseEntity<Response<BiotaDto>> alterar(
-      @Validated(BiotaDto.Alterar.class) @RequestBody BiotaDto BiotaDto, BindingResult result) {
+      @Validated(BiotaDto.Alterar.class) @RequestBody BiotaDto biotaDto, BindingResult result)
+      throws Exception {
     log.info("Requisição para alterar ser vivo existente");
     Response<BiotaDto> response = new Response<>();
+    
     if (result.hasErrors()) {
       response.setIssuesFromResultErrors(result, log);
       return ResponseEntity.badRequest().body(response);
     }
 
-    Optional<Biota> aquarioOpt = biotaService.alterar(BiotaDto);
+    Optional<Biota> biotaOpt = biotaService.alterar(biotaDto);
 
-    if (!aquarioOpt.isPresent()) {
-      response.getIssues().add("Não foi possível localizar biota. Id: " + BiotaDto.getId());
+    if (!biotaOpt.isPresent()) {
+      response.getIssues().add("Não foi possível localizar biota. Id: " + biotaDto.getId());
       return ResponseEntity.notFound().build();
     }
 
-    response.setData(converteObjetoParaDto(aquarioOpt.get()));
+    response.setData(converteObjetoParaDto(biotaOpt.get()));
     return ResponseEntity.ok(response);
   }
 
-  /***
-   * Método de deleção de aquários. Obs: Feito método utilizando estilo funcional para aprendizado.
-   * 
-   * @param id
-   * @return
-   */
   @DeleteMapping(value = "/{id}")
   public ResponseEntity<Response<BiotaDto>> deletar(@PathVariable int id) {
     log.info("Requisição para deletar um ser vivo");
@@ -135,7 +133,7 @@ public class BiotaController {
 
   /***
    * Converte objeto Biota para BiotaDto
-   * 
+   *
    * @param dto
    * @return Biota
    */
@@ -145,7 +143,7 @@ public class BiotaController {
 
   /***
    * Converte objeto Biota para BiotaDto
-   * 
+   *
    * @param dto
    * @return Biota
    */
@@ -163,14 +161,24 @@ public class BiotaController {
     dto.getTamanho().ifPresent(v -> obj.setTamanho(v));
     dto.getRiscoExtincao().ifPresent(v -> obj.setRiscoExtincao(v));
     dto.getInfoAdicional().ifPresent(v -> obj.setInfoAdicional(v));
-    dto.getTaxonomia().ifPresent(v -> obj.setTaxonomia(v));
     dto.getAvaliacao().ifPresent(v -> obj.setAvaliacao(v));
+
+    dto.getTaxonomia().ifPresent(taxonomia -> {
+      taxonomia.getDominio().ifPresent(v -> obj.getTaxonomia().setDominio(v));
+      taxonomia.getReino().ifPresent(v -> obj.getTaxonomia().setReino(v));
+      taxonomia.getFilo().ifPresent(v -> obj.getTaxonomia().setFilo(v));
+      taxonomia.getClasse().ifPresent(v -> obj.getTaxonomia().setClasse(v));
+      taxonomia.getOrdem().ifPresent(v -> obj.getTaxonomia().setOrdem(v));
+      taxonomia.getGenero().ifPresent(v -> obj.getTaxonomia().setGenero(v));
+      taxonomia.getEspecie().ifPresent(v -> obj.getTaxonomia().setEspecie(v));
+    });
+
     return obj;
   }
 
   /***
    * Converte objeto Biota para BiotaDto
-   * 
+   *
    * @param obj
    * @return BiotaDto
    */
@@ -189,12 +197,22 @@ public class BiotaController {
     dto.setTamanho(Optional.ofNullable(obj.getTamanho()));
     dto.setRiscoExtincao(Optional.ofNullable(obj.getRiscoExtincao()));
     dto.setInfoAdicional(Optional.ofNullable(obj.getInfoAdicional()));
-    dto.setTaxonomia(Optional.ofNullable(obj.getTaxonomia()));
     dto.setAvaliacao(Optional.ofNullable(obj.getAvaliacao()));
     dto.setDtCadastro(obj.getDtCadastro());
     dto.setDtAtualizacao(obj.getDtAtualizacao());
     dto.setUsuarioCadastro(obj.getUsuarioCadastro());
     dto.setUsuarioAtualizacao(obj.getUsuarioAtualizacao());
+
+    TaxonomiaDto taxonomia = new TaxonomiaDto();
+    taxonomia.setDominio(Optional.ofNullable(obj.getTaxonomia().getDominio()));
+    taxonomia.setReino(Optional.ofNullable(obj.getTaxonomia().getReino()));
+    taxonomia.setFilo(Optional.ofNullable(obj.getTaxonomia().getFilo()));
+    taxonomia.setClasse(Optional.ofNullable(obj.getTaxonomia().getClasse()));
+    taxonomia.setOrdem(Optional.ofNullable(obj.getTaxonomia().getOrdem()));
+    taxonomia.setGenero(Optional.ofNullable(obj.getTaxonomia().getGenero()));
+    taxonomia.setEspecie(Optional.ofNullable(obj.getTaxonomia().getEspecie()));
+
+    dto.setTaxonomia(Optional.ofNullable(taxonomia));
     return dto;
   }
 
