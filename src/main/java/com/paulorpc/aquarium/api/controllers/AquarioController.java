@@ -4,7 +4,6 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
 import com.paulorpc.aquarium.api.dtos.AquarioDto;
 import com.paulorpc.aquarium.api.entities.Aquario;
 import com.paulorpc.aquarium.api.entities.TipoAquario;
@@ -50,7 +48,7 @@ public class AquarioController {
     log.info("Requisição para buscar aquário - buscarAquario(). Id: " + id);
     Response<AquarioDto> response = new Response<>();
 
-    return aquarioService.buscarAquario(id).map(aquario -> {
+    return aquarioService.buscar(id).map(aquario -> {
       response.setData(converteObjetoParaDto(aquario));
       return ResponseEntity.ok(response);
     }).orElse(ResponseEntity.notFound().build());
@@ -99,11 +97,11 @@ public class AquarioController {
 
     Aquario novoAquario = new Aquario();
     Optional<TipoAquario> tipoAquario =
-        aquarioDto.getIdTipoAquario().flatMap(id -> tipoAquarioService.buscarTipoAquario(id));
+        aquarioDto.getIdTipoAquario().flatMap(id -> tipoAquarioService.buscar(id));
 
-    if (tipoAquario.isPresent())
+    if (tipoAquario.isPresent()) {
       novoAquario.setTipoAquario(tipoAquario.get());
-    else if (aquarioDto.getIdTipoAquario().isPresent()) {
+    } else if (aquarioDto.getIdTipoAquario().isPresent()) {
       issueMsg = "O campo 'idTipoAquario' informado não foi localizado. IdTipoAquario: "
           + gb.nullToEmpty(aquarioDto.getIdTipoAquario().get());
       response.addIssue(issueMsg, log);
@@ -113,7 +111,7 @@ public class AquarioController {
         "O campo 'status' foi alterado para true pelo sistema, pois o método POST sempre considera true o 'status' de um novo registro.";
     aquarioDto.getStatus().orElse(response.addIssue(issueMsg, log));
 
-    novoAquario = aquarioService.cadastrarAquario(converteDtoParaObjeto(aquarioDto, novoAquario));
+    novoAquario = aquarioService.cadastrar(converteDtoParaObjeto(aquarioDto, novoAquario));
     URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
         .buildAndExpand(novoAquario.getId()).toUri();
     response.setData(converteObjetoParaDto(novoAquario));
@@ -131,7 +129,7 @@ public class AquarioController {
       return ResponseEntity.badRequest().body(response);
     }
 
-    Optional<Aquario> aquarioOpt = aquarioService.alterarAquario(aquarioDto);
+    Optional<Aquario> aquarioOpt = aquarioService.alterar(aquarioDto);
 
     if (!aquarioOpt.isPresent()) {
       response.getIssues().add("Não foi possível localizar o aquário, id: " + aquarioDto.getId());
@@ -144,7 +142,7 @@ public class AquarioController {
 
   /***
    * Método de deleção de aquários. Obs: Feito método utilizando estilo funcional para aprendizado.
-   * 
+   *
    * @param id
    * @return
    */
@@ -156,12 +154,12 @@ public class AquarioController {
     /*
      * Optional<Aquario> aquario = aquarioService.deletarAquario(id); if(!aquario.isPresent())
      * return ResponseEntity.notFound().build();
-     * 
+     *
      * //response.setData(ConverteAquarioToAquarioDto(aquario.get())); //return
      * ResponseEntity.ok(response);
      */
 
-    return aquarioService.deletarAquario(id).map(aquario -> {
+    return aquarioService.deletar(id).map(aquario -> {
       response.setData(converteObjetoParaDto(aquario));
       return ResponseEntity.ok(response);
     }).orElse(ResponseEntity.notFound().build());
@@ -172,7 +170,7 @@ public class AquarioController {
 
   /***
    * Converte objeto Aquario para AquarioDTO
-   * 
+   *
    * @param dto
    * @return Aquario
    */
@@ -196,7 +194,7 @@ public class AquarioController {
 
   /***
    * Converte objeto Aquario para AquarioDTO
-   * 
+   *
    * @param obj
    * @return aquarioDto
    */

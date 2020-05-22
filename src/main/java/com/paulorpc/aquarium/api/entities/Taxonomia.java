@@ -1,73 +1,124 @@
 package com.paulorpc.aquarium.api.entities;
 
-public abstract class Taxonomia {
-	
-	private String reino;
-	private String filo;
-	private String classe;
-	private String ordem;
-	private String família;
-	private String gênero;
-	private String espécie;
+import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.paulorpc.aquarium.api.util.Global;
 
-	public Taxonomia() {}
+@Entity
+@Table(name = "BiotaTaxonomia")
+public class Taxonomia implements Serializable {
 
-	public String getReino() {
-		return reino;
-	}
+  private static final long serialVersionUID = 1L;  
 
-	public void setReino(String reino) {
-		this.reino = reino;
-	}
+  @Id
+  @Column(name = "idBiota", nullable = false)
+  private int id;
+  
+  @JoinColumn(name = "idBiota")
+  @OneToOne
+  private Biota biota;
+  
+  @Column(name = "dominio", nullable = true)
+  private String dominio;
 
-	public String getFilo() {
-		return filo;
-	}
+  @Column(name = "reino", nullable = true)
+  private String reino;
 
-	public void setFilo(String filo) {
-		this.filo = filo;
-	}
+  @Column(name = "filo", nullable = true)
+  private String filo;
 
-	public String getClasse() {
-		return classe;
-	}
+  @Column(name = "classe", nullable = true)
+  private String classe;
 
-	public void setClasse(String classe) {
-		this.classe = classe;
-	}
+  @Column(name = "ordem", nullable = true)
+  private String ordem;
 
-	public String getOrdem() {
-		return ordem;
-	}
+  @Column(name = "familia", nullable = true)
+  private String familia;
 
-	public void setOrdem(String ordem) {
-		this.ordem = ordem;
-	}
+  @Column(name = "genero", nullable = true)
+  private String genero;
 
-	public String getFamília() {
-		return família;
-	}
+  @Column(name = "especie", nullable = true)
+  private String especie;
+  
+  
+  public int getId() {
+    return id;
+  }
 
-	public void setFamília(String família) {
-		this.família = família;
-	}
+  public void setId(int id) {
+    this.id = id;
+  }
 
-	public String getGênero() {
-		return gênero;
-	}
+  public String getDominio() {
+    return dominio;
+  }
 
-	public void setGênero(String gênero) {
-		this.gênero = gênero;
-	}
+  public void setDominio(String dominio) {
+    this.dominio = dominio;
+  }
 
-	public String getEspécie() {
-		return espécie;
-	}
+  public String getReino() {
+    return reino;
+  }
 
-	public void setEspécie(String espécie) {
-		this.espécie = espécie;
-	}
-	
-	
+  public void setReino(String reino) {
+    this.reino = reino;
+  }
+
+  public String getFilo() {
+    return filo;
+  }
+
+  public void setFilo(String filo) {
+    this.filo = filo;
+  }
+
+  public String getClasse() {
+    return classe;
+  }
+
+  public void setClasse(String classe) {
+    this.classe = classe;
+  }
+
+  public String getOrdem() {
+    return ordem;
+  }
+
+  public void setOrdem(String ordem) {
+    this.ordem = ordem;
+  }
+
+  public String getFamilia() {
+    return familia;
+  }
+
+  public void setFamilia(String familia) {
+    this.familia = familia;
+  }
+
+  public String getGenero() {
+    return genero;
+  }
+
+  public void setGenero(String genero) {
+    this.genero = genero;
+  }
+
+  public String getEspecie() {
+    return especie;
+  }
+
+  public void setEspecie(String especie) {
+    this.especie = especie;
+  }
 
 }

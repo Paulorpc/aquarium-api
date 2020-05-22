@@ -1,17 +1,16 @@
-package enums;
+package com.paulorpc.aquarium.api.enums;
 
 import java.util.Arrays;
 import java.util.Optional;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 
-public enum TipoAguaEnum {
-
-  doce("Doce"), salgada("Salgada");
+public enum NivelCuidadoEnum {
+  
+  iniciante("Iniciante"), intermediario("Intermediário"), avancado("Avançado");
 
   private String descricao;
 
-  TipoAguaEnum(String descricao) {
+  NivelCuidadoEnum(String descricao) {
     this.descricao = descricao;
   }
 
@@ -26,10 +25,11 @@ public enum TipoAguaEnum {
    * @return
    */
   @JsonCreator
-  public static TipoAguaEnum setValue(String value) {
-    Optional<TipoAguaEnum> tipo = Arrays.stream(TipoAguaEnum.values())
+  public static NivelCuidadoEnum setValue(String value) {
+    Optional<NivelCuidadoEnum> tipo = Arrays.stream(NivelCuidadoEnum.values())
         .filter(t -> t.toString().equalsIgnoreCase(value)).findAny();
 
     return tipo.orElse(null);
   }
+
 }
