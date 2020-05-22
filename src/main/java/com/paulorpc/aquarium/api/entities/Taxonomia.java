@@ -1,21 +1,29 @@
 package com.paulorpc.aquarium.api.entities;
 
+import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.paulorpc.aquarium.api.util.Global;
 
 @Entity
 @Table(name = "BiotaTaxonomia")
-public class Taxonomia {
+public class Taxonomia implements Serializable {
+
+  private static final long serialVersionUID = 1L;  
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "idTaxonomia", nullable = false)
-  private int idTaxonomia;  
-
+  @Column(name = "idBiota", nullable = false)
+  private int id;
+  
+  @JoinColumn(name = "idBiota")
+  @OneToOne
+  private Biota biota;
+  
   @Column(name = "dominio", nullable = true)
   private String dominio;
 
@@ -39,15 +47,14 @@ public class Taxonomia {
 
   @Column(name = "especie", nullable = true)
   private String especie;
-
-  public Taxonomia() {}
-
-  public int getIdTaxonomia() {
-    return idTaxonomia;
+  
+  
+  public int getId() {
+    return id;
   }
 
-  public void setIdTaxonomia(int idTaxonomia) {
-    this.idTaxonomia = idTaxonomia;
+  public void setId(int id) {
+    this.id = id;
   }
 
   public String getDominio() {
@@ -112,13 +119,6 @@ public class Taxonomia {
 
   public void setEspecie(String especie) {
     this.especie = especie;
-  }
-
-  @Override
-  public String toString() {
-    return "Taxonomia [idTaxonomia=" + idTaxonomia + ", dominio=" + dominio
-        + ", reino=" + reino + ", filo=" + filo + ", classe=" + classe + ", ordem=" + ordem
-        + ", familia=" + familia + ", genero=" + genero + ", especie=" + especie + "]";
   }
 
 }

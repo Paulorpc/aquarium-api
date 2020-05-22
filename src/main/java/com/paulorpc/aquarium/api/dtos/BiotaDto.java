@@ -6,7 +6,6 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.paulorpc.aquarium.api.entities.Taxonomia;
 import com.paulorpc.aquarium.api.enums.NivelCuidadoEnum;
 import com.paulorpc.aquarium.api.enums.RiscoExtincaoEnum;
 import com.paulorpc.aquarium.api.enums.TamanhoBiotaEnum;
@@ -27,7 +26,7 @@ public class BiotaDto {
   private Optional<TamanhoBiotaEnum> tamanho = Optional.empty();
   private Optional<RiscoExtincaoEnum> riscoExtincao = Optional.empty();
   private Optional<String> infoAdicional = Optional.empty();
-  private Optional<Taxonomia> taxonomia = Optional.empty();
+  private Optional<TaxonomiaDto> taxonomiaDto = Optional.empty();
   private Optional<Double> avaliacao = Optional.empty();
   private Date dtCadastro;
   private Date dtAtualizacao;
@@ -39,7 +38,7 @@ public class BiotaDto {
 
   public interface Alterar {
   }
-
+  
   public Optional<@NotNull(message = "Campo 'id' é obrigatório.", groups = {Alterar.class}) Integer> getId() {
     return id;
   }
@@ -64,7 +63,7 @@ public class BiotaDto {
     this.nomeCientifico = nomeCientifico;
   }
 
-  public Optional<@NotEmpty(message = "Campo 'nomePopular' é obrigatório.", groups = {Cadastrar.class, Alterar.class}) TipoAguaEnum> getTipoAgua() {
+  public Optional<@NotNull(message = "Campo 'tipoAgua' é obrigatório.", groups = {Cadastrar.class, Alterar.class}) TipoAguaEnum> getTipoAgua() {
     return tipoAgua;
   }
 
@@ -144,12 +143,12 @@ public class BiotaDto {
     this.infoAdicional = infoAdicional;
   }
 
-  public Optional<Taxonomia> getTaxonomia() {
-    return taxonomia;
+  public Optional<TaxonomiaDto> getTaxonomia() {
+    return taxonomiaDto;
   }
 
-  public void setTaxonomia(Optional<Taxonomia> taxonomia) {
-    this.taxonomia = taxonomia;
+  public void setTaxonomia(Optional<TaxonomiaDto> taxonomia) {
+    this.taxonomiaDto = taxonomia;
   }
 
   public Optional<Double> getAvaliacao() {
@@ -199,4 +198,5 @@ public class BiotaDto {
   public void setUsuarioAtualizacao(String usuarioAtualizacao) {
     this.usuarioAtualizacao = usuarioAtualizacao;
   }
+
 }
