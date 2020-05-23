@@ -41,17 +41,18 @@ public class BiotaServiceImpl implements BiotaService {
     log.info("Buscando todos seres vivos ativos.");
     return biotaRep.findByDeletadoIsFalse();
   }
-
+  
+// TODO ao ativar transação gera problema de cadastro 
   @Transactional
   public Biota persistir(Biota biota) throws Exception {
-    log.info("Cadastrando um novo ser vivo. Biota: {}", biota.toString());
+    log.info("Persistindo um novo ser vivo. Biota: {}", biota.toString());
     Taxonomia taxonomia = biota.getTaxonomia();
     biota.setTaxonomia(null);
     Biota biotaNovo = biotaRep.save(biota);
     taxonomia.setId(biotaNovo.getId());
     taxonomiaRep.save(taxonomia);
-    biota.setTaxonomia(taxonomia);
-    return biota;
+    biotaNovo.setTaxonomia(taxonomia);  
+    return biotaNovo;
   }
 
   public Optional<Biota> alterar(BiotaDto biotaDto) throws Exception {
