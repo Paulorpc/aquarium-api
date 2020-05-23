@@ -7,8 +7,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.paulorpc.aquarium.api.util.Global;
 
 @Entity
 @Table(name = "BiotaTaxonomia")
@@ -23,7 +21,7 @@ public class Taxonomia implements Serializable {
   @JoinColumn(name = "idBiota")
   @OneToOne
   private Biota biota;
-  
+
   @Column(name = "dominio", nullable = true)
   private String dominio;
 
@@ -55,6 +53,14 @@ public class Taxonomia implements Serializable {
 
   public void setId(int id) {
     this.id = id;
+  }
+  
+  public Biota getBiota() {
+    return biota;
+  }
+
+  public void setBiota(Biota biota) {
+    this.biota = biota;
   }
 
   public String getDominio() {
@@ -121,4 +127,11 @@ public class Taxonomia implements Serializable {
     this.especie = especie;
   }
 
+  @Override
+  public String toString() {
+    return "Taxonomia [id=" + id + ", dominio=" + dominio + ", reino=" + reino + ", filo=" + filo
+        + ", classe=" + classe + ", ordem=" + ordem + ", familia=" + familia + ", genero=" + genero
+        + ", especie=" + especie + "]";
+  }
+  
 }
