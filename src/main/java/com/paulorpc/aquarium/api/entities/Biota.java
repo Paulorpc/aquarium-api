@@ -73,8 +73,8 @@ public class Biota implements Serializable {
   @Column(name = "infoAdicional", nullable = true)
   private String infoAdicional;
 
-  @OneToOne(mappedBy = "biota", cascade = CascadeType.ALL)
-  private Taxonomia taxonomia;
+  @OneToOne(mappedBy = "biota", cascade = CascadeType.ALL)  
+  private Taxonomia taxonomia = new Taxonomia();
 
   // @ManyToMany(fetch = FetchType.LAZY)
   // @JoinColumn
@@ -102,6 +102,7 @@ public class Biota implements Serializable {
   // @oneToMany(fetch = FetchType.LAZY)
   // @JoinColumn
   // private List<?> aquarioBiota;
+  
 
   public int getId() {
     return id;

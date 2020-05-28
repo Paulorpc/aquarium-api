@@ -42,8 +42,8 @@ public class BiotaServiceImpl implements BiotaService {
     return biotaRep.findByDeletadoIsFalse();
   }
   
-// TODO ao ativar transação gera problema de cadastro 
-  @Transactional
+// TODO ao ativar transação gera problema de cadastro corrigir
+//  @Transactional
   public Biota persistir(Biota biota) throws Exception {
     log.info("Persistindo um novo ser vivo. Biota: {}", biota.toString());
     Taxonomia taxonomia = biota.getTaxonomia();

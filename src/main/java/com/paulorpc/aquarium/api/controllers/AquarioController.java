@@ -36,7 +36,6 @@ import com.paulorpc.aquarium.api.util.Global;
 public class AquarioController {
 
   private final Logger log = LoggerFactory.getLogger(AquarioController.class);
-  private Global gb = new Global();
 
   @Autowired
   private AquarioService aquarioService;
@@ -102,8 +101,8 @@ public class AquarioController {
     if (tipoAquario.isPresent()) {
       novoAquario.setTipoAquario(tipoAquario.get());
     } else if (aquarioDto.getIdTipoAquario().isPresent()) {
-      issueMsg = "O campo 'idTipoAquario' informado não foi localizado. IdTipoAquario: "
-          + gb.nullToEmpty(aquarioDto.getIdTipoAquario().get());
+      issueMsg = "O campo 'idTipoAquario' informado não foi localizado. Id: "
+          + Global.nullToEmpty(aquarioDto.getIdTipoAquario().get().toString());
       response.addIssue(issueMsg, log);
     }
 
