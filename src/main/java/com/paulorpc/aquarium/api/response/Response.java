@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.springframework.validation.BindingResult;
 
-public class Response<T> {
+public class Response<T> implements ResponseInt {
 
   private T data;
   private ArrayList<String> issues;
@@ -64,6 +64,11 @@ public class Response<T> {
    */
   public void setIssuesFromResultErrors(BindingResult result) {
     result.getAllErrors().forEach(e -> getIssues().add(e.getDefaultMessage()));
+  }
+
+  @Override
+  public String getPath() {
+    return null;
   }
 
 }
