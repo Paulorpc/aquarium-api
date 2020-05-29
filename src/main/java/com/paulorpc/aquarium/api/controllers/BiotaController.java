@@ -23,8 +23,12 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.paulorpc.aquarium.api.dtos.BiotaDto;
 import com.paulorpc.aquarium.api.dtos.TaxonomiaDto;
 import com.paulorpc.aquarium.api.entities.Biota;
+import com.paulorpc.aquarium.api.exceptions.NotFoundException;
 import com.paulorpc.aquarium.api.response.Response;
+import com.paulorpc.aquarium.api.response.ResponseObj;
+import com.paulorpc.aquarium.api.response.ResponseInt;
 import com.paulorpc.aquarium.api.services.BiotaService;
+import com.paulorpc.aquarium.api.util.Global;
 
 @RestController
 @RequestMapping(value = "/api/biota")
@@ -45,6 +49,27 @@ public class BiotaController {
       response.setData(converteObjetoParaDto(biota));
       return ResponseEntity.ok(response);
     }).orElse(ResponseEntity.notFound().build());
+  }
+  
+  /***
+   * 
+   * MÉTODO DE EXEMPLO DE COMO DEVERÁ SER RETORNOS COM CONTROLE DE EXCEÇÃO.
+   * QUANDO ERRO, DEVE SER RETORNADO RESPONSE ERROR
+   * QUANDO SUCESSO, DEVE SER RETORNADO RESPONSE
+   * AMBOS IMPLEMENTAO INTERFACE RESPONSE, PORTANTO, RESPONSEENTITY DEVE SER DO TIPO RESPONSE.
+   * 
+   * @param id
+   * @return
+   * @throws Exception
+   */
+  @GetMapping(value = "/teste/{id}")
+  public ResponseEntity<ResponseInt> buscarTeste(@PathVariable int id) throws Exception {
+    log.info("Requisição para buscar ser vivo. Id: " + id);
+
+    return biotaService.buscar(id).map(biota -> {
+      ResponseInt response = new ResponseObj<BiotaDto>(Global.getUri(), converteObjetoParaDto(biota));
+      return ResponseEntity.ok(response);
+    }).orElseThrow(() -> new NotFoundException());
   }
 
   @GetMapping
@@ -161,16 +186,16 @@ public class BiotaController {
     dto.getTamanho().ifPresent(v -> obj.setTamanho(v));
     dto.getRiscoExtincao().ifPresent(v -> obj.setRiscoExtincao(v));
     dto.getInfoAdicional().ifPresent(v -> obj.setInfoAdicional(v));
-    dto.getAvaliacao().ifPresent(v -> obj.setAvaliacao(v));
-
+    dto.getAvaliacao().ifPresent(v -> obj.setAvaliacao(v));   
+    
     dto.getTaxonomia().ifPresent(taxonomia -> {
-      taxonomia.getDominio().ifPresent(v -> obj.getTaxonomia().setDominio(v));
-      taxonomia.getReino().ifPresent(v -> obj.getTaxonomia().setReino(v));
-      taxonomia.getFilo().ifPresent(v -> obj.getTaxonomia().setFilo(v));
-      taxonomia.getClasse().ifPresent(v -> obj.getTaxonomia().setClasse(v));
-      taxonomia.getOrdem().ifPresent(v -> obj.getTaxonomia().setOrdem(v));
-      taxonomia.getGenero().ifPresent(v -> obj.getTaxonomia().setGenero(v));
-      taxonomia.getEspecie().ifPresent(v -> obj.getTaxonomia().setEspecie(v));
+        taxonomia.getDominio().ifPresent(v -> obj.getTaxonomia().setDominio(v));
+        taxonomia.getReino().ifPresent(v -> obj.getTaxonomia().setReino(v));
+        taxonomia.getFilo().ifPresent(v -> obj.getTaxonomia().setFilo(v));
+        taxonomia.getClasse().ifPresent(v -> obj.getTaxonomia().setClasse(v));
+        taxonomia.getOrdem().ifPresent(v -> obj.getTaxonomia().setOrdem(v));
+        taxonomia.getGenero().ifPresent(v -> obj.getTaxonomia().setGenero(v));
+        taxonomia.getEspecie().ifPresent(v -> obj.getTaxonomia().setEspecie(v));
     });
 
     return obj;
@@ -211,8 +236,8 @@ public class BiotaController {
     taxonomia.setOrdem(Optional.ofNullable(obj.getTaxonomia().getOrdem()));
     taxonomia.setGenero(Optional.ofNullable(obj.getTaxonomia().getGenero()));
     taxonomia.setEspecie(Optional.ofNullable(obj.getTaxonomia().getEspecie()));
-
     dto.setTaxonomia(Optional.ofNullable(taxonomia));
+    
     return dto;
   }
 
