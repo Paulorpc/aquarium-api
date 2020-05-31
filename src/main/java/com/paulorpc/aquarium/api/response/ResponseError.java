@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import com.paulorpc.aquarium.api.util.Global;
 
-public class ResponseError implements ResponseInt {
+public class ResponseError implements Response {
 
   private final String path;
   private ArrayList<Error> messages;

@@ -3,7 +3,7 @@ package com.paulorpc.aquarium.api.response;
 import java.net.URI;
 import com.paulorpc.aquarium.api.util.Global;
 
-public class ResponseObj<T> implements ResponseInt {
+public class ResponseObj<T> implements Response {
 
   private final String path;
   private T data;
