@@ -7,9 +7,9 @@
 CREATE TABLE IF NOT EXISTS `TipoAquario`
 (
  `idTipoAquario` INT NOT NULL AUTO_INCREMENT ,
- `tipo`          varchar(45) NOT NULL ,
+ `tipo`          varchar(45) NOT NULL UNIQUE,
  `tipoAgua`      enum('doce', 'salgada') NOT NULL ,
- `status`        bit NOT NULL ,
+ `status`        boolean NOT NULL ,
  `descricao`     text NOT NULL ,
  `dtCadastro`    datetime NOT NULL ,
  `dtAtualizacao` datetime NOT NULL ,
@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS `Aquario`
  `dtAquisicao`   datetime NULL ,
  `dtInicio`      datetime NOT NULL ,
  `dtFinal`       datetime NULL ,
- `idTipoAquario` int NOT NULL ,
+ `idTipoAquario` int NULL ,
  `tipoAgua`      enum('doce', 'salgada') NULL ,
  `tamanho`       varchar(45) NULL ,
  `volume`        int NULL ,
@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS `Aquario`
  `dosagem`       varchar(45) NULL ,
  `substrato`     varchar(45) NULL ,
  `parametros`    int NULL ,
- `status`        boolean NULL ,
+ `status`        boolean NOT NULL ,
  `foto`          int NULL ,
  `observacao`    text NULL ,
  `dtCadastro`    datetime NOT NULL ,
@@ -51,27 +51,28 @@ CONSTRAINT `FK_170` FOREIGN KEY (`idTipoAquario`) REFERENCES `TipoAquario` (`idT
 
 CREATE TABLE IF NOT EXISTS `Biota`
 (
- `idBiota`        int NOT NULL AUTO_INCREMENT ,
- `idAquario`      int NOT NULL ,
- `nome`           varchar(45) NOT NULL ,
- `nomePopular`    varchar(45) NULL ,
- `nomeCientifico` varchar(45) NULL ,
- `familia`        varchar(45) NULL ,
- `dtAquisicao`    datetime NULL ,
- `dtNascimento`   datetime NULL ,
- `tipoBiota`      varchar(45) NULL ,
- `genero`         enum('m', 'f') NULL ,
- `vlrUnitario`    decimal(10,4) NULL ,
- `qtde`           smallint NULL ,
- `status`         bit NULL ,
- `foto`           int NULL ,
- `nota`           decimal(4,2) NULL ,
- `observacao`     text NULL ,
- `dtCadastro`     datetime NOT NULL ,
- `dtAtualizacao`  datetime NOT NULL ,
+ `idBiota`        		int NOT NULL AUTO_INCREMENT ,
+ `nomePopular`    		varchar(200) NOT NULL ,
+ `nomeCientifico` 		varchar(100) NULL ,
+ `tipoAgua`       		enum('doce', 'salgada') NULL ,
+ `nivelCuidado`   		enum('iniciante', 'intermediario', 'avancado') NULL ,
+ `reefSafe`             boolean NULL ,
+ `volumeMinAquario`     decimal(7,2) NULL ,
+ `alimentacao`        	varchar(4000) NULL ,
+ `habitat`        		varchar(4000) NULL ,
+ `regiao`        		varchar(200) NULL ,
+ `tamanho`   			enum('P', 'M', 'G') NULL ,
+ `riscoExtincao`   		enum('NE','DD','LC','NT','VU','EN','CR','EW','EX') NULL ,
+ `infoAdicional`        varchar(4000) NULL ,
+ `idTaxonomia`        	int NULL ,
+ `avaliacao`     		decimal(4,2) NULL ,
+ `deletado`     		boolean NOT NULL default false ,
+ `dtCadastro`     		datetime NOT NULL ,
+ `dtAtualizacao` 		datetime NOT NULL ,
+ `usuarioCadastro`		varchar(45) NOT NULL ,
+ `usuarioAtualizacao` 	varchar(45) NOT NULL , 
 
-PRIMARY KEY (`idBiota`),
-CONSTRAINT `FK_195` FOREIGN KEY (`idAquario`) REFERENCES `Aquario` (`idAquario`)
+PRIMARY KEY (`idBiota`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
