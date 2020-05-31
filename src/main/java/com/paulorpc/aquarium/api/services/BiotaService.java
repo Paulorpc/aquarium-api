@@ -2,7 +2,6 @@ package com.paulorpc.aquarium.api.services;
 
 import java.util.List;
 import java.util.Optional;
-import com.paulorpc.aquarium.api.dtos.BiotaDto;
 import com.paulorpc.aquarium.api.entities.Biota;
 
 public interface BiotaService {
@@ -45,7 +44,7 @@ public interface BiotaService {
    * @throws Exception 
    */
   // TODO corrigir o parametro para int
-  Optional<Biota> alterar(BiotaDto biota) throws Exception;
+  Optional<Biota> alterar(Biota biota) throws Exception;
 
   /***
    * Deleta um Biota cadastrado. Status é alterado para FALSE.

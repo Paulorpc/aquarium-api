@@ -3,7 +3,6 @@ package com.paulorpc.aquarium.api.services;
 import java.util.List;
 import java.util.Optional;
 
-import com.paulorpc.aquarium.api.dtos.AquarioDto;
 import com.paulorpc.aquarium.api.entities.Aquario;
 
 public interface AquarioService {
@@ -34,17 +33,19 @@ public interface AquarioService {
    * 
    * @param aquario
    * @return Aquario
+   * @throws Exception 
    */
-  Aquario persistir(Aquario aquario);
+  Aquario persistir(Aquario aquario) throws Exception;
 
   /***
    * Atualiza cadastro de aquário
    * 
    * @param aquario
    * @return Aquario
+   * @throws Exception 
    */
   // TODO corrigir o parametro para int
-  Optional<Aquario> alterar(AquarioDto aquario);
+  Optional<Aquario> alterar(Aquario aquario) throws Exception;
 
   /***
    * Deleta um aquario cadastrado. Status é alterado para FALSE.
