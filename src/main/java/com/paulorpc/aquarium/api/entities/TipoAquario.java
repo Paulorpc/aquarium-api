@@ -82,7 +82,7 @@ public class TipoAquario implements Serializable {
     this.descricao = descricao;
   }
 
-  @Column(nullable = false)
+  @Column(name = "dtCadastro", nullable = false)
   public Date getDtCadastro() {
     return dtCadastro;
   }
@@ -91,7 +91,7 @@ public class TipoAquario implements Serializable {
     this.dtCadastro = dtCadastro;
   }
 
-  @Column(nullable = false)
+  @Column(name = "dtAtualizacao", nullable = false)
   public Date getDtAtualizacao() {
     return dtAtualizacao;
   }

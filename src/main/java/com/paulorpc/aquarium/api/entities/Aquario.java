@@ -193,6 +193,9 @@ public class Aquario implements Serializable {
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "idTipoAquario")
   public TipoAquario getTipoAquario() {
+    if(tipoAquario == null) {
+      tipoAquario = new TipoAquario();
+    }
     return tipoAquario;
   }
 
