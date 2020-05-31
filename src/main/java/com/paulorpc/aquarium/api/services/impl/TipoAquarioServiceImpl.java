@@ -19,44 +19,56 @@ public class TipoAquarioServiceImpl implements TipoAquarioService {
   @Autowired
   private TipoAquarioRepository tipoAquarioRepository;
 
+  @Override
   public Optional<TipoAquario> buscarPorTipo(String tipo) {
     log.info("Buscando tipo aquário. Tipo: {} ", tipo);
     return tipoAquarioRepository.findByTipo(tipo);
   }
 
+  @Override
   public Optional<TipoAquario> buscar(int id) {
     log.info("Buscando tipo aquário. Id: {} ", id);
     return tipoAquarioRepository.findById(id);
   }
 
+  @Override
   public List<TipoAquario> buscarPorTipoAgua(TipoAguaEnum tipoAgua) {
     log.info("Buscando tipos de aquário pelo tipo de água. TipoAgua: {} ", tipoAgua.getDescricao());
     return tipoAquarioRepository.findByTipoAgua(tipoAgua);
   }
 
+  @Override
   public List<TipoAquario> buscarTodos() {
     log.info("Buscando todos tipos de aquários.");
     return tipoAquarioRepository.findAll();
 
   }
 
+  @Override
   public List<TipoAquario> buscarTodosAtivos() {
     log.info("Buscando todos tipos de aquários ativos.");
     return tipoAquarioRepository.findByStatusIsTrue();
   }
 
+  @Override
   public TipoAquario persistir(TipoAquario tipoAquario) {
-    log.info("Cadastrando um novo tipo de aquário. TipoAquário: {}", tipoAquario.toString());
-    tipoAquario.setStatus(true);
+    log.info("Persistindo tipoAquário. TipoAquário: {}", tipoAquario.toString());
     return tipoAquarioRepository.save(tipoAquario);
   }
 
+  @Override
   public Optional<TipoAquario> alterar(TipoAquario tipoAquario) {
     log.info("Alterando um tipo de aquário. TipoAquario: {}", tipoAquario.toString());
-    return tipoAquarioRepository.findById(tipoAquario.getId())
-        .map(v -> tipoAquarioRepository.save(tipoAquario));
+
+    Optional<TipoAquario> tipoAquarioOpt = tipoAquarioRepository.findById(tipoAquario.getId());
+    if (tipoAquarioOpt.isPresent()) {
+      tipoAquarioOpt = Optional.of(persistir(tipoAquario));
+    }
+
+    return tipoAquarioOpt;
   }
 
+  @Override
   public Optional<TipoAquario> deletar(int id) {
     log.info("Deletando um tipo de aquário. Id: {}", id);
     Optional<TipoAquario> tipoAquario = tipoAquarioRepository.findById(id);

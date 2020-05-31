@@ -23,10 +23,11 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.paulorpc.aquarium.api.dtos.AquarioDto;
 import com.paulorpc.aquarium.api.entities.Aquario;
-import com.paulorpc.aquarium.api.entities.TipoAquario;
+import com.paulorpc.aquarium.api.exceptions.NotFoundException;
 import com.paulorpc.aquarium.api.response.Response;
+import com.paulorpc.aquarium.api.response.ResponseError;
+import com.paulorpc.aquarium.api.response.ResponseObj;
 import com.paulorpc.aquarium.api.services.AquarioService;
-import com.paulorpc.aquarium.api.services.TipoAquarioService;
 import com.paulorpc.aquarium.api.util.Global;
 
 @RestController
@@ -39,103 +40,83 @@ public class AquarioController {
 
   @Autowired
   private AquarioService aquarioService;
-  @Autowired
-  private TipoAquarioService tipoAquarioService;
 
   @GetMapping(value = "/{id}")
-  public ResponseEntity<Response<AquarioDto>> buscarAquario(@PathVariable int id) {
+  public ResponseEntity<Response> buscar(@PathVariable int id) {
     log.info("Requisição para buscar aquário - buscarAquario(). Id: " + id);
-    Response<AquarioDto> response = new Response<>();
 
     return aquarioService.buscar(id).map(aquario -> {
-      response.setData(converteObjetoParaDto(aquario));
+      Response response = new ResponseObj<>(Global.getUri(), converteObjetoParaDto(aquario));
       return ResponseEntity.ok(response);
     }).orElse(ResponseEntity.notFound().build());
   }
 
   @GetMapping
-  public ResponseEntity<Response<List<AquarioDto>>> buscarTodos() {
-    log.info("Requisição para buscar todos aquários - buscarTodos()");
-    Response<List<AquarioDto>> response = new Response<>();
+  public ResponseEntity<Response> buscarTodos() {
+    log.info("Requisição para buscar todos aquários");
 
     List<Aquario> aquarios = aquarioService.buscarTodos();
     List<AquarioDto> aquariosDto = aquarios.stream().map(a -> {
       return converteObjetoParaDto(a);
     }).collect(Collectors.toList());
 
-    response.setData(aquariosDto);
+    Response response = new ResponseObj<>(Global.getUri(), aquariosDto);
     return ResponseEntity.ok(response);
   }
 
   @GetMapping(value = "/ativos")
-  public ResponseEntity<Response<List<AquarioDto>>> buscarTodosAtivos() {
-    log.info("Requisição para buscar todos aquários ativos - buscarTodosAtivos()");
-    Response<List<AquarioDto>> response = new Response<>();
+  public ResponseEntity<Response> buscarTodosAtivos() {
+    log.info("Requisição para buscar todos aquários ativos");
 
     List<Aquario> aquarios = aquarioService.buscarTodosAtivos();
     List<AquarioDto> aquariosDto = aquarios.stream().map(a -> {
       return converteObjetoParaDto(a);
     }).collect(Collectors.toList());
 
-    response.setData(aquariosDto);
+    Response response = new ResponseObj<>(Global.getUri(), aquariosDto);
     return ResponseEntity.ok(response);
   }
 
   @PostMapping
-  public ResponseEntity<Response<AquarioDto>> cadastrarAquario(
+  public ResponseEntity<Response> cadastrar(
       @Validated(AquarioDto.Cadastrar.class) @RequestBody AquarioDto aquarioDto,
-      BindingResult result) {
-    log.info("Requisição para cadastrar um novo aquário - cadastrarAquario()");
-    Response<AquarioDto> response = new Response<>();
-    String issueMsg = new String();
+      BindingResult result) throws Exception {
+    log.info("Requisição para cadastrar um novo aquário");
+    ResponseError responseError = new ResponseError(Global.getUri());
 
     if (result.hasErrors()) {
-      response.setIssuesFromResultErrors(result, log);
-      return ResponseEntity.badRequest().body(response);
+      responseError.addMessagesFromResultErrors(result, log);
+      return ResponseEntity.badRequest().body(responseError);
     }
 
-    Aquario novoAquario = new Aquario();
-    Optional<TipoAquario> tipoAquario =
-        aquarioDto.getIdTipoAquario().flatMap(id -> tipoAquarioService.buscar(id));
-
-    if (tipoAquario.isPresent()) {
-      novoAquario.setTipoAquario(tipoAquario.get());
-    } else if (aquarioDto.getIdTipoAquario().isPresent()) {
-      issueMsg = "O campo 'idTipoAquario' informado não foi localizado. Id: "
-          + Global.nullToEmpty(aquarioDto.getIdTipoAquario().get().toString());
-      response.addIssue(issueMsg, log);
-    }
-
-    issueMsg =
-        "O campo 'status' foi alterado para true pelo sistema, pois o método POST sempre considera true o 'status' de um novo registro.";
-    aquarioDto.getStatus().orElse(response.addIssue(issueMsg, log));
-
-    novoAquario = aquarioService.persistir(converteDtoParaObjeto(aquarioDto, novoAquario));
+    Aquario aquarioNovo = aquarioService.persistir(converteDtoParaObjeto(aquarioDto));
     URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-        .buildAndExpand(novoAquario.getId()).toUri();
-    response.setData(converteObjetoParaDto(novoAquario));
+        .buildAndExpand(aquarioNovo.getId()).toUri();
+
+    Response response = new ResponseObj<>(uri, converteObjetoParaDto(aquarioNovo));
     return ResponseEntity.created(uri).body(response);
   }
 
   @PutMapping
-  public ResponseEntity<Response<AquarioDto>> alterarAquario(
-      @Validated(AquarioDto.Alterar.class) @RequestBody AquarioDto aquarioDto,
-      BindingResult result) {
+  public ResponseEntity<Response> alterar(
+      @Validated(AquarioDto.Alterar.class) @RequestBody AquarioDto aquarioDto, BindingResult result)
+      throws Exception {
     log.info("Requisição para alterar um aquaário existente - alterarAquario()");
-    Response<AquarioDto> response = new Response<>();
+    ResponseError responseError = new ResponseError(Global.getUri());
+
     if (result.hasErrors()) {
-      response.setIssuesFromResultErrors(result, log);
-      return ResponseEntity.badRequest().body(response);
+      responseError.addMessagesFromResultErrors(result, log);
+      return ResponseEntity.badRequest().body(responseError);
     }
 
-    Optional<Aquario> aquarioOpt = aquarioService.alterar(aquarioDto);
+    Aquario aquario = aquarioDto.getId().flatMap(id -> aquarioService.buscar(id))
+        .orElseThrow(() -> new NotFoundException(
+            "Não foi possível localizar o aquário. Id: " + aquarioDto.getId().get()));
 
-    if (!aquarioOpt.isPresent()) {
-      response.getIssues().add("Não foi possível localizar o aquário, id: " + aquarioDto.getId());
-      return ResponseEntity.notFound().build();
-    }
+    Optional<Aquario> aquarioUpd =
+        aquarioService.alterar(converteDtoParaObjeto(aquarioDto, aquario));
 
-    response.setData(converteObjetoParaDto(aquarioOpt.get()));
+    Response response = new ResponseObj<>(Global.getUri(), converteObjetoParaDto(aquarioUpd.get()));
     return ResponseEntity.ok(response);
   }
 
@@ -146,9 +127,8 @@ public class AquarioController {
    * @return
    */
   @DeleteMapping(value = "/{id}")
-  public ResponseEntity<Response<AquarioDto>> deletarAquario(@PathVariable int id) {
+  public ResponseEntity<Response> deletar(@PathVariable int id) throws Exception {
     log.info("Requisição para deletar um aquário - deletarAquario()");
-    Response<AquarioDto> response = new Response<>();
 
     /*
      * Optional<Aquario> aquario = aquarioService.deletarAquario(id); if(!aquario.isPresent())
@@ -159,9 +139,9 @@ public class AquarioController {
      */
 
     return aquarioService.deletar(id).map(aquario -> {
-      response.setData(converteObjetoParaDto(aquario));
+      Response response = new ResponseObj<>(Global.getUri(), converteObjetoParaDto(aquario));
       return ResponseEntity.ok(response);
-    }).orElse(ResponseEntity.notFound().build());
+    }).orElseThrow(() -> new NotFoundException("Não foi possível localizar o aquário. Id: " + id));
 
   }
 
@@ -171,6 +151,17 @@ public class AquarioController {
    * Converte objeto Aquario para AquarioDTO
    *
    * @param dto
+   * @return Aquario
+   */
+  public static Aquario converteDtoParaObjeto(AquarioDto dto) {
+    return converteDtoParaObjeto(dto, new Aquario());
+  }
+
+  /***
+   * Converte objeto Aquario para AquarioDTO
+   *
+   * @param dto
+   * @param obj Aquario
    * @return Aquario
    */
   public static Aquario converteDtoParaObjeto(AquarioDto dto, Aquario obj) {
@@ -188,6 +179,7 @@ public class AquarioController {
     dto.getSubstrato().ifPresent(v -> obj.setSubstrato(v));
     dto.getObservacao().ifPresent(v -> obj.setObservacao(v));
     dto.getStatus().ifPresent(v -> obj.setStatus(v));
+    dto.getIdTipoAquario().ifPresent(v -> obj.getTipoAquario().setId(v));
     return obj;
   }
 

@@ -4,7 +4,6 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +21,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
 import com.paulorpc.aquarium.api.dtos.AquarioDto;
 import com.paulorpc.aquarium.api.dtos.TipoAquarioDto;
 import com.paulorpc.aquarium.api.entities.TipoAquario;
+import com.paulorpc.aquarium.api.exceptions.NotFoundException;
 import com.paulorpc.aquarium.api.response.Response;
+import com.paulorpc.aquarium.api.response.ResponseError;
+import com.paulorpc.aquarium.api.response.ResponseObj;
 import com.paulorpc.aquarium.api.services.TipoAquarioService;
+import com.paulorpc.aquarium.api.util.Global;
 
 @RestController
 @RequestMapping("/api/tipoAquario")
@@ -40,49 +42,47 @@ public class TipoAquarioController {
   private TipoAquarioService tipoAquarioService;
 
   @GetMapping(value = "/{id}")
-  public ResponseEntity<Response<TipoAquarioDto>> buscarTipoAquario(@PathVariable int id) {
-    log.info("Requisição para buscar tipo de aquário - buscarTipoAquario(). Id: " + id);
-    Response<TipoAquarioDto> response = new Response<>();
+  public ResponseEntity<Response> buscar(@PathVariable int id) throws Exception {
+    log.info("Requisição para buscar tipo de aquário. Id: " + id);
 
-    return tipoAquarioService.buscar(id).map(t -> {
-      response.setData(converteObjetoParaDto(t));
+    return tipoAquarioService.buscar(id).map(v -> {
+      Response response = new ResponseObj<>(Global.getUri(), converteObjetoParaDto(v));
       return ResponseEntity.ok(response);
-    }).orElse(ResponseEntity.notFound().build());
+    }).orElseThrow(
+        () -> new NotFoundException("Não foi possível localizar o tipo de aquário. Id: " + id));
   }
 
   @GetMapping
-  public ResponseEntity<Response<List<TipoAquarioDto>>> buscarTodos() {
-    log.info("Requisição para buscar todos tipos de aquários - buscarTodos()");
-    Response<List<TipoAquarioDto>> response = new Response<>();
+  public ResponseEntity<Response> buscarTodos() {
+    log.info("Requisição para buscar todos tipos de aquários");
 
     List<TipoAquario> tiposAquarios = tipoAquarioService.buscarTodos();
     List<TipoAquarioDto> tiposAquariosDto = tiposAquarios.stream().map(v -> {
       return converteObjetoParaDto(v);
     }).collect(Collectors.toList());
 
-    response.setData(tiposAquariosDto);
+    Response response = new ResponseObj<>(Global.getUri(), tiposAquariosDto);
     return ResponseEntity.ok(response);
   }
 
   @GetMapping(value = "/ativos")
-  public ResponseEntity<Response<List<TipoAquarioDto>>> buscarTodosAtivos() {
-    log.info("Requisição para buscar todos aquários ativos - buscarTodosAtivos()");
-    Response<List<TipoAquarioDto>> response = new Response<>();
+  public ResponseEntity<Response> buscarTodosAtivos() {
+    log.info("Requisição para buscar todos aquários ativos");
 
     List<TipoAquario> tiposAquarios = tipoAquarioService.buscarTodosAtivos();
     List<TipoAquarioDto> tiposAquariosDto =
         tiposAquarios.stream().map(v -> converteObjetoParaDto(v)).collect(Collectors.toList());
 
-    response.setData(tiposAquariosDto);
+    Response response = new ResponseObj<>(Global.getUri(), tiposAquariosDto);
     return ResponseEntity.ok(response);
   }
 
   @PostMapping
-  public ResponseEntity<Response<TipoAquarioDto>> cadastrarTipoAquario(
+  public ResponseEntity<Response> cadastrar(
       @Validated(TipoAquarioDto.Cadastrar.class) @RequestBody TipoAquarioDto tipoAquarioDto,
       BindingResult result) {
-    log.info("Requisição para cadastrar um novo tipo de aquário - cadastrarTipoAquario()");
-    Response<TipoAquarioDto> response = new Response<>();
+    log.info("Requisição para cadastrar um novo tipo de aquário");
+    ResponseError responseError = new ResponseError(Global.getUri());
 
     tipoAquarioDto.getTipo().flatMap(tipo -> tipoAquarioService.buscarPorTipo(tipo))
         .ifPresent(t -> {
@@ -92,75 +92,69 @@ public class TipoAquarioController {
         });
 
     if (result.hasErrors()) {
-      response.setIssuesFromResultErrors(result, log);
-      return ResponseEntity.badRequest().body(response);
+      responseError.addMessagesFromResultErrors(result, log);
+      return ResponseEntity.badRequest().body(responseError);
     }
 
     TipoAquario novoTipoAquario = new TipoAquario();
-    novoTipoAquario =
-        tipoAquarioService.persistir(converteDtoParaObjeto(tipoAquarioDto));
+    novoTipoAquario = tipoAquarioService.persistir(converteDtoParaObjeto(tipoAquarioDto));
     URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
         .buildAndExpand(novoTipoAquario.getId()).toUri();
-    response.setData(converteObjetoParaDto(novoTipoAquario));
+
+    Response response = new ResponseObj<>(uri, converteObjetoParaDto(novoTipoAquario));
     return ResponseEntity.created(uri).body(response);
   }
 
   @PutMapping
-  public ResponseEntity<Response<TipoAquarioDto>> alterarTipoAquario(
+  public ResponseEntity<Response> alterar(
       @Validated(AquarioDto.Alterar.class) @RequestBody TipoAquarioDto tipoAquarioDto,
-      BindingResult result) {
-    log.info("Requisição para alterar um tipo de aquário existente - alterarTipoAquario()");
-    Response<TipoAquarioDto> response = new Response<>();
+      BindingResult result) throws Exception {
+    log.info("Requisição para alterar um tipo de aquário existente");
+    ResponseError responseError = new ResponseError(Global.getUri());
 
     if (result.hasErrors()) {
-      response.setIssuesFromResultErrors(result, log);
-      return ResponseEntity.badRequest().body(response);
+      responseError.addMessagesFromResultErrors(result, log);
+      return ResponseEntity.badRequest().body(responseError);
     }
 
-    Optional<TipoAquario> tipoAquario =
-        tipoAquarioService.buscar(tipoAquarioDto.getId().get());
-    if (!tipoAquario.isPresent()) {
-      response.addIssue(
-          "Não foi possível localizar o tipo de aquário. Id: " + tipoAquarioDto.getId(), log);
-      return ResponseEntity.notFound().build();
-    }
+    TipoAquario tipoAquario = tipoAquarioDto.getId().flatMap(id -> tipoAquarioService.buscar(id))
+        .orElseThrow(() -> new NotFoundException(
+            "Não foi possível localizar o tipo de quário. Id: " + tipoAquarioDto.getId().get()));
 
-    Optional<TipoAquario> tipoAquarioUpd = tipoAquarioService
-        .alterar(converteDtoParaObjeto(tipoAquarioDto, tipoAquario.get()));
-    tipoAquarioUpd.ifPresent(v -> response.setData(converteObjetoParaDto(v)));
+    Optional<TipoAquario> tipoAquarioUpd =
+        tipoAquarioService.alterar(converteDtoParaObjeto(tipoAquarioDto, tipoAquario));
+
+    Response response =
+        new ResponseObj<>(Global.getUri(), converteObjetoParaDto(tipoAquarioUpd.get()));
     return ResponseEntity.ok(response);
   }
 
   @DeleteMapping(value = "/{id}")
-  public ResponseEntity<Response<TipoAquarioDto>> deletarTipoAquario(@PathVariable int id) {
-    log.info("Requisição para deletar um aquário - deletarAquario()");
-    Response<TipoAquarioDto> response = new Response<>();
+  public ResponseEntity<Response> deletar(@PathVariable int id) throws Exception {
+    log.info("Requisição para deletar um aquário");
 
     return tipoAquarioService.deletar(id).map(v -> {
-      response.setData(converteObjetoParaDto(v));
+      Response response = new ResponseObj<>(Global.getUri(), converteObjetoParaDto(v));
       return ResponseEntity.ok(response);
-    }).orElseGet(() -> {
-      response.addIssue("Cadastro não localizado. Id: " + id, log);
-      return ResponseEntity.notFound().build();
-    });
-
+    }).orElseThrow(
+        () -> new NotFoundException("Não foi possível localizar o tipo de aquário. Id: " + id));
   }
 
   /************* CONVERSORES OBJETO/DTO *************/
 
   /***
    * Converte objeto TipoAquario para TipoAquarioDTO
-   * 
+   *
    * @param dto
    * @return TipoAquario
    */
-  private static TipoAquario converteDtoParaObjeto(TipoAquarioDto dto) {
+  public static TipoAquario converteDtoParaObjeto(TipoAquarioDto dto) {
     return converteDtoParaObjeto(dto, new TipoAquario());
   }
 
   /***
    * Converte objeto TipoAquario para TipoAquarioDTO
-   * 
+   *
    * @param dto
    * @return TipoAquario
    */
@@ -174,11 +168,11 @@ public class TipoAquarioController {
 
   /***
    * Converte objeto TipoAquario para TipoAquarioDTO
-   * 
+   *
    * @param obj
    * @return TipoAquarioDto
    */
-  private static TipoAquarioDto converteObjetoParaDto(TipoAquario obj) {
+  public static TipoAquarioDto converteObjetoParaDto(TipoAquario obj) {
     TipoAquarioDto dto = new TipoAquarioDto();
     dto.setId(Optional.ofNullable(obj.getId()));
     dto.setTipo(Optional.ofNullable(obj.getTipo()));
