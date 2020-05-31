@@ -3,7 +3,6 @@ package com.paulorpc.aquarium.api.entities;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -82,7 +81,7 @@ public class TipoAquario implements Serializable {
     this.descricao = descricao;
   }
 
-  @Column(nullable = false)
+  @Column(name = "dtCadastro", nullable = false)
   public Date getDtCadastro() {
     return dtCadastro;
   }
@@ -91,7 +90,7 @@ public class TipoAquario implements Serializable {
     this.dtCadastro = dtCadastro;
   }
 
-  @Column(nullable = false)
+  @Column(name = "dtAtualizacao", nullable = false)
   public Date getDtAtualizacao() {
     return dtAtualizacao;
   }

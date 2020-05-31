@@ -82,7 +82,7 @@ public class TipoAquarioDto {
   }
 
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-  @Null(message = "Campo 'dtCadastro' deve ser nulo.", groups = {Cadastrar.class, Alterar.class})
+  @Null(message = "Campo 'dtAtualizacao' deve ser nulo.", groups = {Cadastrar.class, Alterar.class})
   public Date getDtAtualizacao() {
     return dtAtualizacao;
   }

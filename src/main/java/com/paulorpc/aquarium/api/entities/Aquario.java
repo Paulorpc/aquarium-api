@@ -2,7 +2,6 @@ package com.paulorpc.aquarium.api.entities;
 
 import java.io.Serializable;
 import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -193,6 +192,9 @@ public class Aquario implements Serializable {
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "idTipoAquario")
   public TipoAquario getTipoAquario() {
+    if (tipoAquario == null) {
+      tipoAquario = new TipoAquario();
+    }
     return tipoAquario;
   }
 

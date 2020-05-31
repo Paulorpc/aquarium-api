@@ -103,6 +103,7 @@ public class Biota implements Serializable {
   // @JoinColumn
   // private List<?> aquarioBiota;
 
+
   public int getId() {
     return id;
   }
@@ -208,6 +209,9 @@ public class Biota implements Serializable {
   }
 
   public Taxonomia getTaxonomia() {
+    if (taxonomia == null) {
+      taxonomia = new Taxonomia();
+    }
     return taxonomia;
   }
 

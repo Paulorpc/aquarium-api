@@ -23,8 +23,12 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.paulorpc.aquarium.api.dtos.BiotaDto;
 import com.paulorpc.aquarium.api.dtos.TaxonomiaDto;
 import com.paulorpc.aquarium.api.entities.Biota;
+import com.paulorpc.aquarium.api.exceptions.NotFoundException;
 import com.paulorpc.aquarium.api.response.Response;
+import com.paulorpc.aquarium.api.response.ResponseError;
+import com.paulorpc.aquarium.api.response.ResponseObj;
 import com.paulorpc.aquarium.api.services.BiotaService;
+import com.paulorpc.aquarium.api.util.Global;
 
 @RestController
 @RequestMapping(value = "/api/biota")
@@ -37,95 +41,92 @@ public class BiotaController {
   private BiotaService biotaService;
 
   @GetMapping(value = "/{id}")
-  public ResponseEntity<Response<BiotaDto>> buscar(@PathVariable int id) {
+  public ResponseEntity<Response> buscar(@PathVariable int id) throws Exception {
     log.info("Requisição para buscar ser vivo. Id: " + id);
-    Response<BiotaDto> response = new Response<>();
 
     return biotaService.buscar(id).map(biota -> {
-      response.setData(converteObjetoParaDto(biota));
+      Response response = new ResponseObj<>(Global.getUri(), converteObjetoParaDto(biota));
       return ResponseEntity.ok(response);
-    }).orElse(ResponseEntity.notFound().build());
+    }).orElseThrow(() -> new NotFoundException("Não foi possível localizar biota. Id: " + id));
   }
 
   @GetMapping
-  public ResponseEntity<Response<List<BiotaDto>>> buscarTodos() {
+  public ResponseEntity<Response> buscarTodos() {
     log.info("Requisição para buscar todos seres vivos");
-    Response<List<BiotaDto>> response = new Response<>();
 
     List<Biota> biotas = biotaService.buscarTodos();
     List<BiotaDto> biotasDto = biotas.stream().map(v -> {
       return converteObjetoParaDto(v);
     }).collect(Collectors.toList());
 
-    response.setData(biotasDto);
+    ResponseObj<List<BiotaDto>> response = new ResponseObj<>(Global.getUri(), biotasDto);
     return ResponseEntity.ok(response);
   }
 
   @GetMapping(value = "/ativos")
-  public ResponseEntity<Response<List<BiotaDto>>> buscarTodosAtivos() {
+  public ResponseEntity<Response> buscarTodosAtivos() {
     log.info("Requisição para buscar todos seres vivos ativos");
-    Response<List<BiotaDto>> response = new Response<>();
 
     List<Biota> biotas = biotaService.buscarTodosAtivos();
     List<BiotaDto> biotasDto = biotas.stream().map(v -> {
       return converteObjetoParaDto(v);
     }).collect(Collectors.toList());
 
-    response.setData(biotasDto);
+    Response response = new ResponseObj<>(Global.getUri(), biotasDto);
     return ResponseEntity.ok(response);
   }
 
   @PostMapping
-  public ResponseEntity<Response<BiotaDto>> cadastrar(
+  public ResponseEntity<Response> cadastrar(
       @Validated(BiotaDto.Cadastrar.class) @RequestBody BiotaDto biotaDto, BindingResult result)
       throws Exception {
     log.info("Requisição para cadastrar ser vivo");
-    Response<BiotaDto> response = new Response<>();
+    ResponseError responseError = new ResponseError(Global.getUri());
 
     if (result.hasErrors()) {
-      response.setIssuesFromResultErrors(result, log);
-      return ResponseEntity.badRequest().body(response);
+      responseError.addMessagesFromResultErrors(result, log);
+      return ResponseEntity.badRequest().body(responseError);
     }
 
     Biota novoBiota = biotaService.persistir(converteDtoParaObjeto(biotaDto));
     URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
         .buildAndExpand(novoBiota.getId()).toUri();
-    response.setData(converteObjetoParaDto(novoBiota));
+
+    ResponseObj<BiotaDto> response = new ResponseObj<>(uri, converteObjetoParaDto(novoBiota));
     return ResponseEntity.created(uri).body(response);
   }
 
   @PutMapping
-  public ResponseEntity<Response<BiotaDto>> alterar(
+  public ResponseEntity<Response> alterar(
       @Validated(BiotaDto.Alterar.class) @RequestBody BiotaDto biotaDto, BindingResult result)
       throws Exception {
     log.info("Requisição para alterar ser vivo existente");
-    Response<BiotaDto> response = new Response<>();
-    
+    ResponseError responseError = new ResponseError(Global.getUri());
+
     if (result.hasErrors()) {
-      response.setIssuesFromResultErrors(result, log);
-      return ResponseEntity.badRequest().body(response);
+      responseError.addMessagesFromResultErrors(result, log);
+      return ResponseEntity.badRequest().body(responseError);
     }
 
-    Optional<Biota> biotaOpt = biotaService.alterar(biotaDto);
+    Biota biota = biotaDto.getId().flatMap(id -> biotaService.buscar(id))
+        .orElseThrow(() -> new NotFoundException(
+            "Não foi possível localizar o ser vivo. Id: " + biotaDto.getId().get()));
 
-    if (!biotaOpt.isPresent()) {
-      response.getIssues().add("Não foi possível localizar biota. Id: " + biotaDto.getId());
-      return ResponseEntity.notFound().build();
-    }
+    Optional<Biota> biotaUpd = biotaService.alterar(converteDtoParaObjeto(biotaDto, biota));
 
-    response.setData(converteObjetoParaDto(biotaOpt.get()));
+    ResponseObj<BiotaDto> response =
+        new ResponseObj<>(Global.getUri(), converteObjetoParaDto(biotaUpd.get()));
     return ResponseEntity.ok(response);
   }
 
   @DeleteMapping(value = "/{id}")
-  public ResponseEntity<Response<BiotaDto>> deletar(@PathVariable int id) {
+  public ResponseEntity<Response> deletar(@PathVariable int id) throws Exception {
     log.info("Requisição para deletar um ser vivo");
-    Response<BiotaDto> response = new Response<>();
 
     return biotaService.deletar(id).map(v -> {
-      response.setData(converteObjetoParaDto(v));
+      Response response = new ResponseObj<>(Global.getUri(), converteObjetoParaDto(v));
       return ResponseEntity.ok(response);
-    }).orElse(ResponseEntity.notFound().build());
+    }).orElseThrow(() -> new NotFoundException("Não foi possível localizar biota. Id: " + id));
 
   }
 
@@ -211,8 +212,8 @@ public class BiotaController {
     taxonomia.setOrdem(Optional.ofNullable(obj.getTaxonomia().getOrdem()));
     taxonomia.setGenero(Optional.ofNullable(obj.getTaxonomia().getGenero()));
     taxonomia.setEspecie(Optional.ofNullable(obj.getTaxonomia().getEspecie()));
-
     dto.setTaxonomia(Optional.ofNullable(taxonomia));
+
     return dto;
   }
 

@@ -199,4 +199,18 @@ public class BiotaDto {
     this.usuarioAtualizacao = usuarioAtualizacao;
   }
 
+  @Override
+  public String toString() {
+    return "BiotaDto [id=" + id + ", nomePopular=" + nomePopular + ", nomeCientifico="
+        + nomeCientifico + ", tipoAgua=" + tipoAgua + ", nivelCuidado=" + nivelCuidado
+        + ", reefSafe=" + reefSafe + ", volumeMinAquario=" + volumeMinAquario + ", alimentacao="
+        + alimentacao + ", habitat=" + habitat + ", regiao=" + regiao + ", tamanho=" + tamanho
+        + ", riscoExtincao=" + riscoExtincao + ", infoAdicional=" + infoAdicional
+        + ", taxonomiaDto=" + taxonomiaDto + ", avaliacao=" + avaliacao + ", dtCadastro="
+        + dtCadastro + ", dtAtualizacao=" + dtAtualizacao + ", usuarioCadastro=" + usuarioCadastro
+        + ", usuarioAtualizacao=" + usuarioAtualizacao + "]";
+  }
+  
+  
+
 }

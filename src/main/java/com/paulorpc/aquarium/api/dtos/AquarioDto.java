@@ -193,4 +193,16 @@ public class AquarioDto {
   public void setDtAtualizacao(Date dtAtualizacao) {
     this.dtAtualizacao = dtAtualizacao;
   }
+
+  @Override
+  public String toString() {
+    return "AquarioDto [id=" + id + ", nome=" + nome + ", dtInicio=" + dtInicio + ", dtFinal="
+        + dtFinal + ", tipoAgua=" + tipoAgua + ", tamanho=" + tamanho + ", volume=" + volume
+        + ", iluminacao=" + iluminacao + ", filtragem=" + filtragem + ", sistemaCO2=" + sistemaCO2
+        + ", dosagem=" + dosagem + ", substrato=" + substrato + ", foto=" + foto + ", observacao="
+        + observacao + ", status=" + status + ", idTipoAquario=" + idTipoAquario + ", dtCadastro="
+        + dtCadastro + ", dtAtualizacao=" + dtAtualizacao + "]";
+  }
+  
+  
 }

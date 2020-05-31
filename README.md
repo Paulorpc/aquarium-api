@@ -31,4 +31,12 @@ Obs: Aplicação deve estar em execução.
 ##### Spring-Data-Jpa
 - Uso de transação: `@Transactional`
   - Por padrão, na ocorrência de um **RuntimeException** as alterações realizadas na transação **sofrem Rollback**, já as checked **Exceptions** não **executarão rollback**
-  - Utilizando o **rollbackFor** `@Transactional(rollbackFor = Exception.class)`, será forçado o rollback para qualquer exceção lançada, conforme anotação.  
+  - Utilizando o **rollbackFor** `@Transactional(rollbackFor = Exception.class)`, será forçado o rollback para qualquer exceção lançada, conforme anotação.
+  
+  
+##### Arquitetura Sistema
+- Camadas
+  - Controller -> Service -> Repository
+  - DTOs server para trafegar dados de fora do sistema para dentro e vice versa apenas, servindo como uma camada de abstração e segurança da implementação do sistema
+    - Não é possível enviar um DTO para camadas internas, pois seria necessário utizar os conversores da camada controller, por exemplo, com acesso `service -> controler` caracterizando uma violação arquitetural.
+      
