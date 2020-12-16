@@ -15,6 +15,13 @@ Sistema de controle de aquários
     - Configuração: Project properties -> Java Code Style -> Clean Up -> Import    
   
 
+#### MAVEN 
+Após fazer o git clone, caso o projeto apresente algum erro, re-configure o projeto maven usando os comando abaixos. Em seguida, faça o maven update no IDE.
+````shell
+mvn clean install -DskipTests
+mvnc compile
+```
+
 #### DATABASE COM DOCKER
 Uma possibilidade para montadem do ambiente é utilizar o banco de dados através de containers. O Docker possibilita usarmos esse ambiente com muita facilidade. Será necessário apenas baixar a imagem e criar o database. No demais, a aplicação se vira com o migration através do flyway. Para montar o ambiente de BD, realize os seguintes comandos:
 ```shell
