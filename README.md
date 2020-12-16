@@ -15,6 +15,21 @@ Sistema de controle de aquários
     - Configuração: Project properties -> Java Code Style -> Clean Up -> Import    
   
 
+#### DATABASE COM DOCKER
+Uma possibilidade para montadem do ambiente é utilizar o banco de dados através de containers. O Docker possibilita usarmos esse ambiente com muita facilidade. Será necessário apenas baixar a imagem e criar o database. No demais, a aplicação se vira com o migration através do flyway. Para montar o ambiente de BD, realize os seguintes comandos:
+```shell
+$ docker pull mariadb
+$ docker run --name mariadb -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=aquarium -p 3306:3306 -d mariadb:latest
+```
+
+Para certificar que o container e está em execução e que a base foi gerada corretamente:
+```shell
+$ docker exec -it mariadb bash
+$ mysql -u root -p
+$ show databases; 
+```
+
+
 ##### Logging - LOGBACK 
 Logging padrão do springboot. Para ajustar configurações específicas do log, acessar application.properties. 
 
