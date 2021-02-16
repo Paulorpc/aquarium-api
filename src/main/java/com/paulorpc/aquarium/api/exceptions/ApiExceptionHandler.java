@@ -1,5 +1,7 @@
 package com.paulorpc.aquarium.api.exceptions;
 
+import com.paulorpc.aquarium.api.response.ResponseError;
+import com.paulorpc.aquarium.api.util.Global;
 import java.net.URI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,9 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
-import com.paulorpc.aquarium.api.response.ResponseError;
-import com.paulorpc.aquarium.api.util.Global;
-
 
 /***
  * Classe de controle de Exceções do componente @Controller
@@ -27,8 +26,11 @@ public class ApiExceptionHandler {
   protected ResponseEntity<ResponseError> conflitHandlerException(Throwable e, WebRequest request)
       throws Exception {
     URI uri = Global.getUri();
-    log.error("Internal Server Erro. Message: " + Global.formataExceptionMessage(e) + ". Path: "
-        + uri.getPath());
+    log.error(
+        "Internal Server Erro. Message: "
+            + Global.formataExceptionMessage(e)
+            + ". Path: "
+            + uri.getPath());
     e.printStackTrace();
 
     HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
@@ -42,31 +44,18 @@ public class ApiExceptionHandler {
    * extendem ApiDefaultException.
    */
   @ExceptionHandler(ApiDefaultException.class)
-  protected ResponseEntity<ResponseError> apiConflitHandlerException(Throwable e,
-      WebRequest request) throws Exception {
+  protected ResponseEntity<ResponseError> apiConflitHandlerException(
+      Throwable e, WebRequest request) throws Exception {
     URI uri = Global.getUri();
-    log.warn("Requisição continha erros: " + Global.formataExceptionMessage(e) + ". Path: "
-        + uri.getPath());
+    log.warn(
+        "Requisição continha erros: "
+            + Global.formataExceptionMessage(e)
+            + ". Path: "
+            + uri.getPath());
 
     HttpStatus status = HttpStatus.BAD_REQUEST;
 
     ResponseError responseError = new ResponseError(status, e, uri);
     return ResponseEntity.status(status).body(responseError);
   }
-
-  /***
-   * Método de controle de Exceções para erros de requisição do tipo NOT FOUND.
-   */
-  @ExceptionHandler(NotFoundException.class)
-  protected ResponseEntity<ResponseError> NotFoundConflitHandlerException(Throwable e,
-      WebRequest request) throws Exception {
-    URI uri = Global.getUri();
-    log.warn(Global.formataExceptionMessage(e) + ". Path: " + uri.getPath());
-
-    HttpStatus status = HttpStatus.NOT_FOUND;
-
-    ResponseError responseError = new ResponseError(status, e, uri);
-    return ResponseEntity.status(status).body(responseError);
-  }
-
 }

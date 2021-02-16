@@ -1,9 +1,9 @@
 package com.paulorpc.aquarium.api.services;
 
-import java.util.List;
-import java.util.Optional;
 import com.paulorpc.aquarium.api.entities.TipoAquario;
 import com.paulorpc.aquarium.api.enums.TipoAguaEnum;
+import java.util.List;
+import java.util.Optional;
 
 public interface TipoAquarioService {
 
@@ -19,7 +19,7 @@ public interface TipoAquarioService {
    *
    * @return List<TipoAquario>
    */
-  Optional<TipoAquario> buscar(int id);
+  Optional<TipoAquario> buscar(Long id);
 
   /***
    * Busca Tipo Aquario pelo seu tipo de água
@@ -64,6 +64,5 @@ public interface TipoAquarioService {
    * @param id
    * @return Optional<TipoAquario>
    */
-  Optional<TipoAquario> deletar(int id);
-
+  Optional<TipoAquario> deletar(Long id);
 }

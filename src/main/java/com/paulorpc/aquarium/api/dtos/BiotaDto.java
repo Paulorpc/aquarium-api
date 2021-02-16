@@ -1,19 +1,19 @@
 package com.paulorpc.aquarium.api.dtos;
 
-import java.util.Date;
-import java.util.Optional;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.paulorpc.aquarium.api.enums.NivelCuidadoEnum;
 import com.paulorpc.aquarium.api.enums.RiscoExtincaoEnum;
 import com.paulorpc.aquarium.api.enums.TamanhoBiotaEnum;
 import com.paulorpc.aquarium.api.enums.TipoAguaEnum;
+import java.time.LocalDateTime;
+import java.util.Optional;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 
 public class BiotaDto {
 
-  private Optional<Integer> id = Optional.empty();
+  private Optional<Long> id = Optional.empty();
   private Optional<String> nomePopular = Optional.empty();
   private Optional<String> nomeCientifico = Optional.empty();
   private Optional<TipoAguaEnum> tipoAgua = Optional.empty();
@@ -28,26 +28,34 @@ public class BiotaDto {
   private Optional<String> infoAdicional = Optional.empty();
   private Optional<TaxonomiaDto> taxonomiaDto = Optional.empty();
   private Optional<Double> avaliacao = Optional.empty();
-  private Date dtCadastro;
-  private Date dtAtualizacao;
+  private LocalDateTime dtCadastro;
+  private LocalDateTime dtAtualizacao;
   private String usuarioCadastro;
   private String usuarioAtualizacao;
 
-  public interface Cadastrar {
-  }
+  public interface Cadastrar {}
 
-  public interface Alterar {
-  }
-  
-  public Optional<@NotNull(message = "Campo 'id' é obrigatório.", groups = {Alterar.class}) Integer> getId() {
+  public interface Alterar {}
+
+  public Optional<
+          @NotNull(
+              message = "Campo 'id' é obrigatório.",
+              groups = {Alterar.class})
+          Long>
+      getId() {
     return id;
   }
 
-  public void setId(Optional<Integer> id) {
+  public void setId(Optional<Long> id) {
     this.id = id;
   }
-  
-  public Optional<@NotEmpty(message = "Campo 'nomePopular' é obrigatório.", groups = {Cadastrar.class, Alterar.class}) String> getNomePopular() {
+
+  public Optional<
+          @NotEmpty(
+              message = "Campo 'nomePopular' é obrigatório.",
+              groups = {Cadastrar.class, Alterar.class})
+          String>
+      getNomePopular() {
     return nomePopular;
   }
 
@@ -63,7 +71,12 @@ public class BiotaDto {
     this.nomeCientifico = nomeCientifico;
   }
 
-  public Optional<@NotNull(message = "Campo 'tipoAgua' é obrigatório.", groups = {Cadastrar.class, Alterar.class}) TipoAguaEnum> getTipoAgua() {
+  public Optional<
+          @NotNull(
+              message = "Campo 'tipoAgua' é obrigatório.",
+              groups = {Cadastrar.class, Alterar.class})
+          TipoAguaEnum>
+      getTipoAgua() {
     return tipoAgua;
   }
 
@@ -160,26 +173,31 @@ public class BiotaDto {
   }
 
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-  @Null(message = "Campo 'dtCadastro' deve ser nulo.", groups = {Cadastrar.class, Alterar.class})
-  public Date getDtCadastro() {
+  @Null(
+      message = "Campo 'dtCadastro' deve ser nulo.",
+      groups = {Cadastrar.class, Alterar.class})
+  public LocalDateTime getDtCadastro() {
     return dtCadastro;
   }
 
-  public void setDtCadastro(Date dtCadastro) {
+  public void setDtCadastro(LocalDateTime dtCadastro) {
     this.dtCadastro = dtCadastro;
   }
 
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-  @Null(message = "Campo 'dtAtualizacao' deve ser nulo.", groups = {Cadastrar.class, Alterar.class})
-  public Date getDtAtualizacao() {
+  @Null(
+      message = "Campo 'dtAtualizacao' deve ser nulo.",
+      groups = {Cadastrar.class, Alterar.class})
+  public LocalDateTime getDtAtualizacao() {
     return dtAtualizacao;
   }
 
-  public void setDtAtualizacao(Date dtAtualizacao) {
+  public void setDtAtualizacao(LocalDateTime dtAtualizacao) {
     this.dtAtualizacao = dtAtualizacao;
   }
 
-  @Null(message = "Campo 'usuarioCadastro' deve ser nulo.",
+  @Null(
+      message = "Campo 'usuarioCadastro' deve ser nulo.",
       groups = {Cadastrar.class, Alterar.class})
   public String getUsuarioCadastro() {
     return usuarioCadastro;
@@ -189,7 +207,8 @@ public class BiotaDto {
     this.usuarioCadastro = usuarioCadastro;
   }
 
-  @Null(message = "Campo 'usuarioAtualizacao' deve ser nulo.",
+  @Null(
+      message = "Campo 'usuarioAtualizacao' deve ser nulo.",
       groups = {Cadastrar.class, Alterar.class})
   public String getUsuarioAtualizacao() {
     return usuarioAtualizacao;
@@ -201,16 +220,44 @@ public class BiotaDto {
 
   @Override
   public String toString() {
-    return "BiotaDto [id=" + id + ", nomePopular=" + nomePopular + ", nomeCientifico="
-        + nomeCientifico + ", tipoAgua=" + tipoAgua + ", nivelCuidado=" + nivelCuidado
-        + ", reefSafe=" + reefSafe + ", volumeMinAquario=" + volumeMinAquario + ", alimentacao="
-        + alimentacao + ", habitat=" + habitat + ", regiao=" + regiao + ", tamanho=" + tamanho
-        + ", riscoExtincao=" + riscoExtincao + ", infoAdicional=" + infoAdicional
-        + ", taxonomiaDto=" + taxonomiaDto + ", avaliacao=" + avaliacao + ", dtCadastro="
-        + dtCadastro + ", dtAtualizacao=" + dtAtualizacao + ", usuarioCadastro=" + usuarioCadastro
-        + ", usuarioAtualizacao=" + usuarioAtualizacao + "]";
+    return "BiotaDto [id="
+        + id
+        + ", nomePopular="
+        + nomePopular
+        + ", nomeCientifico="
+        + nomeCientifico
+        + ", tipoAgua="
+        + tipoAgua
+        + ", nivelCuidado="
+        + nivelCuidado
+        + ", reefSafe="
+        + reefSafe
+        + ", volumeMinAquario="
+        + volumeMinAquario
+        + ", alimentacao="
+        + alimentacao
+        + ", habitat="
+        + habitat
+        + ", regiao="
+        + regiao
+        + ", tamanho="
+        + tamanho
+        + ", riscoExtincao="
+        + riscoExtincao
+        + ", infoAdicional="
+        + infoAdicional
+        + ", taxonomiaDto="
+        + taxonomiaDto
+        + ", avaliacao="
+        + avaliacao
+        + ", dtCadastro="
+        + dtCadastro
+        + ", dtAtualizacao="
+        + dtAtualizacao
+        + ", usuarioCadastro="
+        + usuarioCadastro
+        + ", usuarioAtualizacao="
+        + usuarioAtualizacao
+        + "]";
   }
-  
-  
-
 }

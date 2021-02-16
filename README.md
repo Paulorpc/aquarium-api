@@ -56,3 +56,7 @@ Obs: Aplicação deve estar em execução.
 
 - Utilizando controller advice para gerenciamento de exceções o qual formatan um response padronizado para retornar ao client. 
 - O gerenciamento de exceção está definido para controlar todas exceções lançadas em um controller, o qual não foi tratado com um try/catch.
+
+
+#### TESTES 
+Ao retornar o conteúdo do response (`MockMvcResultMatcher.content()`) para verificar algum dado gera falha, pois o charset default retornado não é mais o UTF-8. Portanto, é necessário aficionar o `.accept(MediaType.APPLICATION_JSON_UTF8_VALUE)`. Mesmo depreciado, a versão que deveria substituir esse tipo não resolve o problema.

@@ -1,8 +1,11 @@
-
 package com.paulorpc.aquarium.api.entities;
 
+import com.paulorpc.aquarium.api.enums.NivelCuidadoEnum;
+import com.paulorpc.aquarium.api.enums.RiscoExtincaoEnum;
+import com.paulorpc.aquarium.api.enums.TamanhoBiotaEnum;
+import com.paulorpc.aquarium.api.enums.TipoAguaEnum;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -13,17 +16,23 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
-import com.paulorpc.aquarium.api.enums.NivelCuidadoEnum;
-import com.paulorpc.aquarium.api.enums.RiscoExtincaoEnum;
-import com.paulorpc.aquarium.api.enums.TamanhoBiotaEnum;
-import com.paulorpc.aquarium.api.enums.TipoAguaEnum;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.Where;
 
 @Entity
-@Table(name = "Biota")
+@Table(name = "biota")
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@SQLDelete(sql = "update Biota set deletado = true where id = ?")
+@Where(clause = "where deletado = false")
 public class Biota implements Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -31,7 +40,7 @@ public class Biota implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "idBiota", nullable = false)
-  private int id;
+  private Long id;
 
   @Column(name = "nomePopular", nullable = false)
   private String nomePopular;
@@ -76,8 +85,6 @@ public class Biota implements Serializable {
   @OneToOne(mappedBy = "biota", cascade = CascadeType.ALL)
   private Taxonomia taxonomia;
 
-  // @ManyToMany(fetch = FetchType.LAZY)
-  // @JoinColumn
   // private List<String> fotos;
 
   @Column(name = "avaliacao", nullable = true)
@@ -87,11 +94,13 @@ public class Biota implements Serializable {
   @ColumnDefault(value = "false")
   private boolean deletado;
 
+  @CreationTimestamp
   @Column(name = "dtCadastro", nullable = false)
-  private Date dtCadastro;
+  private LocalDateTime dtCadastro;
 
+  @UpdateTimestamp
   @Column(name = "dtAtualizacao", nullable = false)
-  private Date dtAtualizacao;
+  private LocalDateTime dtAtualizacao;
 
   @Column(name = "usuarioCadastro", nullable = false)
   private String usuarioCadastro;
@@ -103,12 +112,11 @@ public class Biota implements Serializable {
   // @JoinColumn
   // private List<?> aquarioBiota;
 
-
-  public int getId() {
+  public Long getId() {
     return id;
   }
 
-  public void setId(int id) {
+  public void setId(Long id) {
     this.id = id;
   }
 
@@ -259,19 +267,19 @@ public class Biota implements Serializable {
     this.deletado = deletado;
   }
 
-  public Date getDtCadastro() {
+  public LocalDateTime getDtCadastro() {
     return dtCadastro;
   }
 
-  public void setDtCadastro(Date dtCadastro) {
+  public void setDtCadastro(LocalDateTime dtCadastro) {
     this.dtCadastro = dtCadastro;
   }
 
-  public Date getDtAtualizacao() {
+  public LocalDateTime getDtAtualizacao() {
     return dtAtualizacao;
   }
 
-  public void setDtAtualizacao(Date dtAtualizacao) {
+  public void setDtAtualizacao(LocalDateTime dtAtualizacao) {
     this.dtAtualizacao = dtAtualizacao;
   }
 
@@ -291,31 +299,26 @@ public class Biota implements Serializable {
     this.usuarioAtualizacao = usuarioAtualizacao;
   }
 
-  @PreUpdate
-  public void preUpdate() {
-    dtAtualizacao = new Date();
-    usuarioAtualizacao = "USUARIO_SESSAO";
-  }
-
-  @PrePersist
-  public void prePersist() {
-    Date hojeHora = new Date();
-    dtCadastro = hojeHora;
-    dtAtualizacao = hojeHora;
-    usuarioCadastro = "USUARIO_SESSAO";
-    usuarioAtualizacao = "USUARIO_SESSAO";
-  }
-
   @Override
   public String toString() {
-    return "Biota [id=" + id + ", nomePopular=" + nomePopular + ", nomeCientifico=" + nomeCientifico
-        + ", tipoAgua=" + tipoAgua + ", nivelCuidado=" + nivelCuidado + ", reefSafe=" + reefSafe
-        + ", volumeMinAquario=" + volumeMinAquario + ", alimentacao=" + alimentacao + ", habitat="
-        + habitat + ", regiao=" + regiao + ", tamanho=" + tamanho + ", riscoExtincao="
-        + riscoExtincao + ", infoAdicional=" + infoAdicional + ", taxonomia=" + taxonomia
-        + ", avaliacao=" + avaliacao + ", deletado=" + deletado + ", dtCadastro=" + dtCadastro
-        + ", dtAtualizacao=" + dtAtualizacao + ", usuarioCadastro=" + usuarioCadastro
-        + ", usuarioAtualizacao=" + usuarioAtualizacao + "]";
+    return "Biota [id="
+        + id
+        + ", nomePopular="
+        + nomePopular
+        + ", nomeCientifico="
+        + nomeCientifico
+        + ", tipoAgua="
+        + tipoAgua
+        + ", deletado="
+        + deletado
+        + ", dtCadastro="
+        + dtCadastro
+        + ", dtAtualizacao="
+        + dtAtualizacao
+        + ", usuarioCadastro="
+        + usuarioCadastro
+        + ", usuarioAtualizacao="
+        + usuarioAtualizacao
+        + "]";
   }
-
 }

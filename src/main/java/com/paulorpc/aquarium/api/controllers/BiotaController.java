@@ -1,5 +1,14 @@
 package com.paulorpc.aquarium.api.controllers;
 
+import com.paulorpc.aquarium.api.dtos.BiotaDto;
+import com.paulorpc.aquarium.api.dtos.TaxonomiaDto;
+import com.paulorpc.aquarium.api.entities.Biota;
+import com.paulorpc.aquarium.api.exceptions.NotFoundException;
+import com.paulorpc.aquarium.api.response.Response;
+import com.paulorpc.aquarium.api.response.ResponseError;
+import com.paulorpc.aquarium.api.response.ResponseObj;
+import com.paulorpc.aquarium.api.services.BiotaService;
+import com.paulorpc.aquarium.api.util.Global;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
@@ -20,15 +29,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import com.paulorpc.aquarium.api.dtos.BiotaDto;
-import com.paulorpc.aquarium.api.dtos.TaxonomiaDto;
-import com.paulorpc.aquarium.api.entities.Biota;
-import com.paulorpc.aquarium.api.exceptions.NotFoundException;
-import com.paulorpc.aquarium.api.response.Response;
-import com.paulorpc.aquarium.api.response.ResponseError;
-import com.paulorpc.aquarium.api.response.ResponseObj;
-import com.paulorpc.aquarium.api.services.BiotaService;
-import com.paulorpc.aquarium.api.util.Global;
 
 @RestController
 @RequestMapping(value = "/api/biota")
@@ -37,17 +37,20 @@ public class BiotaController {
 
   private final Logger log = LoggerFactory.getLogger(BiotaController.class);
 
-  @Autowired
-  private BiotaService biotaService;
+  @Autowired private BiotaService biotaService;
 
   @GetMapping(value = "/{id}")
-  public ResponseEntity<Response> buscar(@PathVariable int id) throws Exception {
+  public ResponseEntity<Response> buscar(@PathVariable Long id) throws Exception {
     log.info("Requisição para buscar ser vivo. Id: " + id);
 
-    return biotaService.buscar(id).map(biota -> {
-      Response response = new ResponseObj<>(Global.getUri(), converteObjetoParaDto(biota));
-      return ResponseEntity.ok(response);
-    }).orElseThrow(() -> new NotFoundException("Não foi possível localizar biota. Id: " + id));
+    return biotaService
+        .buscar(id)
+        .map(
+            biota -> {
+              Response response = new ResponseObj<>(Global.getUri(), converteObjetoParaDto(biota));
+              return ResponseEntity.ok(response);
+            })
+        .orElseThrow(() -> new NotFoundException("Não foi possível localizar biota. Id: " + id));
   }
 
   @GetMapping
@@ -55,24 +58,15 @@ public class BiotaController {
     log.info("Requisição para buscar todos seres vivos");
 
     List<Biota> biotas = biotaService.buscarTodos();
-    List<BiotaDto> biotasDto = biotas.stream().map(v -> {
-      return converteObjetoParaDto(v);
-    }).collect(Collectors.toList());
+    List<BiotaDto> biotasDto =
+        biotas.stream()
+            .map(
+                v -> {
+                  return converteObjetoParaDto(v);
+                })
+            .collect(Collectors.toList());
 
     ResponseObj<List<BiotaDto>> response = new ResponseObj<>(Global.getUri(), biotasDto);
-    return ResponseEntity.ok(response);
-  }
-
-  @GetMapping(value = "/ativos")
-  public ResponseEntity<Response> buscarTodosAtivos() {
-    log.info("Requisição para buscar todos seres vivos ativos");
-
-    List<Biota> biotas = biotaService.buscarTodosAtivos();
-    List<BiotaDto> biotasDto = biotas.stream().map(v -> {
-      return converteObjetoParaDto(v);
-    }).collect(Collectors.toList());
-
-    Response response = new ResponseObj<>(Global.getUri(), biotasDto);
     return ResponseEntity.ok(response);
   }
 
@@ -89,8 +83,11 @@ public class BiotaController {
     }
 
     Biota novoBiota = biotaService.persistir(converteDtoParaObjeto(biotaDto));
-    URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-        .buildAndExpand(novoBiota.getId()).toUri();
+    URI uri =
+        ServletUriComponentsBuilder.fromCurrentRequest()
+            .path("/{id}")
+            .buildAndExpand(novoBiota.getId())
+            .toUri();
 
     ResponseObj<BiotaDto> response = new ResponseObj<>(uri, converteObjetoParaDto(novoBiota));
     return ResponseEntity.created(uri).body(response);
@@ -108,9 +105,14 @@ public class BiotaController {
       return ResponseEntity.badRequest().body(responseError);
     }
 
-    Biota biota = biotaDto.getId().flatMap(id -> biotaService.buscar(id))
-        .orElseThrow(() -> new NotFoundException(
-            "Não foi possível localizar o ser vivo. Id: " + biotaDto.getId().get()));
+    Biota biota =
+        biotaDto
+            .getId()
+            .flatMap(id -> biotaService.buscar(id))
+            .orElseThrow(
+                () ->
+                    new NotFoundException(
+                        "Não foi possível localizar o ser vivo. Id: " + biotaDto.getId().get()));
 
     Optional<Biota> biotaUpd = biotaService.alterar(converteDtoParaObjeto(biotaDto, biota));
 
@@ -120,14 +122,17 @@ public class BiotaController {
   }
 
   @DeleteMapping(value = "/{id}")
-  public ResponseEntity<Response> deletar(@PathVariable int id) throws Exception {
+  public ResponseEntity<Response> deletar(@PathVariable Long id) throws Exception {
     log.info("Requisição para deletar um ser vivo");
 
-    return biotaService.deletar(id).map(v -> {
-      Response response = new ResponseObj<>(Global.getUri(), converteObjetoParaDto(v));
-      return ResponseEntity.ok(response);
-    }).orElseThrow(() -> new NotFoundException("Não foi possível localizar biota. Id: " + id));
-
+    return biotaService
+        .deletar(id)
+        .map(
+            v -> {
+              Response response = new ResponseObj<>(Global.getUri(), converteObjetoParaDto(v));
+              return ResponseEntity.ok(response);
+            })
+        .orElseThrow(() -> new NotFoundException("Não foi possível localizar biota. Id: " + id));
   }
 
   /************* CONVERSORES OBJETO/DTO *************/
@@ -164,15 +169,17 @@ public class BiotaController {
     dto.getInfoAdicional().ifPresent(v -> obj.setInfoAdicional(v));
     dto.getAvaliacao().ifPresent(v -> obj.setAvaliacao(v));
 
-    dto.getTaxonomia().ifPresent(taxonomia -> {
-      taxonomia.getDominio().ifPresent(v -> obj.getTaxonomia().setDominio(v));
-      taxonomia.getReino().ifPresent(v -> obj.getTaxonomia().setReino(v));
-      taxonomia.getFilo().ifPresent(v -> obj.getTaxonomia().setFilo(v));
-      taxonomia.getClasse().ifPresent(v -> obj.getTaxonomia().setClasse(v));
-      taxonomia.getOrdem().ifPresent(v -> obj.getTaxonomia().setOrdem(v));
-      taxonomia.getGenero().ifPresent(v -> obj.getTaxonomia().setGenero(v));
-      taxonomia.getEspecie().ifPresent(v -> obj.getTaxonomia().setEspecie(v));
-    });
+    dto.getTaxonomia()
+        .ifPresent(
+            taxonomia -> {
+              taxonomia.getDominio().ifPresent(v -> obj.getTaxonomia().setDominio(v));
+              taxonomia.getReino().ifPresent(v -> obj.getTaxonomia().setReino(v));
+              taxonomia.getFilo().ifPresent(v -> obj.getTaxonomia().setFilo(v));
+              taxonomia.getClasse().ifPresent(v -> obj.getTaxonomia().setClasse(v));
+              taxonomia.getOrdem().ifPresent(v -> obj.getTaxonomia().setOrdem(v));
+              taxonomia.getGenero().ifPresent(v -> obj.getTaxonomia().setGenero(v));
+              taxonomia.getEspecie().ifPresent(v -> obj.getTaxonomia().setEspecie(v));
+            });
 
     return obj;
   }
@@ -216,5 +223,4 @@ public class BiotaController {
 
     return dto;
   }
-
 }

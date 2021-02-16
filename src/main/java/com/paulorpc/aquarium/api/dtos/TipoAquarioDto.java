@@ -1,42 +1,44 @@
 package com.paulorpc.aquarium.api.dtos;
 
-import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.paulorpc.aquarium.api.enums.TipoAguaEnum;
+import java.time.LocalDateTime;
 import java.util.Optional;
-
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.paulorpc.aquarium.api.enums.TipoAguaEnum;
-
 public class TipoAquarioDto {
 
-  private Optional<Integer> id = Optional.empty();
+  private Optional<Long> id = Optional.empty();
   private Optional<String> tipo = Optional.empty();
   private Optional<TipoAguaEnum> tipoAgua = Optional.empty();
   private Optional<Boolean> status = Optional.empty();
   private Optional<String> descricao = Optional.empty();
-  private Date dtCadastro;
-  private Date dtAtualizacao;
+  private LocalDateTime dtCadastro;
+  private LocalDateTime dtAtualizacao;
 
-  public interface Cadastrar {
-  }
+  public interface Cadastrar {}
 
-  public interface Alterar {
-  }
+  public interface Alterar {}
 
-  @NotNull(message = "Campo 'id' é obrigatório.", groups = {Alterar.class})
-  public Optional<Integer> getId() {
+  @NotNull(
+      message = "Campo 'id' é obrigatório.",
+      groups = {Alterar.class})
+  public Optional<Long> getId() {
     return id;
   }
 
-  public void setId(Optional<Integer> idTipoAquario) {
+  public void setId(Optional<Long> idTipoAquario) {
     this.id = idTipoAquario;
   }
 
-  public Optional<@NotEmpty(message = "Campo 'tipo' é obrigatório.",
-      groups = {Cadastrar.class}) String> getTipo() {
+  public Optional<
+          @NotEmpty(
+              message = "Campo 'tipo' é obrigatório.",
+              groups = {Cadastrar.class})
+          String>
+      getTipo() {
     return tipo;
   }
 
@@ -44,8 +46,12 @@ public class TipoAquarioDto {
     this.tipo = tipo;
   }
 
-  public Optional<@NotNull(message = "Campo 'tipoAgua' é obrigatório.",
-      groups = {Cadastrar.class}) TipoAguaEnum> getTipoAgua() {
+  public Optional<
+          @NotNull(
+              message = "Campo 'tipoAgua' é obrigatório.",
+              groups = {Cadastrar.class})
+          TipoAguaEnum>
+      getTipoAgua() {
     return tipoAgua;
   }
 
@@ -53,8 +59,12 @@ public class TipoAquarioDto {
     this.tipoAgua = tipoAgua;
   }
 
-  public Optional<@NotNull(message = "Campo 'status' é obrigatório.",
-      groups = {Cadastrar.class}) Boolean> getStatus() {
+  public Optional<
+          @NotNull(
+              message = "Campo 'status' é obrigatório.",
+              groups = {Cadastrar.class})
+          Boolean>
+      getStatus() {
     return status;
   }
 
@@ -62,8 +72,12 @@ public class TipoAquarioDto {
     this.status = status;
   }
 
-  public Optional<@NotNull(message = "Campo 'descricao' é obrigatório.",
-      groups = {Cadastrar.class}) String> getDescricao() {
+  public Optional<
+          @NotNull(
+              message = "Campo 'descricao' é obrigatório.",
+              groups = {Cadastrar.class})
+          String>
+      getDescricao() {
     return descricao;
   }
 
@@ -72,23 +86,26 @@ public class TipoAquarioDto {
   }
 
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-  @Null(message = "Campo 'dtCadastro' deve ser nulo.", groups = {Cadastrar.class, Alterar.class})
-  public Date getDtCadastro() {
+  @Null(
+      message = "Campo 'dtCadastro' deve ser nulo.",
+      groups = {Cadastrar.class, Alterar.class})
+  public LocalDateTime getDtCadastro() {
     return dtCadastro;
   }
 
-  public void setDtCadastro(Date dtCadastro) {
+  public void setDtCadastro(LocalDateTime dtCadastro) {
     this.dtCadastro = dtCadastro;
   }
 
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-  @Null(message = "Campo 'dtAtualizacao' deve ser nulo.", groups = {Cadastrar.class, Alterar.class})
-  public Date getDtAtualizacao() {
+  @Null(
+      message = "Campo 'dtAtualizacao' deve ser nulo.",
+      groups = {Cadastrar.class, Alterar.class})
+  public LocalDateTime getDtAtualizacao() {
     return dtAtualizacao;
   }
 
-  public void setDtAtualizacao(Date dtAtualizacao) {
+  public void setDtAtualizacao(LocalDateTime dtAtualizacao) {
     this.dtAtualizacao = dtAtualizacao;
   }
-
 }

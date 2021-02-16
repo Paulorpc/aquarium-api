@@ -1,8 +1,6 @@
 package com.paulorpc.aquarium.api.repositories;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import com.paulorpc.aquarium.api.entities.Taxonomia;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface TaxonomiaRepository extends JpaRepository<Taxonomia, Integer>{
-
-}
+public interface TaxonomiaRepository extends JpaRepository<Taxonomia, Long> {}
