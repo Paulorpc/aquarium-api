@@ -1,9 +1,9 @@
 package com.paulorpc.aquarium.api.util;
 
+import com.paulorpc.aquarium.api.exceptions.ApiDefaultException;
 import java.net.URI;
 import java.time.LocalDateTime;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import com.paulorpc.aquarium.api.exceptions.ApiDefaultException;
 
 public class Global {
 
@@ -55,5 +55,4 @@ public class Global {
   public static String formataExceptionMessage(Throwable exception) throws Exception {
     return ApiDefaultException.formataExceptionMessage(exception);
   }
-
 }

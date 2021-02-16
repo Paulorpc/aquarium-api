@@ -4,128 +4,126 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class Equipamento {
-	
-	 private int idEquipamento;
-	 private String nome;
-	 private LocalDate dtAquisicao;
-	 private String tipo;
-	 private BigDecimal vlrUnitario;
-	 private int qtde;
-	 //private foto;
-	 private String fabricante;
-	 private String modelo;	 	 
-	 private String potencia;
-	 private String dtSubstituicao;
-	 private String observacao;
-	 //private Double avaliacao;
-	 private String dtCadastro;
-	 private String dtAtualizacao;
 
-	public Equipamento() {}
+  private int idEquipamento;
+  private String nome;
+  private LocalDate dtAquisicao;
+  private String tipo;
+  private BigDecimal vlrUnitario;
+  private int qtde;
+  // private foto;
+  private String fabricante;
+  private String modelo;
+  private String potencia;
+  private String dtSubstituicao;
+  private String observacao;
+  // private Double avaliacao;
+  private String dtCadastro;
+  private String dtAtualizacao;
 
-	public int getIdEquipamento() {
-		return idEquipamento;
-	}
+  public Equipamento() {}
 
-	public void setIdEquipamento(int idEquipamento) {
-		this.idEquipamento = idEquipamento;
-	}
+  public int getIdEquipamento() {
+    return idEquipamento;
+  }
 
-	public String getNome() {
-		return nome;
-	}
+  public void setIdEquipamento(int idEquipamento) {
+    this.idEquipamento = idEquipamento;
+  }
 
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
+  public String getNome() {
+    return nome;
+  }
 
-	public LocalDate getDtAquisicao() {
-		return dtAquisicao;
-	}
+  public void setNome(String nome) {
+    this.nome = nome;
+  }
 
-	public void setDtAquisicao(LocalDate dtAquisicao) {
-		this.dtAquisicao = dtAquisicao;
-	}
+  public LocalDate getDtAquisicao() {
+    return dtAquisicao;
+  }
 
-	public String getTipo() {
-		return tipo;
-	}
+  public void setDtAquisicao(LocalDate dtAquisicao) {
+    this.dtAquisicao = dtAquisicao;
+  }
 
-	public void setTipo(String tipo) {
-		this.tipo = tipo;
-	}
+  public String getTipo() {
+    return tipo;
+  }
 
-	public BigDecimal getVlrUnitario() {
-		return vlrUnitario;
-	}
+  public void setTipo(String tipo) {
+    this.tipo = tipo;
+  }
 
-	public void setVlrUnitario(BigDecimal vlrUnitario) {
-		this.vlrUnitario = vlrUnitario;
-	}
+  public BigDecimal getVlrUnitario() {
+    return vlrUnitario;
+  }
 
-	public int getQtde() {
-		return qtde;
-	}
+  public void setVlrUnitario(BigDecimal vlrUnitario) {
+    this.vlrUnitario = vlrUnitario;
+  }
 
-	public void setQtde(int qtde) {
-		this.qtde = qtde;
-	}
+  public int getQtde() {
+    return qtde;
+  }
 
-	public String getFabricante() {
-		return fabricante;
-	}
+  public void setQtde(int qtde) {
+    this.qtde = qtde;
+  }
 
-	public void setFabricante(String fabricante) {
-		this.fabricante = fabricante;
-	}
+  public String getFabricante() {
+    return fabricante;
+  }
 
-	public String getModelo() {
-		return modelo;
-	}
+  public void setFabricante(String fabricante) {
+    this.fabricante = fabricante;
+  }
 
-	public void setModelo(String modelo) {
-		this.modelo = modelo;
-	}
+  public String getModelo() {
+    return modelo;
+  }
 
-	public String getPotencia() {
-		return potencia;
-	}
+  public void setModelo(String modelo) {
+    this.modelo = modelo;
+  }
 
-	public void setPotencia(String potencia) {
-		this.potencia = potencia;
-	}
+  public String getPotencia() {
+    return potencia;
+  }
 
-	public String getDtSubstituicao() {
-		return dtSubstituicao;
-	}
+  public void setPotencia(String potencia) {
+    this.potencia = potencia;
+  }
 
-	public void setDtSubstituicao(String dtSubstituicao) {
-		this.dtSubstituicao = dtSubstituicao;
-	}
+  public String getDtSubstituicao() {
+    return dtSubstituicao;
+  }
 
-	public String getObservacao() {
-		return observacao;
-	}
+  public void setDtSubstituicao(String dtSubstituicao) {
+    this.dtSubstituicao = dtSubstituicao;
+  }
 
-	public void setObservacao(String observacao) {
-		this.observacao = observacao;
-	}
+  public String getObservacao() {
+    return observacao;
+  }
 
-	public String getDtCadastro() {
-		return dtCadastro;
-	}
+  public void setObservacao(String observacao) {
+    this.observacao = observacao;
+  }
 
-	public void setDtCadastro(String dtCadastro) {
-		this.dtCadastro = dtCadastro;
-	}
+  public String getDtCadastro() {
+    return dtCadastro;
+  }
 
-	public String getDtAtualizacao() {
-		return dtAtualizacao;
-	}
+  public void setDtCadastro(String dtCadastro) {
+    this.dtCadastro = dtCadastro;
+  }
 
-	public void setDtAtualizacao(String dtAtualizacao) {
-		this.dtAtualizacao = dtAtualizacao;
-	}
-	
-	
+  public String getDtAtualizacao() {
+    return dtAtualizacao;
+  }
+
+  public void setDtAtualizacao(String dtAtualizacao) {
+    this.dtAtualizacao = dtAtualizacao;
+  }
 }
