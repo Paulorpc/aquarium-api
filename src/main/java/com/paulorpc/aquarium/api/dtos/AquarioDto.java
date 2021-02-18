@@ -23,6 +23,9 @@ public class AquarioDto {
 
   public interface Patch {}
 
+  @Positive(
+      message = "Campo 'id' deve ser maior que zero.",
+      groups = {Put.class, Patch.class})
   @NotNull(
       message = "Campo 'id' obrigatório para alteração.",
       groups = {Put.class, Patch.class})

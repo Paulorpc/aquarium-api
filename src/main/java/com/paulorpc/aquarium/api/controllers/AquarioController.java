@@ -113,12 +113,6 @@ public class AquarioController {
     return ResponseEntity.ok(response);
   }
 
-  /***
-   * Método de deleção de aquários.
-   *
-   * @param id
-   * @return
-   */
   @DeleteMapping(value = "/{id}")
   public ResponseEntity<Response> deletar(@PathVariable Long id) throws Exception {
     log.info("Requisição para deletar um aquário - deletar()");

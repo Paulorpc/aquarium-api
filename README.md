@@ -60,3 +60,7 @@ Obs: Aplicação deve estar em execução.
 
 #### TESTES 
 Ao retornar o conteúdo do response (`MockMvcResultMatcher.content()`) para verificar algum dado gera falha, pois o charset default retornado não é mais o UTF-8. Portanto, é necessário aficionar o `.accept(MediaType.APPLICATION_JSON_UTF8_VALUE)`. Mesmo depreciado, a versão que deveria substituir esse tipo não resolve o problema.
+
+#### MAPSTRUCT
+MapStruct ajuda na criação de classes para conversão entre objetos de forma automatizada. É necessário adicionar seu processor no POM para gerar as classes durante execução do maven. 
+https://mapstruct.org/documentation/stable/reference/html/#basic-mappings

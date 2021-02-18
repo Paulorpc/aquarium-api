@@ -1,5 +1,6 @@
 package com.paulorpc.aquarium.api.entities;
 
+import com.paulorpc.aquarium.api.controllers.AquarioController;
 import com.paulorpc.aquarium.api.enums.NivelCuidadoEnum;
 import com.paulorpc.aquarium.api.enums.RiscoExtincaoEnum;
 import com.paulorpc.aquarium.api.enums.TamanhoBiotaEnum;
@@ -12,10 +13,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.persistence.PreRemove;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,15 +28,19 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.Where;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Entity
 @Table(name = "biota")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@SQLDelete(sql = "update Biota set deletado = true where id = ?")
-@Where(clause = "where deletado = false")
+@SQLDelete(sql = "update Biota set deletado = true where idBiota = ?")
+@Where(clause = "deletado = false")
 public class Biota implements Serializable {
+
+  private static final Logger log = LoggerFactory.getLogger(AquarioController.class);
 
   private static final long serialVersionUID = 1L;
 
@@ -82,7 +89,7 @@ public class Biota implements Serializable {
   @Column(name = "infoAdicional", nullable = true)
   private String infoAdicional;
 
-  @OneToOne(mappedBy = "biota", cascade = CascadeType.ALL)
+  @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private Taxonomia taxonomia;
 
   // private List<String> fotos;
@@ -90,7 +97,7 @@ public class Biota implements Serializable {
   @Column(name = "avaliacao", nullable = true)
   private Double avaliacao;
 
-  @Column(name = "deletado", nullable = false)
+  @Column(name = "deletado", nullable = true)
   @ColumnDefault(value = "false")
   private boolean deletado;
 
@@ -102,10 +109,10 @@ public class Biota implements Serializable {
   @Column(name = "dtAtualizacao", nullable = false)
   private LocalDateTime dtAtualizacao;
 
-  @Column(name = "usuarioCadastro", nullable = false)
+  @Column(name = "usuarioCadastro", nullable = true)
   private String usuarioCadastro;
 
-  @Column(name = "usuarioAtualizacao", nullable = false)
+  @Column(name = "usuarioAtualizacao", nullable = true)
   private String usuarioAtualizacao;
 
   // @oneToMany(fetch = FetchType.LAZY)
@@ -297,6 +304,12 @@ public class Biota implements Serializable {
 
   public void setUsuarioAtualizacao(String usuarioAtualizacao) {
     this.usuarioAtualizacao = usuarioAtualizacao;
+  }
+
+  @PreRemove
+  public void preRemove() {
+    log.info("setting {}.id({}).isDeleted = true", this.getClass().getSimpleName(), this.id);
+    this.deletado = true;
   }
 
   @Override

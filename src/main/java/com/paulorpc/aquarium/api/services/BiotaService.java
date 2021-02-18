@@ -14,11 +14,18 @@ public interface BiotaService {
   Optional<Biota> buscar(Long id);
 
   /***
-   * Busca todos seres vivos cadastrados
+   * Busca todos seres vivos
    *
    * @return List<Biota>
    */
   List<Biota> buscarTodos();
+
+  /***
+   * Busca todos seres marcados como deletados.
+   *
+   * @return List<Biota>
+   */
+  List<Biota> buscarTodosDeletados();
 
   /***
    * Cadastra novo ser vivo
@@ -37,7 +44,7 @@ public interface BiotaService {
    * @throws Exception
    */
   // TODO corrigir o parametro para int
-  Optional<Biota> alterar(Biota biota) throws Exception;
+  Biota alterar(Biota biota) throws Exception;
 
   /***
    * Deleta um Biota cadastrado. Status é alterado para FALSE.
@@ -45,5 +52,5 @@ public interface BiotaService {
    * @param id
    * @return Optional<Biota>
    */
-  Optional<Biota> deletar(Long id);
+  Biota deletar(Long id) throws Exception;
 }

@@ -210,7 +210,7 @@ public class Aquario implements Serializable {
   public LocalDateTime getDtAtualizacao() {
     return dtAtualizacao;
   }
-  
+
   public void setDtAtualizacao(LocalDateTime dtAtualizacao) {
     this.dtAtualizacao = dtAtualizacao;
   }
