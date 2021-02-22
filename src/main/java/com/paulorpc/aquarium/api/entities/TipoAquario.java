@@ -8,7 +8,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -55,7 +54,7 @@ public class TipoAquario implements Serializable {
   @Column(name = "dtAtualizacao", nullable = false)
   private LocalDateTime dtAtualizacao;
 
-  @OneToMany(mappedBy = "tipoAquario", fetch = FetchType.EAGER)
+  @OneToMany(mappedBy = "tipoAquario")
   private List<Aquario> aquarios;
 
   public Long getId() {

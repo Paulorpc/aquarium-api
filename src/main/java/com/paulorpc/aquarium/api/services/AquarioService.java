@@ -39,7 +39,7 @@ public interface AquarioService {
   Aquario alterar(Aquario aquario) throws Exception;
 
   /***
-   * Deleta um aquario cadastrado. Status é alterado para FALSE.
+   * Deleta um aquario cadastrado.
    *
    * @param id
    * @return Optional<Aquario>

@@ -3,6 +3,8 @@ package com.paulorpc.aquarium.api.entities;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -84,6 +87,10 @@ public class Aquario implements Serializable {
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "idTipoAquario")
   private TipoAquario tipoAquario;
+
+  @ManyToMany(mappedBy = "aquarios")
+  @Builder.Default
+  private Set<Equipamento> equipamentos = new LinkedHashSet<Equipamento>();
 
   // private Parametro parametros;
 
@@ -224,6 +231,24 @@ public class Aquario implements Serializable {
 
   public void setTipoAquario(TipoAquario tipoAquario) {
     this.tipoAquario = tipoAquario;
+  }
+
+  public Set<Equipamento> getEquipamentos() {
+    return equipamentos;
+  }
+
+  public void setEquipamentos(Set<Equipamento> equipamentos) {
+    this.equipamentos = equipamentos;
+  }
+
+  public void addEquipamento(Equipamento equipamento) {
+    this.getEquipamentos().add(equipamento);
+    equipamento.getAquarios().add(this);
+  }
+
+  public void removeEquipamento(Equipamento equipamento) {
+    this.getEquipamentos().remove(equipamento);
+    equipamento.getAquarios().remove(this);
   }
 
   @Override

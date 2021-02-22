@@ -43,7 +43,7 @@ public class AquarioController {
 
   @GetMapping(value = "/{id}")
   public ResponseEntity<Response> buscar(@PathVariable Long id) {
-    log.info("Requisição para buscar aquário - buscarAquario(). Id: " + id);
+    log.info("Requisição para buscar aquário: {}", id);
 
     return aquarioService
         .buscar(id)
@@ -94,7 +94,7 @@ public class AquarioController {
   public ResponseEntity<Response> alterar(
       @Validated(AquarioDto.Put.class) @RequestBody AquarioDto aquarioDto, BindingResult result)
       throws Exception {
-    log.info("Requisição para alterar um aquaário existente - alterarAquario()");
+    log.info("Requisição para alterar um aquaário existente");
     ResponseError responseError = new ResponseError(Global.getUri());
 
     if (result.hasErrors()) {
@@ -115,7 +115,7 @@ public class AquarioController {
 
   @DeleteMapping(value = "/{id}")
   public ResponseEntity<Response> deletar(@PathVariable Long id) throws Exception {
-    log.info("Requisição para deletar um aquário - deletar()");
+    log.info("Requisição para deletar um aquário");
 
     Aquario aquario = aquarioService.deletar(id);
     Response response = new ResponseObj<>(Global.getUri(), mapper.toAquarioDto(aquario));

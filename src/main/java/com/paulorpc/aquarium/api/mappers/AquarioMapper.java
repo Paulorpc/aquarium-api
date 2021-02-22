@@ -2,6 +2,7 @@ package com.paulorpc.aquarium.api.mappers;
 
 import com.paulorpc.aquarium.api.dtos.AquarioDto;
 import com.paulorpc.aquarium.api.entities.Aquario;
+import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -15,6 +16,7 @@ public interface AquarioMapper {
   @Mapping(source = "tipoAquario.id", target = "idTipoAquario")
   AquarioDto toAquarioDto(Aquario aquario);
 
-  @Mapping(source = "idTipoAquario", target = "tipoAquario.id")
+  @Mapping(target = "equipamentos", ignore = true)
+  @InheritInverseConfiguration
   Aquario toAquario(AquarioDto aquarioDto);
 }

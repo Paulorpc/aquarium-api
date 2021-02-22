@@ -44,8 +44,8 @@ public class AquarioRepositoryTest {
   }
 
   @Test
-  public void should_findByStatusIsTrue() {
-    List<Aquario> list = aquarioRepository.findByStatusIsTrue();
+  public void should_findAllByStatusIsTrue() {
+    List<Aquario> list = aquarioRepository.findAllByStatusIsTrue();
     assertThat(list).hasSize(2);
   }
 

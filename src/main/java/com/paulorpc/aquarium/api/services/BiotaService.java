@@ -47,7 +47,7 @@ public interface BiotaService {
   Biota alterar(Biota biota) throws Exception;
 
   /***
-   * Deleta um Biota cadastrado. Status é alterado para FALSE.
+   * Deleta um Biota cadastrado. Campo deletado é alterado para TRUE.
    *
    * @param id
    * @return Optional<Biota>

@@ -42,7 +42,7 @@ public class TipoAquarioController {
 
   @GetMapping(value = "/{id}")
   public ResponseEntity<Response> buscar(@PathVariable Long id) throws Exception {
-    log.info("Requisição para buscar tipo de aquário. Id: " + id);
+    log.info("Requisição para buscar tipo de aquário: {}", id);
 
     return tipoAquarioService
         .buscar(id)
@@ -74,7 +74,7 @@ public class TipoAquarioController {
 
   @GetMapping(value = "/ativos")
   public ResponseEntity<Response> buscarTodosAtivos() {
-    log.info("Requisição para buscar todos aquários ativos");
+    log.info("Requisição para buscar todos tipos de aquários ativos");
 
     List<TipoAquario> tiposAquarios = tipoAquarioService.buscarTodosAtivos();
     List<TipoAquarioDto> tiposAquariosDto =
@@ -125,7 +125,7 @@ public class TipoAquarioController {
       @Validated(AquarioDto.Patch.class) @RequestBody TipoAquarioDto tipoAquarioDto,
       BindingResult result)
       throws Exception {
-    log.info("Requisição para alterar um tipo de aquário existente");
+    log.info("Requisição para alterar um tipo de aquário existente: {}", tipoAquarioDto.getId());
     ResponseError responseError = new ResponseError(Global.getUri());
 
     if (result.hasErrors()) {
@@ -153,7 +153,7 @@ public class TipoAquarioController {
 
   @DeleteMapping(value = "/{id}")
   public ResponseEntity<Response> deletar(@PathVariable Long id) throws Exception {
-    log.info("Requisição para deletar um aquário");
+    log.info("Requisição para deletar um aquário: {}", id);
 
     return tipoAquarioService
         .deletar(id)

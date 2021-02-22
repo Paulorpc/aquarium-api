@@ -9,9 +9,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AquarioRepository extends JpaRepository<Aquario, Long> {
 
-  // TODO ALTERAR O PADRÃO DE FIND/FINDALL COM STATUS=TRUE IMPLICITO
-
   Optional<Aquario> findByIdAndStatusIsTrue(Long id);
 
-  List<Aquario> findByStatusIsTrue();
+  List<Aquario> findAllByStatusIsTrue();
 }

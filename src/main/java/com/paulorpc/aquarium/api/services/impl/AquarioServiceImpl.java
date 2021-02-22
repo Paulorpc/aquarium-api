@@ -4,9 +4,11 @@ import com.paulorpc.aquarium.api.entities.Aquario;
 import com.paulorpc.aquarium.api.exceptions.NotFoundException;
 import com.paulorpc.aquarium.api.repositories.AquarioRepository;
 import com.paulorpc.aquarium.api.services.AquarioService;
+import com.paulorpc.aquarium.api.services.EquipamentoService;
 import com.paulorpc.aquarium.api.services.TipoAquarioService;
 import java.util.List;
 import java.util.Optional;
+import javax.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,8 @@ public class AquarioServiceImpl implements AquarioService {
   @Autowired private AquarioRepository aquarioRep;
 
   @Autowired private TipoAquarioService tipoAquarioService;
+
+  @Autowired private EquipamentoService equipamentoService;
 
   @Override
   public Optional<Aquario> buscar(Long id) {
@@ -66,16 +70,18 @@ public class AquarioServiceImpl implements AquarioService {
   }
 
   @Override
-  public Aquario deletar(Long id) throws NotFoundException {
+  @Transactional
+  public Aquario deletar(Long id) throws Exception {
     log.info("Deletando um aquário. Id: {}", id);
     Optional<Aquario> aquario = aquarioRep.findById(id);
 
     if (aquario.isPresent()) {
+      aquario.get().getEquipamentos().forEach(e -> e.removeAquario(aquario.get()));
+      persistir(aquario.get());
       aquarioRep.delete(aquario.get());
     } else {
-      throw new NotFoundException("Não foi possível localizar o aquário. Id: ");
+      throw new NotFoundException("Não foi possível localizar o aquário. Id: " + id);
     }
-
     return aquario.get();
   }
 }

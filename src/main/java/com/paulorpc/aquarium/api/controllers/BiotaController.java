@@ -42,7 +42,7 @@ public class BiotaController {
 
   @GetMapping(value = "/{id}")
   public ResponseEntity<Response> buscar(@PathVariable Long id) throws Exception {
-    log.info("Requisição para buscar ser vivo. Id: " + id);
+    log.info("Requisição para buscar ser vivo: {}", id);
 
     return biotaService
         .buscar(id)
@@ -126,93 +126,4 @@ public class BiotaController {
 
     return ResponseEntity.ok(response);
   }
-
-  /************* CONVERSORES OBJETO/DTO *************/
-
-  //  /***
-  //   * Converte objeto Biota para BiotaDto
-  //   *
-  //   * @param dto
-  //   * @return Biota
-  //   */
-  //  public static Biota converteDtoParaObjeto(BiotaDto dto) {
-  //    return converteDtoParaObjeto(dto, new Biota());
-  //  }
-  //
-  //  /***
-  //   * Converte objeto Biota para BiotaDto
-  //   *
-  //   * @param dto
-  //   * @return Biota
-  //   */
-  //  public static Biota converteDtoParaObjeto(BiotaDto dto, Biota obj) {
-  //    dto.getId().ifPresent(v -> obj.setId(v));
-  //    dto.getNomePopular().ifPresent(v -> obj.setNomePopular(v));
-  //    dto.getNomeCientifico().ifPresent(v -> obj.setNomeCientifico(v));
-  //    dto.getTipoAgua().ifPresent(v -> obj.setTipoAgua(v));
-  //    dto.getNivelCuidado().ifPresent(v -> obj.setNivelCuidado(v));
-  //    dto.getReefSafe().ifPresent(v -> obj.setReefSafe(v));
-  //    dto.getVolumeMinAquario().ifPresent(v -> obj.setVolumeMinAquario(v));
-  //    dto.getAlimentacao().ifPresent(v -> obj.setAlimentacao(v));
-  //    dto.getHabitat().ifPresent(v -> obj.setHabitat(v));
-  //    dto.getRegiao().ifPresent(v -> obj.setRegiao(v));
-  //    dto.getTamanho().ifPresent(v -> obj.setTamanho(v));
-  //    dto.getRiscoExtincao().ifPresent(v -> obj.setRiscoExtincao(v));
-  //    dto.getInfoAdicional().ifPresent(v -> obj.setInfoAdicional(v));
-  //    dto.getAvaliacao().ifPresent(v -> obj.setAvaliacao(v));
-  //
-  //    dto.getTaxonomia()
-  //        .ifPresent(
-  //            taxonomia -> {
-  //              taxonomia.getDominio().ifPresent(v -> obj.getTaxonomia().setDominio(v));
-  //              taxonomia.getReino().ifPresent(v -> obj.getTaxonomia().setReino(v));
-  //              taxonomia.getFilo().ifPresent(v -> obj.getTaxonomia().setFilo(v));
-  //              taxonomia.getClasse().ifPresent(v -> obj.getTaxonomia().setClasse(v));
-  //              taxonomia.getOrdem().ifPresent(v -> obj.getTaxonomia().setOrdem(v));
-  //              taxonomia.getGenero().ifPresent(v -> obj.getTaxonomia().setGenero(v));
-  //              taxonomia.getEspecie().ifPresent(v -> obj.getTaxonomia().setEspecie(v));
-  //            });
-  //
-  //    return obj;
-  //  }
-  //
-  //  /***
-  //   * Converte objeto Biota para BiotaDto
-  //   *
-  //   * @param obj
-  //   * @return BiotaDto
-  //   */
-  //  private static BiotaDto converteObjetoParaDto(Biota obj) {
-  //    BiotaDto dto = new BiotaDto();
-  //    dto.setId(Optional.ofNullable(obj.getId()));
-  //    dto.setNomePopular(Optional.ofNullable(obj.getNomePopular()));
-  //    dto.setNomeCientifico(Optional.ofNullable(obj.getNomeCientifico()));
-  //    dto.setTipoAgua(Optional.ofNullable(obj.getTipoAgua()));
-  //    dto.setNivelCuidado(Optional.ofNullable(obj.getNivelCuidado()));
-  //    dto.setReefSafe(Optional.ofNullable(obj.isReefSafe()));
-  //    dto.setVolumeMinAquario(Optional.ofNullable(obj.getVolumeMinAquario()));
-  //    dto.setAlimentacao(Optional.ofNullable(obj.getAlimentacao()));
-  //    dto.setHabitat(Optional.ofNullable(obj.getHabitat()));
-  //    dto.setRegiao(Optional.ofNullable(obj.getRegiao()));
-  //    dto.setTamanho(Optional.ofNullable(obj.getTamanho()));
-  //    dto.setRiscoExtincao(Optional.ofNullable(obj.getRiscoExtincao()));
-  //    dto.setInfoAdicional(Optional.ofNullable(obj.getInfoAdicional()));
-  //    dto.setAvaliacao(Optional.ofNullable(obj.getAvaliacao()));
-  //    dto.setDtCadastro(obj.getDtCadastro());
-  //    dto.setDtAtualizacao(obj.getDtAtualizacao());
-  //    dto.setUsuarioCadastro(obj.getUsuarioCadastro());
-  //    dto.setUsuarioAtualizacao(obj.getUsuarioAtualizacao());
-  //
-  //    TaxonomiaDto taxonomia = new TaxonomiaDto();
-  //    taxonomia.setDominio(Optional.ofNullable(obj.getTaxonomia().getDominio()));
-  //    taxonomia.setReino(Optional.ofNullable(obj.getTaxonomia().getReino()));
-  //    taxonomia.setFilo(Optional.ofNullable(obj.getTaxonomia().getFilo()));
-  //    taxonomia.setClasse(Optional.ofNullable(obj.getTaxonomia().getClasse()));
-  //    taxonomia.setOrdem(Optional.ofNullable(obj.getTaxonomia().getOrdem()));
-  //    taxonomia.setGenero(Optional.ofNullable(obj.getTaxonomia().getGenero()));
-  //    taxonomia.setEspecie(Optional.ofNullable(obj.getTaxonomia().getEspecie()));
-  //    dto.setTaxonomia(Optional.ofNullable(taxonomia));
-  //
-  //    return dto;
-  //  }
 }

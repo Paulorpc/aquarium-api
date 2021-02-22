@@ -6,14 +6,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "taxonomia_biota")
+@Table(name = "taxonomia")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -22,12 +21,9 @@ public class Taxonomia implements Serializable {
   private static final long serialVersionUID = 1L;
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "idBiota", nullable = false)
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(name = "idTaxonomia", nullable = false)
   private Long id;
-
-  @OneToOne(mappedBy = "taxonomia")
-  private Biota biota;
 
   @Column(name = "dominio", nullable = true)
   private String dominio;
@@ -59,14 +55,6 @@ public class Taxonomia implements Serializable {
 
   public void setId(Long id) {
     this.id = id;
-  }
-
-  public Biota getBiota() {
-    return biota;
-  }
-
-  public void setBiota(Biota biota) {
-    this.biota = biota;
   }
 
   public String getDominio() {

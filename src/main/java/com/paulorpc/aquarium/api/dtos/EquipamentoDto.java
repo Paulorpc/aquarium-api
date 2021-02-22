@@ -1,76 +1,101 @@
-package com.paulorpc.aquarium.api.entities;
+package com.paulorpc.aquarium.api.dtos;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.paulorpc.aquarium.api.enums.AvaliacaoEnum;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.LinkedHashSet;
 import java.util.Set;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.validation.constraints.Future;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
+import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
-@Entity
-@Table(name = "equipamento")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Equipamento {
+public class EquipamentoDto {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "idEquipamento")
+  public interface Default {}
+
+  public interface Post extends Default {}
+
+  public interface Put extends Default {}
+
+  public interface Patch extends Default {}
+
+  @Positive(
+      message = "Campo 'id' deve ser maior que zero.",
+      groups = {Put.class, Patch.class})
+  @NotNull(
+      message = "Campo 'id' obrigatório para alteração.",
+      groups = {Put.class, Patch.class})
   private Long id;
 
-  @Column(nullable = false)
+  @NotEmpty(
+      message = "Campo 'nome' é obrigatório.",
+      groups = {Default.class})
   private String nome;
 
-  @Column(nullable = false)
+  @Positive(
+      message = "Campo 'qtde' deve ser maior que zero.",
+      groups = {Default.class})
   private int qtde;
 
-  @Builder.Default
-  @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-  @JoinTable(
-      name = "equipamento_aquario",
-      joinColumns = @JoinColumn(name = "idEquipamento"),
-      inverseJoinColumns = @JoinColumn(name = "idAquario"))
-  private Set<Aquario> aquarios = new LinkedHashSet<Aquario>();
+  private Set<AquarioDto> aquarios;
 
   private String tipo;
 
+  @Positive(
+      message = "Campo 'vlrUnitario' deve ser maior que zero.",
+      groups = {Default.class})
   private BigDecimal vlrUnitario;
-
-  // private foto;
 
   private String fabricante;
 
   private String modelo;
 
+  @Positive(
+      message = "Campo 'potencia' deve ser maior que zero.",
+      groups = {Default.class})
   private String potencia;
 
+  @JsonFormat(pattern = "yyyy-MM-dd")
+  @Future(
+      message = "Campo 'dtSubstituicao' deve ser posterior a data atual.",
+      groups = {Default.class})
   private LocalDate dtSubstituicao;
 
   private String observacao;
 
+  @Min(1)
+  @Max(5)
   private AvaliacaoEnum avaliacao;
 
+  @JsonFormat(pattern = "yyyy-MM-dd")
+  @PastOrPresent(
+      message = "Campo 'dtAquisicao' não pode ser posterior a data atual.",
+      groups = {Default.class})
   private LocalDate dtAquisicao;
 
-  @CreationTimestamp private LocalDateTime dtCadastro;
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  @Null(
+      message = "Campo 'dtCadastro' deve ser nulo.",
+      groups = {Default.class})
+  private LocalDateTime dtCadastro;
 
-  @UpdateTimestamp private LocalDateTime dtAtualizacao;
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  @Null(
+      message = "Campo 'dtAtualizacao' deve ser nulo.",
+      groups = {Default.class})
+  private LocalDateTime dtAtualizacao;
 
   public Long getId() {
     return id;
@@ -96,22 +121,12 @@ public class Equipamento {
     this.qtde = qtde;
   }
 
-  public Set<Aquario> getAquarios() {
-    return this.aquarios;
+  public Set<AquarioDto> getAquarios() {
+    return aquarios;
   }
 
-  public void setAquarios(Set<Aquario> aquarios) {
+  public void setAquarios(Set<AquarioDto> aquarios) {
     this.aquarios = aquarios;
-  }
-
-  public void addAquario(Aquario aquario) {
-    this.aquarios.add(aquario);
-    aquario.getEquipamentos().add(this);
-  }
-
-  public void removeAquario(Aquario aquario) {
-    this.aquarios.remove(aquario);
-    aquario.getEquipamentos().remove(this);
   }
 
   public String getTipo() {
