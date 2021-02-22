@@ -3,24 +3,27 @@ package com.paulorpc.aquarium.api.entities;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "BiotaTaxonomia")
+@Table(name = "taxonomia")
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Taxonomia implements Serializable {
 
-  private static final long serialVersionUID = 1L;  
+  private static final long serialVersionUID = 1L;
 
   @Id
-  @Column(name = "idBiota", nullable = false)
-  private int id;
-  
-  @JoinColumn(name = "idBiota")
-  @OneToOne
-  private Biota biota;
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(name = "idTaxonomia", nullable = false)
+  private Long id;
 
   @Column(name = "dominio", nullable = true)
   private String dominio;
@@ -45,22 +48,13 @@ public class Taxonomia implements Serializable {
 
   @Column(name = "especie", nullable = true)
   private String especie;
-  
-  
-  public int getId() {
+
+  public Long getId() {
     return id;
   }
 
-  public void setId(int id) {
+  public void setId(Long id) {
     this.id = id;
-  }
-  
-  public Biota getBiota() {
-    return biota;
-  }
-
-  public void setBiota(Biota biota) {
-    this.biota = biota;
   }
 
   public String getDominio() {
@@ -129,9 +123,24 @@ public class Taxonomia implements Serializable {
 
   @Override
   public String toString() {
-    return "Taxonomia [id=" + id + ", dominio=" + dominio + ", reino=" + reino + ", filo=" + filo
-        + ", classe=" + classe + ", ordem=" + ordem + ", familia=" + familia + ", genero=" + genero
-        + ", especie=" + especie + "]";
+    return "Taxonomia [id="
+        + id
+        + ", dominio="
+        + dominio
+        + ", reino="
+        + reino
+        + ", filo="
+        + filo
+        + ", classe="
+        + classe
+        + ", ordem="
+        + ordem
+        + ", familia="
+        + familia
+        + ", genero="
+        + genero
+        + ", especie="
+        + especie
+        + "]";
   }
-  
 }

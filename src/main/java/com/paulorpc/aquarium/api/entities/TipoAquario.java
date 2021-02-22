@@ -1,50 +1,70 @@
 package com.paulorpc.aquarium.api.entities;
 
+import com.paulorpc.aquarium.api.enums.TipoAguaEnum;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-import com.paulorpc.aquarium.api.enums.TipoAguaEnum;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
-@Table(name = "TipoAquario")
+@Table(name = "tipoAquario")
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class TipoAquario implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
-  private int id;
-  private String tipo;
-  private TipoAguaEnum tipoAgua;
-  private boolean status;
-  private String descricao;
-  private Date dtCadastro;
-  private Date dtAtualizacao;
-
-  private List<Aquario> aquarios;
-
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "idTipoAquario", nullable = false)
-  public int getId() {
+  private Long id;
+
+  @Column(nullable = false)
+  private String tipo;
+
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false)
+  private TipoAguaEnum tipoAgua;
+
+  @Column(nullable = false)
+  private boolean status;
+
+  @Column(nullable = false)
+  private String descricao;
+
+  @CreationTimestamp
+  @Column(name = "dtCadastro", nullable = false)
+  private LocalDateTime dtCadastro;
+
+  @UpdateTimestamp
+  @Column(name = "dtAtualizacao", nullable = false)
+  private LocalDateTime dtAtualizacao;
+
+  @OneToMany(mappedBy = "tipoAquario")
+  private List<Aquario> aquarios;
+
+  public Long getId() {
     return id;
   }
 
-  public void setId(int id) {
+  public void setId(Long id) {
     this.id = id;
   }
 
-  @Column(nullable = false)
   public String getTipo() {
     return tipo;
   }
@@ -53,8 +73,6 @@ public class TipoAquario implements Serializable {
     this.tipo = tipo;
   }
 
-  @Enumerated(EnumType.STRING)
-  @Column(nullable = false)
   public TipoAguaEnum getTipoAgua() {
     return tipoAgua;
   }
@@ -63,7 +81,6 @@ public class TipoAquario implements Serializable {
     this.tipoAgua = tipoAgua;
   }
 
-  @Column(nullable = false)
   public boolean isStatus() {
     return status;
   }
@@ -72,7 +89,6 @@ public class TipoAquario implements Serializable {
     this.status = status;
   }
 
-  @Column(nullable = false)
   public String getDescricao() {
     return descricao;
   }
@@ -81,25 +97,22 @@ public class TipoAquario implements Serializable {
     this.descricao = descricao;
   }
 
-  @Column(name = "dtCadastro", nullable = false)
-  public Date getDtCadastro() {
+  public LocalDateTime getDtCadastro() {
     return dtCadastro;
   }
 
-  public void setDtCadastro(Date dtCadastro) {
+  public void setDtCadastro(LocalDateTime dtCadastro) {
     this.dtCadastro = dtCadastro;
   }
 
-  @Column(name = "dtAtualizacao", nullable = false)
-  public Date getDtAtualizacao() {
+  public LocalDateTime getDtAtualizacao() {
     return dtAtualizacao;
   }
 
-  public void setDtAtualizacao(Date dtAtualizacao) {
+  public void setDtAtualizacao(LocalDateTime dtAtualizacao) {
     this.dtAtualizacao = dtAtualizacao;
   }
 
-  @OneToMany(mappedBy = "tipoAquario", fetch = FetchType.EAGER)
   public List<Aquario> getAquarios() {
     return aquarios;
   }
@@ -108,23 +121,22 @@ public class TipoAquario implements Serializable {
     this.aquarios = aquarios;
   }
 
-  @PreUpdate
-  public void preUpdate() {
-    dtAtualizacao = new Date();
-  }
-
-  @PrePersist
-  public void prePersist() {
-    Date hojeHora = new Date();
-    dtCadastro = hojeHora;
-    dtAtualizacao = hojeHora;
-  }
-
   @Override
   public String toString() {
-    return "TipoAquario [id=" + id + ", tipo=" + tipo + ", tipoAgua=" + tipoAgua + ", status="
-        + status + ", descricao=" + descricao + ", dtCadastro=" + dtCadastro + ", dtAtualizacao="
-        + dtAtualizacao + "]";
+    return "TipoAquario [id="
+        + id
+        + ", tipo="
+        + tipo
+        + ", tipoAgua="
+        + tipoAgua
+        + ", status="
+        + status
+        + ", descricao="
+        + descricao
+        + ", dtCadastro="
+        + dtCadastro
+        + ", dtAtualizacao="
+        + dtAtualizacao
+        + "]";
   }
-
 }

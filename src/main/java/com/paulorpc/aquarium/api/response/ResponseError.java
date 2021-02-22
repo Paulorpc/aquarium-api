@@ -1,11 +1,11 @@
 package com.paulorpc.aquarium.api.response;
 
+import com.paulorpc.aquarium.api.util.Global;
 import java.net.URI;
 import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
-import com.paulorpc.aquarium.api.util.Global;
 
 public class ResponseError implements Response {
 
@@ -30,7 +30,6 @@ public class ResponseError implements Response {
     } else {
       addMessageFromClientException(e);
     }
-
   }
 
   @Override
@@ -41,7 +40,6 @@ public class ResponseError implements Response {
   public ArrayList<Error> getMessages() {
     return messages;
   }
-
 
   /***
    * Adiciona um erro na lista de erros.
@@ -79,7 +77,8 @@ public class ResponseError implements Response {
    * @param Logger Instancia para log de erros
    */
   public void addMessagesFromResultErrors(BindingResult result, Logger log) {
-    result.getAllErrors()
+    result
+        .getAllErrors()
         .forEach(e -> getMessages().add(new Error(e.getCode(), e.getDefaultMessage())));
     log.warn("Requisição continha erros: " + getMessages().toString());
   }
@@ -90,7 +89,8 @@ public class ResponseError implements Response {
    * @param result resulado da validação
    */
   public void addMessagesFromResultErrors(BindingResult result) {
-    result.getAllErrors()
+    result
+        .getAllErrors()
         .forEach(e -> getMessages().add(new Error(e.getCode(), e.getDefaultMessage())));
   }
 
@@ -126,5 +126,4 @@ public class ResponseError implements Response {
     addMessageFromClientException(e);
     log.error("Exception: " + getMessages().get(getMessages().size()));
   }
-
 }

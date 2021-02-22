@@ -1,7 +1,7 @@
 package com.paulorpc.aquarium.api.response;
 
-import java.net.URI;
 import com.paulorpc.aquarium.api.util.Global;
+import java.net.URI;
 
 public class ResponseObj<T> implements Response {
 
@@ -29,5 +29,4 @@ public class ResponseObj<T> implements Response {
   public void setData(T data) {
     this.data = data;
   }
-
 }

@@ -1,5 +1,14 @@
 package com.paulorpc.aquarium.api.controllers;
 
+import com.paulorpc.aquarium.api.dtos.AquarioDto;
+import com.paulorpc.aquarium.api.dtos.TipoAquarioDto;
+import com.paulorpc.aquarium.api.entities.TipoAquario;
+import com.paulorpc.aquarium.api.exceptions.NotFoundException;
+import com.paulorpc.aquarium.api.response.Response;
+import com.paulorpc.aquarium.api.response.ResponseError;
+import com.paulorpc.aquarium.api.response.ResponseObj;
+import com.paulorpc.aquarium.api.services.TipoAquarioService;
+import com.paulorpc.aquarium.api.util.Global;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
@@ -21,15 +30,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import com.paulorpc.aquarium.api.dtos.AquarioDto;
-import com.paulorpc.aquarium.api.dtos.TipoAquarioDto;
-import com.paulorpc.aquarium.api.entities.TipoAquario;
-import com.paulorpc.aquarium.api.exceptions.NotFoundException;
-import com.paulorpc.aquarium.api.response.Response;
-import com.paulorpc.aquarium.api.response.ResponseError;
-import com.paulorpc.aquarium.api.response.ResponseObj;
-import com.paulorpc.aquarium.api.services.TipoAquarioService;
-import com.paulorpc.aquarium.api.util.Global;
 
 @RestController
 @RequestMapping("/api/tipoAquario")
@@ -38,18 +38,21 @@ public class TipoAquarioController {
 
   private final Logger log = LoggerFactory.getLogger(TipoAquarioController.class);
 
-  @Autowired
-  private TipoAquarioService tipoAquarioService;
+  @Autowired private TipoAquarioService tipoAquarioService;
 
   @GetMapping(value = "/{id}")
-  public ResponseEntity<Response> buscar(@PathVariable int id) throws Exception {
-    log.info("Requisição para buscar tipo de aquário. Id: " + id);
+  public ResponseEntity<Response> buscar(@PathVariable Long id) throws Exception {
+    log.info("Requisição para buscar tipo de aquário: {}", id);
 
-    return tipoAquarioService.buscar(id).map(v -> {
-      Response response = new ResponseObj<>(Global.getUri(), converteObjetoParaDto(v));
-      return ResponseEntity.ok(response);
-    }).orElseThrow(
-        () -> new NotFoundException("Não foi possível localizar o tipo de aquário. Id: " + id));
+    return tipoAquarioService
+        .buscar(id)
+        .map(
+            v -> {
+              Response response = new ResponseObj<>(Global.getUri(), converteObjetoParaDto(v));
+              return ResponseEntity.ok(response);
+            })
+        .orElseThrow(
+            () -> new NotFoundException("Não foi possível localizar o tipo de aquário. Id: " + id));
   }
 
   @GetMapping
@@ -57,9 +60,13 @@ public class TipoAquarioController {
     log.info("Requisição para buscar todos tipos de aquários");
 
     List<TipoAquario> tiposAquarios = tipoAquarioService.buscarTodos();
-    List<TipoAquarioDto> tiposAquariosDto = tiposAquarios.stream().map(v -> {
-      return converteObjetoParaDto(v);
-    }).collect(Collectors.toList());
+    List<TipoAquarioDto> tiposAquariosDto =
+        tiposAquarios.stream()
+            .map(
+                v -> {
+                  return converteObjetoParaDto(v);
+                })
+            .collect(Collectors.toList());
 
     Response response = new ResponseObj<>(Global.getUri(), tiposAquariosDto);
     return ResponseEntity.ok(response);
@@ -67,7 +74,7 @@ public class TipoAquarioController {
 
   @GetMapping(value = "/ativos")
   public ResponseEntity<Response> buscarTodosAtivos() {
-    log.info("Requisição para buscar todos aquários ativos");
+    log.info("Requisição para buscar todos tipos de aquários ativos");
 
     List<TipoAquario> tiposAquarios = tipoAquarioService.buscarTodosAtivos();
     List<TipoAquarioDto> tiposAquariosDto =
@@ -84,12 +91,17 @@ public class TipoAquarioController {
     log.info("Requisição para cadastrar um novo tipo de aquário");
     ResponseError responseError = new ResponseError(Global.getUri());
 
-    tipoAquarioDto.getTipo().flatMap(tipo -> tipoAquarioService.buscarPorTipo(tipo))
-        .ifPresent(t -> {
-          result.addError(new ObjectError("id",
-              "Tipo de aquário já cadastrado. Não é possível cadastrar dois tipos de aquários com mesmo valor. Tipo: "
-                  + t.getTipo()));
-        });
+    tipoAquarioDto
+        .getTipo()
+        .flatMap(tipo -> tipoAquarioService.buscarPorTipo(tipo))
+        .ifPresent(
+            t -> {
+              result.addError(
+                  new ObjectError(
+                      "id",
+                      "Tipo de aquário já cadastrado. Não é possível cadastrar dois tipos de aquários com mesmo valor. Tipo: "
+                          + t.getTipo()));
+            });
 
     if (result.hasErrors()) {
       responseError.addMessagesFromResultErrors(result, log);
@@ -98,8 +110,11 @@ public class TipoAquarioController {
 
     TipoAquario novoTipoAquario = new TipoAquario();
     novoTipoAquario = tipoAquarioService.persistir(converteDtoParaObjeto(tipoAquarioDto));
-    URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-        .buildAndExpand(novoTipoAquario.getId()).toUri();
+    URI uri =
+        ServletUriComponentsBuilder.fromCurrentRequest()
+            .path("/{id}")
+            .buildAndExpand(novoTipoAquario.getId())
+            .toUri();
 
     Response response = new ResponseObj<>(uri, converteObjetoParaDto(novoTipoAquario));
     return ResponseEntity.created(uri).body(response);
@@ -107,9 +122,10 @@ public class TipoAquarioController {
 
   @PutMapping
   public ResponseEntity<Response> alterar(
-      @Validated(AquarioDto.Alterar.class) @RequestBody TipoAquarioDto tipoAquarioDto,
-      BindingResult result) throws Exception {
-    log.info("Requisição para alterar um tipo de aquário existente");
+      @Validated(AquarioDto.Patch.class) @RequestBody TipoAquarioDto tipoAquarioDto,
+      BindingResult result)
+      throws Exception {
+    log.info("Requisição para alterar um tipo de aquário existente: {}", tipoAquarioDto.getId());
     ResponseError responseError = new ResponseError(Global.getUri());
 
     if (result.hasErrors()) {
@@ -117,9 +133,15 @@ public class TipoAquarioController {
       return ResponseEntity.badRequest().body(responseError);
     }
 
-    TipoAquario tipoAquario = tipoAquarioDto.getId().flatMap(id -> tipoAquarioService.buscar(id))
-        .orElseThrow(() -> new NotFoundException(
-            "Não foi possível localizar o tipo de quário. Id: " + tipoAquarioDto.getId().get()));
+    TipoAquario tipoAquario =
+        tipoAquarioDto
+            .getId()
+            .flatMap(id -> tipoAquarioService.buscar(id))
+            .orElseThrow(
+                () ->
+                    new NotFoundException(
+                        "Não foi possível localizar o tipo de quário. Id: "
+                            + tipoAquarioDto.getId().get()));
 
     Optional<TipoAquario> tipoAquarioUpd =
         tipoAquarioService.alterar(converteDtoParaObjeto(tipoAquarioDto, tipoAquario));
@@ -130,14 +152,18 @@ public class TipoAquarioController {
   }
 
   @DeleteMapping(value = "/{id}")
-  public ResponseEntity<Response> deletar(@PathVariable int id) throws Exception {
-    log.info("Requisição para deletar um aquário");
+  public ResponseEntity<Response> deletar(@PathVariable Long id) throws Exception {
+    log.info("Requisição para deletar um aquário: {}", id);
 
-    return tipoAquarioService.deletar(id).map(v -> {
-      Response response = new ResponseObj<>(Global.getUri(), converteObjetoParaDto(v));
-      return ResponseEntity.ok(response);
-    }).orElseThrow(
-        () -> new NotFoundException("Não foi possível localizar o tipo de aquário. Id: " + id));
+    return tipoAquarioService
+        .deletar(id)
+        .map(
+            v -> {
+              Response response = new ResponseObj<>(Global.getUri(), converteObjetoParaDto(v));
+              return ResponseEntity.ok(response);
+            })
+        .orElseThrow(
+            () -> new NotFoundException("Não foi possível localizar o tipo de aquário. Id: " + id));
   }
 
   /************* CONVERSORES OBJETO/DTO *************/
@@ -182,5 +208,4 @@ public class TipoAquarioController {
     dto.setDtAtualizacao(obj.getDtAtualizacao());
     return dto;
   }
-
 }

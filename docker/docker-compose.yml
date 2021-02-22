@@ -1,0 +1,18 @@
+version: '3.8'
+
+services: 
+  db_sql:
+    container_name: mysql
+    image: mysql
+    volumes:
+        - dbdata_aquarium:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: aquarium
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      
+volumes:
+  dbdata_aquarium:

@@ -1,208 +1,236 @@
 package com.paulorpc.aquarium.api.dtos;
 
-import java.util.Date;
-import java.util.Optional;
-
+import com.fasterxml.jackson.annotation.JsonFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Positive;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class AquarioDto {
 
-  private Optional<Integer> id = Optional.empty();
-  private Optional<String> nome = Optional.empty();
-  private Optional<Date> dtInicio = Optional.empty();
-  private Optional<Date> dtFinal = Optional.empty();
-  private Optional<String> tipoAgua = Optional.empty();
-  private Optional<String> tamanho = Optional.empty();
-  private Optional<Integer> volume = Optional.empty();
-  private Optional<String> iluminacao = Optional.empty();
-  private Optional<String> filtragem = Optional.empty();
-  private Optional<String> sistemaCO2 = Optional.empty();
-  private Optional<String> dosagem = Optional.empty();
-  private Optional<String> substrato = Optional.empty();
-  private Optional<String> foto = Optional.empty();
-  private Optional<String> observacao = Optional.empty();
-  private Optional<Boolean> status = Optional.empty();
-  private Optional<Integer> idTipoAquario = Optional.empty();
-  private Date dtCadastro;
-  private Date dtAtualizacao;
+  public interface Post {}
 
-  public interface Cadastrar {
-  }
+  public interface Put {}
 
-  public interface Alterar {
-  }
+  public interface Patch {}
 
-  @NotNull(message = "Campo 'id' obrigatório para método de alteração.", groups = {Alterar.class})
-  public Optional<Integer> getId() {
+  @Positive(
+      message = "Campo 'id' deve ser maior que zero.",
+      groups = {Put.class, Patch.class})
+  @NotNull(
+      message = "Campo 'id' obrigatório para alteração.",
+      groups = {Put.class, Patch.class})
+  private Long id;
+
+  @NotEmpty(
+      message = "Campo 'nome' é obrigatório.",
+      groups = {Post.class, Put.class})
+  private String nome;
+
+  @JsonFormat(pattern = "yyyy-MM-dd")
+  @PastOrPresent(
+      message = "Campo 'dtInicio' não pode ser posterior a data atual.",
+      groups = {Post.class, Put.class})
+  @NotNull(
+      message = "Campo 'dtInicio' não pode ser nulo.",
+      groups = {Post.class, Put.class})
+  private LocalDate dtInicio;
+
+  @JsonFormat(pattern = "yyyy-MM-dd")
+  private LocalDate dtFinal;
+
+  private String tipoAgua;
+
+  private String tamanho;
+
+  @Positive(
+      message = "Campo 'volume' deve ser maior que zero.",
+      groups = {Post.class, Put.class})
+  private Integer volume;
+
+  private String iluminacao;
+
+  private String filtragem;
+
+  private String sistemaCO2;
+
+  private String dosagem;
+
+  private String substrato;
+
+  private String foto;
+
+  private String observacao;
+
+  @NotNull(
+      message = "Campo 'status' não pode ser nulo.",
+      groups = {Post.class, Put.class})
+  private Boolean status;
+
+  private Long idTipoAquario;
+
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  @Null(
+      message = "Campo 'dtCadastro' deve ser nulo.",
+      groups = {Post.class, Put.class})
+  private LocalDateTime dtCadastro;
+
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  @Null(
+      message = "Campo 'dtAtualizacao' deve ser nulo.",
+      groups = {Post.class, Put.class})
+  private LocalDateTime dtAtualizacao;
+
+  public Long getId() {
     return id;
   }
 
-  public void setId(Optional<Integer> id) {
+  public void setId(Long id) {
     this.id = id;
   }
 
-  public Optional<@NotEmpty(message = "Campo 'nome' é obrigatório.",
-      groups = {Cadastrar.class}) String> getNome() {
+  public String getNome() {
     return nome;
   }
 
-  public void setNome(Optional<String> nome) {
+  public void setNome(String nome) {
     this.nome = nome;
   }
 
-  @JsonFormat(pattern = "yyyy-MM-dd")
-  public Optional<@PastOrPresent(message = "Campo 'dtInicio' não pode ser posterior a data atual.",
-      groups = {Cadastrar.class}) @NotNull(message = "Campo 'dtInicio' não pode ser nulo.",
-          groups = {Cadastrar.class}) Date> getDtInicio() {
+  public LocalDate getDtInicio() {
     return dtInicio;
   }
 
-  public void setDtInicio(Optional<Date> dtInicio) {
+  public void setDtInicio(LocalDate dtInicio) {
     this.dtInicio = dtInicio;
   }
 
-  @JsonFormat(pattern = "yyyy-MM-dd")
-  public Optional<Date> getDtFinal() {
+  public LocalDate getDtFinal() {
     return dtFinal;
   }
 
-  public void setDtFinal(Optional<Date> dtFinal) {
+  public void setDtFinal(LocalDate dtFinal) {
     this.dtFinal = dtFinal;
   }
 
-  public Optional<String> getTipoAgua() {
+  public String getTipoAgua() {
     return tipoAgua;
   }
 
-  public void setTipoAgua(Optional<String> tipoAgua) {
+  public void setTipoAgua(String tipoAgua) {
     this.tipoAgua = tipoAgua;
   }
 
-  public Optional<String> getTamanho() {
+  public String getTamanho() {
     return tamanho;
   }
 
-  public void setTamanho(Optional<String> tamanho) {
+  public void setTamanho(String tamanho) {
     this.tamanho = tamanho;
   }
 
-  public Optional<@Positive(message = "Campo 'volume' deve ser maior que zero.",
-      groups = {Cadastrar.class}) Integer> getVolume() {
+  public Integer getVolume() {
     return volume;
   }
 
-  public void setVolume(Optional<Integer> volume) {
+  public void setVolume(Integer volume) {
     this.volume = volume;
   }
 
-  public Optional<String> getIluminacao() {
+  public String getIluminacao() {
     return iluminacao;
   }
 
-  public void setIluminacao(Optional<String> iluminacao) {
+  public void setIluminacao(String iluminacao) {
     this.iluminacao = iluminacao;
   }
 
-  public Optional<String> getFiltragem() {
+  public String getFiltragem() {
     return filtragem;
   }
 
-  public void setFiltragem(Optional<String> filtragem) {
+  public void setFiltragem(String filtragem) {
     this.filtragem = filtragem;
   }
 
-  public Optional<String> getSistemaCO2() {
+  public String getSistemaCO2() {
     return sistemaCO2;
   }
 
-  public void setSistemaCO2(Optional<String> sistemaCO2) {
+  public void setSistemaCO2(String sistemaCO2) {
     this.sistemaCO2 = sistemaCO2;
   }
 
-  public Optional<String> getDosagem() {
+  public String getDosagem() {
     return dosagem;
   }
 
-  public void setDosagem(Optional<String> dosagem) {
+  public void setDosagem(String dosagem) {
     this.dosagem = dosagem;
   }
 
-  public Optional<String> getSubstrato() {
+  public String getSubstrato() {
     return substrato;
   }
 
-  public void setSubstrato(Optional<String> substrato) {
+  public void setSubstrato(String substrato) {
     this.substrato = substrato;
   }
 
-  public Optional<String> getFoto() {
+  public String getFoto() {
     return foto;
   }
 
-  public void setFoto(Optional<String> foto) {
+  public void setFoto(String foto) {
     this.foto = foto;
   }
 
-  public Optional<String> getObservacao() {
+  public String getObservacao() {
     return observacao;
   }
 
-  public void setObservacao(Optional<String> observacao) {
+  public void setObservacao(String observacao) {
     this.observacao = observacao;
   }
 
-  public Optional<@NotNull(message = "Campo 'status' não pode ser nulo.",
-      groups = {Cadastrar.class}) Boolean> getStatus() {
+  public Boolean getStatus() {
     return status;
   }
 
-  public void setStatus(Optional<Boolean> status) {
+  public void setStatus(Boolean status) {
     this.status = status;
   }
 
-  public Optional<Integer> getIdTipoAquario() {
+  public Long getIdTipoAquario() {
     return idTipoAquario;
   }
 
-  public void setIdTipoAquario(Optional<Integer> idTipoAquario) {
+  public void setIdTipoAquario(Long idTipoAquario) {
     this.idTipoAquario = idTipoAquario;
   }
 
-  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-  @Null(message = "Campo 'dtCadastro' deve ser nulo.", groups = {Cadastrar.class, Alterar.class})
-  public Date getDtCadastro() {
+  public LocalDateTime getDtCadastro() {
     return dtCadastro;
   }
 
-  public void setDtCadastro(Date dtCadastro) {
+  public void setDtCadastro(LocalDateTime dtCadastro) {
     this.dtCadastro = dtCadastro;
   }
 
-  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-  @Null(message = "Campo 'dtAtualizacao' deve ser nulo.", groups = {Cadastrar.class, Alterar.class})
-  public Date getDtAtualizacao() {
+  public LocalDateTime getDtAtualizacao() {
     return dtAtualizacao;
   }
 
-  public void setDtAtualizacao(Date dtAtualizacao) {
+  public void setDtAtualizacao(LocalDateTime dtAtualizacao) {
     this.dtAtualizacao = dtAtualizacao;
   }
-
-  @Override
-  public String toString() {
-    return "AquarioDto [id=" + id + ", nome=" + nome + ", dtInicio=" + dtInicio + ", dtFinal="
-        + dtFinal + ", tipoAgua=" + tipoAgua + ", tamanho=" + tamanho + ", volume=" + volume
-        + ", iluminacao=" + iluminacao + ", filtragem=" + filtragem + ", sistemaCO2=" + sistemaCO2
-        + ", dosagem=" + dosagem + ", substrato=" + substrato + ", foto=" + foto + ", observacao="
-        + observacao + ", status=" + status + ", idTipoAquario=" + idTipoAquario + ", dtCadastro="
-        + dtCadastro + ", dtAtualizacao=" + dtAtualizacao + "]";
-  }
-  
-  
 }

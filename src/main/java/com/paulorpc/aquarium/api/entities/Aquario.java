@@ -1,7 +1,10 @@
 package com.paulorpc.aquarium.api.entities;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,52 +12,96 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
-@Table(name = "Aquario")
+@Table(name = "aquario")
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Aquario implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
-  private int id;
-  private String nome;
-  private Date dtInicio;
-  private Date dtFinal;
-  private String tipoAgua;
-  private String tamanho;
-  private int volume;
-  private String iluminacao;
-  private String filtragem;
-  private String sistemaCO2;
-  private String dosagem;
-  private String substrato;
-  // private foto;
-  private String observacao;
-  private boolean status;
-  private Date dtCadastro;
-  private Date dtAtualizacao;
-
-  private TipoAquario tipoAquario;
-  // private Parametro parametros;
-
-  public Aquario() {}
-
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "idAquario")
-  public int getId() {
+  private Long id;
+
+  @Column(name = "nome", nullable = false)
+  private String nome;
+
+  @Column(name = "dtInicio", nullable = false)
+  private LocalDate dtInicio;
+
+  @Column(name = "dtFinal", nullable = true)
+  private LocalDate dtFinal;
+
+  @Column(name = "tipoAgua", nullable = true)
+  private String tipoAgua;
+
+  @Column(name = "tamanho", nullable = true)
+  private String tamanho;
+
+  @Column(name = "volume", nullable = true)
+  private int volume;
+
+  @Column(name = "iluminacao", nullable = true)
+  private String iluminacao;
+
+  @Column(name = "filtragem", nullable = true)
+  private String filtragem;
+
+  @Column(name = "sistemaCO2", nullable = true)
+  private String sistemaCO2;
+
+  @Column(name = "dosagem", nullable = true)
+  private String dosagem;
+
+  @Column(name = "substrato", nullable = true)
+  private String substrato;
+
+  // private foto;
+
+  @Column(name = "observacao", nullable = true)
+  private String observacao;
+
+  @Column(name = "status", nullable = false)
+  private boolean status;
+
+  @CreationTimestamp
+  @Column(name = "dtCadastro", nullable = false)
+  private LocalDateTime dtCadastro;
+
+  @UpdateTimestamp
+  @Column(name = "dtAtualizacao", nullable = false)
+  private LocalDateTime dtAtualizacao;
+
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "idTipoAquario")
+  private TipoAquario tipoAquario;
+
+  @ManyToMany(mappedBy = "aquarios")
+  @Builder.Default
+  private Set<Equipamento> equipamentos = new LinkedHashSet<Equipamento>();
+
+  // private Parametro parametros;
+
+  public Long getId() {
     return id;
   }
 
-  public void setId(int idAquario) {
+  public void setId(Long idAquario) {
     this.id = idAquario;
   }
 
-  @Column(name = "nome", nullable = false)
   public String getNome() {
     return nome;
   }
@@ -63,25 +110,22 @@ public class Aquario implements Serializable {
     this.nome = nome;
   }
 
-  @Column(name = "dtInicio", nullable = false)
-  public Date getDtInicio() {
+  public LocalDate getDtInicio() {
     return dtInicio;
   }
 
-  public void setDtInicio(Date dtInicio) {
+  public void setDtInicio(LocalDate dtInicio) {
     this.dtInicio = dtInicio;
   }
 
-  @Column(name = "dtFinal", nullable = true)
-  public Date getDtFinal() {
+  public LocalDate getDtFinal() {
     return dtFinal;
   }
 
-  public void setDtFinal(Date dtFinal) {
+  public void setDtFinal(LocalDate dtFinal) {
     this.dtFinal = dtFinal;
   }
 
-  @Column(name = "tipoAgua", nullable = true)
   public String getTipoAgua() {
     return tipoAgua;
   }
@@ -90,7 +134,6 @@ public class Aquario implements Serializable {
     this.tipoAgua = tipoAgua;
   }
 
-  @Column(name = "tamanho", nullable = true)
   public String getTamanho() {
     return tamanho;
   }
@@ -99,7 +142,6 @@ public class Aquario implements Serializable {
     this.tamanho = tamanho;
   }
 
-  @Column(name = "volume", nullable = true)
   public int getVolume() {
     return volume;
   }
@@ -108,7 +150,6 @@ public class Aquario implements Serializable {
     this.volume = volume;
   }
 
-  @Column(name = "iluminacao", nullable = true)
   public String getIluminacao() {
     return iluminacao;
   }
@@ -117,7 +158,6 @@ public class Aquario implements Serializable {
     this.iluminacao = iluminacao;
   }
 
-  @Column(name = "filtragem", nullable = true)
   public String getFiltragem() {
     return filtragem;
   }
@@ -126,7 +166,6 @@ public class Aquario implements Serializable {
     this.filtragem = filtragem;
   }
 
-  @Column(name = "sistemaCO2", nullable = true)
   public String getSistemaCO2() {
     return sistemaCO2;
   }
@@ -135,7 +174,6 @@ public class Aquario implements Serializable {
     this.sistemaCO2 = sistemaCO2;
   }
 
-  @Column(name = "dosagem", nullable = true)
   public String getDosagem() {
     return dosagem;
   }
@@ -144,7 +182,6 @@ public class Aquario implements Serializable {
     this.dosagem = dosagem;
   }
 
-  @Column(name = "substrato", nullable = true)
   public String getSubstrato() {
     return substrato;
   }
@@ -153,7 +190,6 @@ public class Aquario implements Serializable {
     this.substrato = substrato;
   }
 
-  @Column(name = "observacao", nullable = true)
   public String getObservacao() {
     return observacao;
   }
@@ -162,7 +198,6 @@ public class Aquario implements Serializable {
     this.observacao = observacao;
   }
 
-  @Column(name = "status", nullable = false)
   public boolean getStatus() {
     return status;
   }
@@ -171,26 +206,22 @@ public class Aquario implements Serializable {
     this.status = status;
   }
 
-  @Column(name = "dtCadastro", nullable = false)
-  public Date getDtCadastro() {
+  public LocalDateTime getDtCadastro() {
     return dtCadastro;
   }
 
-  public void setDtCadastro(Date dtCadastro) {
+  public void setDtCadastro(LocalDateTime dtCadastro) {
     this.dtCadastro = dtCadastro;
   }
 
-  @Column(name = "dtAtualizacao", nullable = false)
-  public Date getDtAtualizacao() {
+  public LocalDateTime getDtAtualizacao() {
     return dtAtualizacao;
   }
 
-  public void setDtAtualizacao(Date dtAtualizacao) {
+  public void setDtAtualizacao(LocalDateTime dtAtualizacao) {
     this.dtAtualizacao = dtAtualizacao;
   }
 
-  @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "idTipoAquario")
   public TipoAquario getTipoAquario() {
     if (tipoAquario == null) {
       tipoAquario = new TipoAquario();
@@ -202,26 +233,46 @@ public class Aquario implements Serializable {
     this.tipoAquario = tipoAquario;
   }
 
-  @PreUpdate
-  public void preUpdate() {
-    dtAtualizacao = new Date();
+  public Set<Equipamento> getEquipamentos() {
+    return equipamentos;
   }
 
-  @PrePersist
-  public void prePersist() {
-    Date hojeHora = new Date();
-    dtCadastro = hojeHora;
-    dtAtualizacao = hojeHora;
+  public void setEquipamentos(Set<Equipamento> equipamentos) {
+    this.equipamentos = equipamentos;
+  }
+
+  public void addEquipamento(Equipamento equipamento) {
+    this.getEquipamentos().add(equipamento);
+    equipamento.getAquarios().add(this);
+  }
+
+  public void removeEquipamento(Equipamento equipamento) {
+    this.getEquipamentos().remove(equipamento);
+    equipamento.getAquarios().remove(this);
   }
 
   @Override
   public String toString() {
-    return "Aquario [id=" + id + ", nome=" + nome + ", dtInicio=" + dtInicio + ", dtFinal="
-        + dtFinal + ", tipoAgua=" + tipoAgua + ", tamanho=" + tamanho + ", volume=" + volume
-        + ", iluminacao=" + iluminacao + ", filtragem=" + filtragem + ", sistemaCO2=" + sistemaCO2
-        + ", dosagem=" + dosagem + ", substrato=" + substrato + ", observacao=" + observacao
-        + ", status=" + status + ", dtCadastro=" + dtCadastro + ", dtAtualizacao=" + dtAtualizacao
-        + ", tipoAquario=" + tipoAquario + "]";
+    return "Aquario [id="
+        + id
+        + ", nome="
+        + nome
+        + ", tipoAgua="
+        + tipoAgua
+        + ", tamanho="
+        + tamanho
+        + ", volume="
+        + volume
+        + ", observacao="
+        + observacao
+        + ", status="
+        + status
+        + ", dtCadastro="
+        + dtCadastro
+        + ", dtAtualizacao="
+        + dtAtualizacao
+        + ", tipoAquario="
+        + tipoAquario
+        + "]";
   }
-
 }

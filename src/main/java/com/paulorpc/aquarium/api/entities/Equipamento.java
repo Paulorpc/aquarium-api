@@ -1,131 +1,204 @@
 package com.paulorpc.aquarium.api.entities;
 
+import com.paulorpc.aquarium.api.enums.AvaliacaoEnum;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.LinkedHashSet;
+import java.util.Set;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+@Entity
+@Table(name = "equipamento")
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Equipamento {
-	
-	 private int idEquipamento;
-	 private String nome;
-	 private LocalDate dtAquisicao;
-	 private String tipo;
-	 private BigDecimal vlrUnitario;
-	 private int qtde;
-	 //private foto;
-	 private String fabricante;
-	 private String modelo;	 	 
-	 private String potencia;
-	 private String dtSubstituicao;
-	 private String observacao;
-	 //private Double avaliacao;
-	 private String dtCadastro;
-	 private String dtAtualizacao;
 
-	public Equipamento() {}
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "idEquipamento")
+  private Long id;
 
-	public int getIdEquipamento() {
-		return idEquipamento;
-	}
+  @Column(nullable = false)
+  private String nome;
 
-	public void setIdEquipamento(int idEquipamento) {
-		this.idEquipamento = idEquipamento;
-	}
+  @Column(nullable = false)
+  private int qtde;
 
-	public String getNome() {
-		return nome;
-	}
+  @Builder.Default
+  @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  @JoinTable(
+      name = "equipamento_aquario",
+      joinColumns = @JoinColumn(name = "idEquipamento"),
+      inverseJoinColumns = @JoinColumn(name = "idAquario"))
+  private Set<Aquario> aquarios = new LinkedHashSet<Aquario>();
 
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
+  private String tipo;
 
-	public LocalDate getDtAquisicao() {
-		return dtAquisicao;
-	}
+  private BigDecimal vlrUnitario;
 
-	public void setDtAquisicao(LocalDate dtAquisicao) {
-		this.dtAquisicao = dtAquisicao;
-	}
+  // private foto;
 
-	public String getTipo() {
-		return tipo;
-	}
+  private String fabricante;
 
-	public void setTipo(String tipo) {
-		this.tipo = tipo;
-	}
+  private String modelo;
 
-	public BigDecimal getVlrUnitario() {
-		return vlrUnitario;
-	}
+  private String potencia;
 
-	public void setVlrUnitario(BigDecimal vlrUnitario) {
-		this.vlrUnitario = vlrUnitario;
-	}
+  private LocalDate dtSubstituicao;
 
-	public int getQtde() {
-		return qtde;
-	}
+  private String observacao;
 
-	public void setQtde(int qtde) {
-		this.qtde = qtde;
-	}
+  private AvaliacaoEnum avaliacao;
 
-	public String getFabricante() {
-		return fabricante;
-	}
+  private LocalDate dtAquisicao;
 
-	public void setFabricante(String fabricante) {
-		this.fabricante = fabricante;
-	}
+  @CreationTimestamp private LocalDateTime dtCadastro;
 
-	public String getModelo() {
-		return modelo;
-	}
+  @UpdateTimestamp private LocalDateTime dtAtualizacao;
 
-	public void setModelo(String modelo) {
-		this.modelo = modelo;
-	}
+  public Long getId() {
+    return id;
+  }
 
-	public String getPotencia() {
-		return potencia;
-	}
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-	public void setPotencia(String potencia) {
-		this.potencia = potencia;
-	}
+  public String getNome() {
+    return nome;
+  }
 
-	public String getDtSubstituicao() {
-		return dtSubstituicao;
-	}
+  public void setNome(String nome) {
+    this.nome = nome;
+  }
 
-	public void setDtSubstituicao(String dtSubstituicao) {
-		this.dtSubstituicao = dtSubstituicao;
-	}
+  public int getQtde() {
+    return qtde;
+  }
 
-	public String getObservacao() {
-		return observacao;
-	}
+  public void setQtde(int qtde) {
+    this.qtde = qtde;
+  }
 
-	public void setObservacao(String observacao) {
-		this.observacao = observacao;
-	}
+  public Set<Aquario> getAquarios() {
+    return this.aquarios;
+  }
 
-	public String getDtCadastro() {
-		return dtCadastro;
-	}
+  public void setAquarios(Set<Aquario> aquarios) {
+    this.aquarios = aquarios;
+  }
 
-	public void setDtCadastro(String dtCadastro) {
-		this.dtCadastro = dtCadastro;
-	}
+  public void addAquario(Aquario aquario) {
+    this.aquarios.add(aquario);
+    aquario.getEquipamentos().add(this);
+  }
 
-	public String getDtAtualizacao() {
-		return dtAtualizacao;
-	}
+  public void removeAquario(Aquario aquario) {
+    this.aquarios.remove(aquario);
+    aquario.getEquipamentos().remove(this);
+  }
 
-	public void setDtAtualizacao(String dtAtualizacao) {
-		this.dtAtualizacao = dtAtualizacao;
-	}
-	
-	
+  public String getTipo() {
+    return tipo;
+  }
+
+  public void setTipo(String tipo) {
+    this.tipo = tipo;
+  }
+
+  public BigDecimal getVlrUnitario() {
+    return vlrUnitario;
+  }
+
+  public void setVlrUnitario(BigDecimal vlrUnitario) {
+    this.vlrUnitario = vlrUnitario;
+  }
+
+  public String getFabricante() {
+    return fabricante;
+  }
+
+  public void setFabricante(String fabricante) {
+    this.fabricante = fabricante;
+  }
+
+  public String getModelo() {
+    return modelo;
+  }
+
+  public void setModelo(String modelo) {
+    this.modelo = modelo;
+  }
+
+  public String getPotencia() {
+    return potencia;
+  }
+
+  public void setPotencia(String potencia) {
+    this.potencia = potencia;
+  }
+
+  public LocalDate getDtSubstituicao() {
+    return dtSubstituicao;
+  }
+
+  public void setDtSubstituicao(LocalDate dtSubstituicao) {
+    this.dtSubstituicao = dtSubstituicao;
+  }
+
+  public String getObservacao() {
+    return observacao;
+  }
+
+  public void setObservacao(String observacao) {
+    this.observacao = observacao;
+  }
+
+  public AvaliacaoEnum getAvaliacao() {
+    return avaliacao;
+  }
+
+  public void setAvaliacao(AvaliacaoEnum avaliacao) {
+    this.avaliacao = avaliacao;
+  }
+
+  public LocalDate getDtAquisicao() {
+    return dtAquisicao;
+  }
+
+  public void setDtAquisicao(LocalDate dtAquisicao) {
+    this.dtAquisicao = dtAquisicao;
+  }
+
+  public LocalDateTime getDtCadastro() {
+    return dtCadastro;
+  }
+
+  public void setDtCadastro(LocalDateTime dtCadastro) {
+    this.dtCadastro = dtCadastro;
+  }
+
+  public LocalDateTime getDtAtualizacao() {
+    return dtAtualizacao;
+  }
+
+  public void setDtAtualizacao(LocalDateTime dtAtualizacao) {
+    this.dtAtualizacao = dtAtualizacao;
+  }
 }

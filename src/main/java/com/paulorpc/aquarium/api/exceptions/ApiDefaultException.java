@@ -18,7 +18,7 @@ public class ApiDefaultException extends Exception {
   public String getMessage() {
     return message;
   }
-  
+
   /***
    * Formata as mensagem de Exception com um padrão de retorno.
    *
@@ -30,16 +30,17 @@ public class ApiDefaultException extends Exception {
 
     Optional<Throwable> exceptionOpt = Optional.ofNullable(exception);
 
-    return exceptionOpt.map(e -> {
-      String messageBase = e.getClass().getSimpleName();
-      String message = messageBase + ": No message available.";
+    return exceptionOpt
+        .map(
+            e -> {
+              String messageBase = e.getClass().getSimpleName();
+              String message = messageBase + ": No message available.";
 
-      if (e.getMessage() != null) {
-        message = messageBase + ". " + e.getMessage() + ".";
-      }
-      return message;
-
-    }).orElseThrow(() -> new Exception("Impossível formatar Exception null"));
+              if (e.getMessage() != null) {
+                message = messageBase + ". " + e.getMessage() + ".";
+              }
+              return message;
+            })
+        .orElseThrow(() -> new Exception("Impossível formatar Exception null"));
   }
-
 }

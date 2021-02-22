@@ -1,8 +1,8 @@
 package com.paulorpc.aquarium.api.services;
 
+import com.paulorpc.aquarium.api.entities.Biota;
 import java.util.List;
 import java.util.Optional;
-import com.paulorpc.aquarium.api.entities.Biota;
 
 public interface BiotaService {
 
@@ -11,28 +11,28 @@ public interface BiotaService {
    *
    * @return List<Biota>
    */
-  Optional<Biota> buscar(int id);
+  Optional<Biota> buscar(Long id);
 
   /***
-   * Busca todos seres vivos cadastrados
+   * Busca todos seres vivos
    *
    * @return List<Biota>
    */
   List<Biota> buscarTodos();
 
   /***
-   * Busca todos seres vivos ativos (não excluídos pelo usuário)
+   * Busca todos seres marcados como deletados.
    *
    * @return List<Biota>
    */
-  List<Biota> buscarTodosAtivos();
+  List<Biota> buscarTodosDeletados();
 
   /***
    * Cadastra novo ser vivo
    *
    * @param biota
    * @return Biota
-   * @throws Exception 
+   * @throws Exception
    */
   Biota persistir(Biota biota) throws Exception;
 
@@ -41,17 +41,16 @@ public interface BiotaService {
    *
    * @param biota
    * @return Biota
-   * @throws Exception 
+   * @throws Exception
    */
   // TODO corrigir o parametro para int
-  Optional<Biota> alterar(Biota biota) throws Exception;
+  Biota alterar(Biota biota) throws Exception;
 
   /***
-   * Deleta um Biota cadastrado. Status é alterado para FALSE.
+   * Deleta um Biota cadastrado. Campo deletado é alterado para TRUE.
    *
    * @param id
    * @return Optional<Biota>
    */
-  Optional<Biota> deletar(int id);
-
+  Biota deletar(Long id) throws Exception;
 }

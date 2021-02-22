@@ -1,23 +1,22 @@
 package com.paulorpc.aquarium.api.services.impl;
 
+import com.paulorpc.aquarium.api.entities.TipoAquario;
+import com.paulorpc.aquarium.api.enums.TipoAguaEnum;
+import com.paulorpc.aquarium.api.repositories.TipoAquarioRepository;
+import com.paulorpc.aquarium.api.services.TipoAquarioService;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.paulorpc.aquarium.api.entities.TipoAquario;
-import com.paulorpc.aquarium.api.enums.TipoAguaEnum;
-import com.paulorpc.aquarium.api.repositories.TipoAquarioRepository;
-import com.paulorpc.aquarium.api.services.TipoAquarioService;
 
 @Service
 public class TipoAquarioServiceImpl implements TipoAquarioService {
 
   private final Logger log = LoggerFactory.getLogger(TipoAquarioServiceImpl.class);
 
-  @Autowired
-  private TipoAquarioRepository tipoAquarioRepository;
+  @Autowired private TipoAquarioRepository tipoAquarioRepository;
 
   @Override
   public Optional<TipoAquario> buscarPorTipo(String tipo) {
@@ -26,7 +25,7 @@ public class TipoAquarioServiceImpl implements TipoAquarioService {
   }
 
   @Override
-  public Optional<TipoAquario> buscar(int id) {
+  public Optional<TipoAquario> buscar(Long id) {
     log.info("Buscando tipo aquário. Id: {} ", id);
     return tipoAquarioRepository.findById(id);
   }
@@ -41,7 +40,6 @@ public class TipoAquarioServiceImpl implements TipoAquarioService {
   public List<TipoAquario> buscarTodos() {
     log.info("Buscando todos tipos de aquários.");
     return tipoAquarioRepository.findAll();
-
   }
 
   @Override
@@ -69,11 +67,10 @@ public class TipoAquarioServiceImpl implements TipoAquarioService {
   }
 
   @Override
-  public Optional<TipoAquario> deletar(int id) {
+  public Optional<TipoAquario> deletar(Long id) {
     log.info("Deletando um tipo de aquário. Id: {}", id);
     Optional<TipoAquario> tipoAquario = tipoAquarioRepository.findById(id);
     tipoAquario.ifPresent(v -> tipoAquarioRepository.deleteById(id));
     return tipoAquario;
   }
-
 }

@@ -1,65 +1,84 @@
 package com.paulorpc.aquarium.api.dtos;
 
-import java.util.Optional;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class TaxonomiaDto {
-  
-  private Optional<String> dominio = Optional.empty();
-  private Optional<String> reino = Optional.empty();
-  private Optional<String> filo = Optional.empty();
-  private Optional<String> classe = Optional.empty();
-  private Optional<String> ordem = Optional.empty();
-  private Optional<String> familia = Optional.empty();
-  private Optional<String> genero = Optional.empty();
-  private Optional<String> especie = Optional.empty();
-  
-  public Optional<String> getDominio() {
+
+  private String dominio;
+  private String reino;
+  private String filo;
+  private String classe;
+  private String ordem;
+  private String familia;
+  private String genero;
+  private String especie;
+
+  public String getDominio() {
     return dominio;
   }
-  public void setDominio(Optional<String> dominio) {
+
+  public void setDominio(String dominio) {
     this.dominio = dominio;
   }
-  public Optional<String> getReino() {
+
+  public String getReino() {
     return reino;
   }
-  public void setReino(Optional<String> reino) {
+
+  public void setReino(String reino) {
     this.reino = reino;
   }
-  public Optional<String> getFilo() {
+
+  public String getFilo() {
     return filo;
   }
-  public void setFilo(Optional<String> filo) {
+
+  public void setFilo(String filo) {
     this.filo = filo;
   }
-  public Optional<String> getClasse() {
+
+  public String getClasse() {
     return classe;
   }
-  public void setClasse(Optional<String> classe) {
+
+  public void setClasse(String classe) {
     this.classe = classe;
   }
-  public Optional<String> getOrdem() {
+
+  public String getOrdem() {
     return ordem;
   }
-  public void setOrdem(Optional<String> ordem) {
+
+  public void setOrdem(String ordem) {
     this.ordem = ordem;
   }
-  public Optional<String> getFamilia() {
+
+  public String getFamilia() {
     return familia;
   }
-  public void setFamilia(Optional<String> familia) {
+
+  public void setFamilia(String familia) {
     this.familia = familia;
   }
-  public Optional<String> getGenero() {
+
+  public String getGenero() {
     return genero;
   }
-  public void setGenero(Optional<String> genero) {
+
+  public void setGenero(String genero) {
     this.genero = genero;
   }
-  public Optional<String> getEspecie() {
+
+  public String getEspecie() {
     return especie;
   }
-  public void setEspecie(Optional<String> especie) {
+
+  public void setEspecie(String especie) {
     this.especie = especie;
   }
-  
 }
