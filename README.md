@@ -41,7 +41,7 @@ Logging padrão do springboot. Para ajustar configurações específicas do log,
 - Sua responsabilidade é gerar um response padronizado para retornar ao cliente ao ser lançado alguma exceção no sistema que não tenha sido tratada.
 
 
-#### TESTES 
+### TESTES 
 Ao retornar o conteúdo do response (`MockMvcResultMatcher.content()`) o charset default retornado não é mais o UTF-8. Portanto, é necessário adicionar o `.accept(MediaType.APPLICATION_JSON_UTF8_VALUE)`. Apesar de depreciado, a opção que deveria substituir esse tipo não resolve o problema, então por hora será usado este.
 - Por defaul os testes de integração (final IT) não são executados, devido a sua menor performance. Para executá-los, basta rodar o comando abaixo.
 ```shell
@@ -50,6 +50,6 @@ mvn failsafe:integration-test # Testes de Integração
 ```
 
 
-#### MAPSTRUCT
+### MAPSTRUCT
 MapStruct ajuda na criação de classes para conversão entre objetos de forma automatizada. É necessário adicionar seu processor no POM para gerar as classes durante execução do maven. 
 https://mapstruct.org/documentation/stable/reference/html/#basic-mappings
