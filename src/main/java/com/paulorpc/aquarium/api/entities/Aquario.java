@@ -3,7 +3,9 @@ package com.paulorpc.aquarium.api.entities;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -91,6 +94,10 @@ public class Aquario implements Serializable {
   @ManyToMany(mappedBy = "aquarios")
   @Builder.Default
   private Set<Equipamento> equipamentos = new LinkedHashSet<Equipamento>();
+
+  @OneToMany(mappedBy = "aquario")
+  @Builder.Default
+  private List<Parametro> parametros = new ArrayList<Parametro>();
 
   // private Parametro parametros;
 
@@ -249,6 +256,24 @@ public class Aquario implements Serializable {
   public void removeEquipamento(Equipamento equipamento) {
     this.getEquipamentos().remove(equipamento);
     equipamento.getAquarios().remove(this);
+  }
+
+  public List<Parametro> getParametros() {
+    return parametros;
+  }
+
+  public void setParametros(List<Parametro> parametros) {
+    this.parametros = parametros;
+  }
+
+  public void addParametro(Parametro parametro) {
+    this.parametros.add(parametro);
+    parametro.setAquario(this);
+  }
+
+  public void removeParametro(Parametro parametro) {
+    this.parametros.remove(parametro);
+    parametro.setAquario(null);
   }
 
   @Override

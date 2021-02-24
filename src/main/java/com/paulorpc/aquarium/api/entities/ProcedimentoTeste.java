@@ -6,13 +6,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(name = "procedimentoTeste")
@@ -20,29 +21,26 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class ProcedimentoTeste {
-  
+
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "idProcedimento", nullable = false)
   private Long id;
-  
-  @Column(nullable = false)
+
+  @ManyToOne(optional = false)
+  @JoinColumn(name = "idParametro")
   private Parametro parametro;
-  
+
   @Column(nullable = false)
   private Integer nroEtapa;
-  
-  @Column(nullable = false)
-  @ManyToOne
-  private String procedimento;
-  
-  @CreationTimestamp
-  private LocalDateTime dtCadastro;
-  
-  @UpdateTimestamp
-  private LocalDateTime dtAtualizacao;
 
-  
+  @Column(nullable = false)
+  private String procedimento;
+
+  @CreationTimestamp private LocalDateTime dtCadastro;
+
+  @UpdateTimestamp private LocalDateTime dtAtualizacao;
+
   public Long getId() {
     return id;
   }
@@ -90,5 +88,17 @@ public class ProcedimentoTeste {
   public void setDtAtualizacao(LocalDateTime dtAtualizacao) {
     this.dtAtualizacao = dtAtualizacao;
   }
-  
+
+  @Override
+  public String toString() {
+    return "ProcedimentoTeste [id="
+        + id
+        + ", parametro="
+        + parametro
+        + ", nroEtapa="
+        + nroEtapa
+        + ", procedimento="
+        + procedimento
+        + "]";
+  }
 }

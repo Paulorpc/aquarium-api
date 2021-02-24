@@ -1,11 +1,11 @@
 package com.paulorpc.aquarium.api.services;
 
+import com.paulorpc.aquarium.api.entities.Parametro;
 import java.util.List;
 import java.util.Optional;
-import com.paulorpc.aquarium.api.entities.Parametro;
 
 public interface ParametroService {
-  
+
   /***
    * Busca parametro pelo id
    *
@@ -48,7 +48,7 @@ public interface ParametroService {
    * @return Parametro
    * @throws Exception
    */
-  Parametro persistir(Parametro Parametro) throws Exception;
+  Parametro persistir(Parametro parametro) throws Exception;
 
   /***
    * Persiti uma lista de novos parâmetros
@@ -57,15 +57,6 @@ public interface ParametroService {
    * @throws Exception
    */
   List<Parametro> persistirTodos(List<Parametro> parametros) throws Exception;
-
-  /***
-   * Cadastra novo parametro a um determinado aquário pelo id do aquário
-   *
-   * @param parametro
-   * @return Parametro
-   * @throws Exception
-   */
-  Parametro persistir(Parametro Parametro, Long aquarioId) throws Exception;
 
   /***
    * Atualiza cadastro de parâmetro
@@ -80,8 +71,7 @@ public interface ParametroService {
    * Deleta um parâmetro cadastrado pelo id.
    *
    * @param id
-   * @return Optional<Parametro>
+   * @return Parametro
    */
   Parametro deletar(Long id) throws Exception;
-
 }

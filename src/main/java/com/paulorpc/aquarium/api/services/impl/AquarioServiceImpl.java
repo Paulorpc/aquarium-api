@@ -4,7 +4,6 @@ import com.paulorpc.aquarium.api.entities.Aquario;
 import com.paulorpc.aquarium.api.exceptions.NotFoundException;
 import com.paulorpc.aquarium.api.repositories.AquarioRepository;
 import com.paulorpc.aquarium.api.services.AquarioService;
-import com.paulorpc.aquarium.api.services.EquipamentoService;
 import com.paulorpc.aquarium.api.services.TipoAquarioService;
 import java.util.List;
 import java.util.Optional;
@@ -22,8 +21,6 @@ public class AquarioServiceImpl implements AquarioService {
   @Autowired private AquarioRepository aquarioRep;
 
   @Autowired private TipoAquarioService tipoAquarioService;
-
-  @Autowired private EquipamentoService equipamentoService;
 
   @Override
   public Optional<Aquario> buscar(Long id) {
@@ -60,13 +57,12 @@ public class AquarioServiceImpl implements AquarioService {
 
     Optional<Aquario> aquarioOpt = aquarioRep.findById(aquario.getId());
     if (aquarioOpt.isPresent()) {
+      aquario.setId(aquarioOpt.get().getId());
       aquario.setDtCadastro(aquarioOpt.get().getDtCadastro());
-      aquarioOpt = Optional.of(persistir(aquario));
     } else {
       throw new NotFoundException("Não foi possível localizar o aquário. Id: " + aquario.getId());
     }
-
-    return aquarioOpt.get();
+    return persistir(aquario);
   }
 
   @Override
@@ -77,6 +73,7 @@ public class AquarioServiceImpl implements AquarioService {
 
     if (aquario.isPresent()) {
       aquario.get().getEquipamentos().forEach(e -> e.removeAquario(aquario.get()));
+      aquario.get().getParametros().forEach(p -> p.setAquario(null));
       persistir(aquario.get());
       aquarioRep.delete(aquario.get());
     } else {

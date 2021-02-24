@@ -23,6 +23,7 @@ import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
@@ -236,7 +237,7 @@ public class Biota implements Serializable {
 
       Optional<String> genero = Optional.ofNullable(taxonomia.getGenero());
       Optional<String> especie = Optional.ofNullable(taxonomia.getEspecie());
-      if (!nomeCientifico.isEmpty()) {
+      if (StringUtils.isNotBlank(nomeCientifico)) {
         String[] nomes = nomeCientifico.split(" ");
         if (nomes.length == 2) {
           taxonomia.setGenero(genero.orElse(nomes[0].trim()));

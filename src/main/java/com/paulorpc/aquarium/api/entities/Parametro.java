@@ -5,16 +5,19 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(name = "parametro")
@@ -22,47 +25,48 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class Parametro {
-  
+
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "idParametro", nullable = false)
   private Long id;
-  
+
   @Column(nullable = false)
   private String nome;
-  
+
   private String abreviacaoNome;
-  
+
   @Column(nullable = false)
   private Double escalaInicio;
-  
+
   @Column(nullable = false)
   private Double escalaFim;
-  
+
   @Column(nullable = false)
   private Double vlrIdealInicio;
-  
+
   @Column(nullable = false)
   private Double vlrIdealFim;
-  
+
   @Column(nullable = false)
   private String unidadeMedida;
-  
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "idAquario")
+  private Aquario aquario;
+
   @Builder.Default
   @OneToMany(mappedBy = "parametro")
   private List<Teste> historicoTestes = new ArrayList<>();
-  
-  @Builder.Default
-  @OneToMany(mappedBy = "procedimento")
-  private List<ProcedimentoTeste> procedimentosTeste = new ArrayList<>();
-  
-  @CreationTimestamp
-  private LocalDateTime dtCadastro;
-  
-  @UpdateTimestamp
-  private LocalDateTime dtAtualização;
 
-  
+  @Builder.Default
+  @OneToMany(mappedBy = "parametro")
+  private List<ProcedimentoTeste> procedimentosTeste = new ArrayList<>();
+
+  @CreationTimestamp private LocalDateTime dtCadastro;
+
+  @UpdateTimestamp private LocalDateTime dtAtualizacao;
+
   public Long getId() {
     return id;
   }
@@ -127,6 +131,22 @@ public class Parametro {
     this.unidadeMedida = unidadeMedida;
   }
 
+  public Aquario getAquario() {
+    return aquario;
+  }
+
+  public void setAquario(Aquario aquario) {
+    this.aquario = aquario;
+  }
+
+  public List<Teste> getHistoricoTestes() {
+    return historicoTestes;
+  }
+
+  public void setHistoricoTestes(List<Teste> historicoTestes) {
+    this.historicoTestes = historicoTestes;
+  }
+
   public List<ProcedimentoTeste> getProcedimentosTeste() {
     return procedimentosTeste;
   }
@@ -134,11 +154,11 @@ public class Parametro {
   public void setProcedimentosTeste(List<ProcedimentoTeste> procedimentosTeste) {
     this.procedimentosTeste = procedimentosTeste;
   }
-  
+
   public void addProcedimentoTeste(ProcedimentoTeste procedimentoTeste) {
     this.procedimentosTeste.add(procedimentoTeste);
   }
-  
+
   public void removeProcedimentoTeste(ProcedimentoTeste procedimentoTeste) {
     this.procedimentosTeste.remove(procedimentoTeste);
   }
@@ -152,10 +172,25 @@ public class Parametro {
   }
 
   public LocalDateTime getDtAtualização() {
-    return dtAtualização;
+    return dtAtualizacao;
   }
 
   public void setDtAtualização(LocalDateTime dtAtualização) {
-    this.dtAtualização = dtAtualização;
+    this.dtAtualizacao = dtAtualização;
+  }
+
+  @Override
+  public String toString() {
+    return "Parametro [id="
+        + id
+        + ", nome="
+        + nome
+        + ", abreviacaoNome="
+        + abreviacaoNome
+        + ", vlrIdealInicio="
+        + vlrIdealInicio
+        + ", vlrIdealFim="
+        + vlrIdealFim
+        + "]";
   }
 }

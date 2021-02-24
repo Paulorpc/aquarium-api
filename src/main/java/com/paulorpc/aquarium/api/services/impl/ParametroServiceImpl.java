@@ -1,70 +1,94 @@
 package com.paulorpc.aquarium.api.services.impl;
 
+import com.paulorpc.aquarium.api.entities.Parametro;
+import com.paulorpc.aquarium.api.exceptions.NotFoundException;
+import com.paulorpc.aquarium.api.repositories.ParametroRepository;
+import com.paulorpc.aquarium.api.services.AquarioService;
+import com.paulorpc.aquarium.api.services.ParametroService;
 import java.util.List;
 import java.util.Optional;
-import com.paulorpc.aquarium.api.entities.Parametro;
-import com.paulorpc.aquarium.api.services.ParametroService;
+import javax.transaction.Transactional;
+import org.hibernate.Hibernate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class ParametroServiceImpl implements ParametroService {
 
+  private final Logger log = LoggerFactory.getLogger(ParametroServiceImpl.class);
+
+  @Autowired ParametroRepository parametroRep;
+
+  @Autowired AquarioService aquarioService;
+
   @Override
   public Optional<Parametro> buscar(Long id) {
-    // TODO Auto-generated method stub
-    return null;
+    log.info("Buscando um parâmetro: {} ", id);
+    return parametroRep.findById(id);
   }
 
   @Override
+  @Transactional
   public Optional<Parametro> buscarRetornandoProcedimentosTeste(Long id) {
-    // TODO Auto-generated method stub
-    return null;
+    Optional<Parametro> parametro = parametroRep.findById(id);
+    parametro.ifPresent(p -> Hibernate.initialize(p.getProcedimentosTeste()));
+    return parametro;
   }
 
   @Override
   public List<Parametro> buscarTodos() {
-    // TODO Auto-generated method stub
-    return null;
+    log.info("Buscando todos parâmetros.");
+    return parametroRep.findAll();
   }
 
   @Override
   public List<Parametro> buscarTodosRetornandoProcedimentosTeste() {
-    // TODO Auto-generated method stub
-    return null;
+    return parametroRep.findAllRetrieveProcedimentosTeste();
   }
 
   @Override
   public List<Parametro> buscarTodosDoAquario(Long idAquario) {
-    // TODO Auto-generated method stub
-    return null;
+    return parametroRep.findAllFromAquario(idAquario);
   }
 
   @Override
-  public Parametro persistir(Parametro Parametro) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
+  public Parametro persistir(Parametro parametro) throws Exception {
+    log.info("Persistindo um novo parâmetro: {}", parametro.toString());
+    return parametroRep.save(parametro);
   }
 
   @Override
   public List<Parametro> persistirTodos(List<Parametro> parametros) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
+    log.info("Persistindo todos novos parâmetros");
+    return parametroRep.saveAll(parametros);
   }
 
   @Override
-  public Parametro persistir(Parametro Parametro, Long aquarioId) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
-  }
+  public Parametro alterar(Parametro parametro) throws Exception {
+    log.info("Alterando um parâmetro: {}", parametro.toString());
 
-  @Override
-  public Parametro alterar(Parametro Parametro) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
+    Optional<Parametro> parametroOpt = parametroRep.findById(parametro.getId());
+    if (parametroOpt.isPresent()) {
+      parametro.setId(parametroOpt.get().getId());
+      parametro.setDtCadastro(parametroOpt.get().getDtCadastro());
+    } else {
+      throw new NotFoundException(
+          "Não foi possível localizar o parametro. Id: " + parametro.getId());
+    }
+    return persistir(parametro);
   }
 
   @Override
   public Parametro deletar(Long id) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
+    log.info("Deletando um parâmetro. Id: {}", id);
+    return parametroRep
+        .findById(id)
+        .map(
+            p -> {
+              parametroRep.delete(p);
+              return p;
+            })
+        .orElseThrow(
+            () -> new NotFoundException("Não foi possível localizar o parâmetro. Id: " + id));
   }
-
 }

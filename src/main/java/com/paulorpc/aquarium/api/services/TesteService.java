@@ -1,40 +1,41 @@
 package com.paulorpc.aquarium.api.services;
 
+import com.paulorpc.aquarium.api.entities.Teste;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import com.paulorpc.aquarium.api.entities.Teste;
 
 public interface TesteService {
-  
+
   /***
    * Busca teste pelo id
    *
    * @return Optional<Teste>
    */
   Optional<Teste> buscar(Long id);
-  
+
   /***
-   * Busca todos testes cadastrados
+   * Busca todos testes cadastrados. O parâmetroId é opcional, caso tenha sido passado diferente de vazio, então irá filtrar apenas os testes do parâmetro desejado.
    *
    * @return List<Teste>
    */
-  List<Teste> buscarTodos();
-  
+  List<Teste> buscarTodos(Optional<Long> parametroId);
+
   /***
-   * Busca todos testes de um determinado aquário.
+   * Busca todos testes de um determinado aquário. O parâmetroId é opcional, caso tenha sido passado diferente de vazio, então irá filtrar apenas os testes do parâmetro desejado.
    *
    * @return List<Teste>
    */
-  List<Teste> buscarTodosDoAquario(Long idAquario);
-  
+  List<Teste> buscarTodosDoAquario(Long idAquario, Optional<Long> parametroId);
+
   /***
-   * Busca todos os testes em um determinado aquário em um período desejado. Se o parametroId for diferente de null, então irá filtrar apenas os testes do parâmetro informado.
+   * Busca todos os testes em um determinado aquário em um período desejado. O parâmetroId é opcional, caso tenha sido passado diferente de vazio, então irá filtrar apenas os testes do parâmetro desejado.
    *
    * @return List<Teste>
    */
-  List<Teste> buscarTodosDoAquarioPorPeriodo(Long aquarioId, LocalDate inicio, LocalDate fim, Long parametroId);
-  
+  List<Teste> buscarTodosDoAquarioPorPeriodo(
+      Long aquarioId, LocalDate inicio, LocalDate fim, Optional<Long> parametroId);
+
   /***
    * Cadastra novo teste
    *
@@ -68,5 +69,4 @@ public interface TesteService {
    * @return Optional<Teste>
    */
   Teste deletar(Long id) throws Exception;
-
 }

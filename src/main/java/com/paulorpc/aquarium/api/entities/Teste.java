@@ -6,13 +6,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(name = "teste")
@@ -25,25 +26,24 @@ public class Teste {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "idTeste", nullable = false)
   private Long id;
-  
-  @ManyToOne
-  private Aquario aquario;
-  
-  @ManyToOne
-  private Parametro parametro;
-  
-  private Double vlrResultado;
-  
-  private String observacao;
-  
-  private String unidadeMedida;
-  
-  @CreationTimestamp
-  private LocalDateTime dtCadastro;
-  
-  @UpdateTimestamp
-  private LocalDateTime dtAtualizacao;
 
+  @ManyToOne
+  @JoinColumn(name = "idAquario")
+  private Aquario aquario;
+
+  @ManyToOne
+  @JoinColumn(name = "idParametro")
+  private Parametro parametro;
+
+  private Double vlrResultado;
+
+  private String observacao;
+
+  private String unidadeMedida;
+
+  @CreationTimestamp private LocalDateTime dtCadastro;
+
+  @UpdateTimestamp private LocalDateTime dtAtualizacao;
 
   public Long getId() {
     return id;
@@ -108,5 +108,4 @@ public class Teste {
   public void setDtAtualizacao(LocalDateTime dtAtualizacao) {
     this.dtAtualizacao = dtAtualizacao;
   }
-  
 }
