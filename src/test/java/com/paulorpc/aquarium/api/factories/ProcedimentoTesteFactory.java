@@ -1,20 +1,34 @@
 package com.paulorpc.aquarium.api.factories;
 
+import com.paulorpc.aquarium.api.dtos.ProcedimentoTesteDto;
 import com.paulorpc.aquarium.api.entities.ProcedimentoTeste;
 import java.time.LocalDateTime;
 
-public class ProcedimentoTesteFactory {
+public class ProcedimentoTesteFactory
+    implements BaseSeeder<ProcedimentoTeste, ProcedimentoTesteDto> {
 
-  private static int n;
+  public static ProcedimentoTesteFactory INSTANCE = new ProcedimentoTesteFactory();
 
-  public static ProcedimentoTeste seed() {
-    LocalDateTime data = LocalDateTime.now();
+  private static int qtde;
+  private static int qtdeDto;
+  LocalDateTime data = LocalDateTime.now();
 
+  @Override
+  public ProcedimentoTeste seed() {
     return ProcedimentoTeste.builder()
         .dtAtualizacao(data)
         .dtCadastro(data)
-        .nroEtapa(++n)
-        .procedimento("realizar procedimento " + n)
+        .nroEtapa(++qtde)
+        .procedimento("realizar procedimento " + qtde)
+        .build();
+  }
+
+  public ProcedimentoTesteDto seedDto() {
+    return ProcedimentoTesteDto.builder()
+        .dtAtualizacao(data)
+        .dtCadastro(data)
+        .nroEtapa(++qtdeDto)
+        .procedimento("realizar procedimento dto " + qtdeDto)
         .build();
   }
 }

@@ -21,7 +21,7 @@ public class ProcedimentoTesteServiceImpl implements ProcedimentoTesteService {
 
   @Override
   public Optional<ProcedimentoTeste> buscar(Long id) {
-    log.info("Buscando procedimento de teste. Id: {} ", id);
+    log.info("Buscando procedimento de teste: {} ", id);
     return procedimentoRep.findById(id);
   }
 
@@ -38,6 +38,7 @@ public class ProcedimentoTesteServiceImpl implements ProcedimentoTesteService {
 
   @Override
   public ProcedimentoTeste persistir(ProcedimentoTeste procedimento) throws Exception {
+    log.info("Persistindo procedimento de teste: {} ", procedimento);
     if (procedimento.getId() != null) {
       throw new EntityExistsException("Objeto já persistido anteriormente.");
     }
@@ -46,6 +47,7 @@ public class ProcedimentoTesteServiceImpl implements ProcedimentoTesteService {
 
   @Override
   public ProcedimentoTeste alterar(ProcedimentoTeste procedimento) throws Exception {
+    log.info("Alterando procedimento de teste: {} ", procedimento);
     if (!procedimentoRep.existsById(procedimento.getId())) {
       throw new NotFoundException(
           "Não foi possível localizar o procedimentoTeste. Id: " + procedimento.getId());
@@ -55,6 +57,7 @@ public class ProcedimentoTesteServiceImpl implements ProcedimentoTesteService {
 
   @Override
   public ProcedimentoTeste deletar(Long id) throws Exception {
+    log.info("Deletando procedimento de teste: {} ", id);
     return procedimentoRep
         .findById(id)
         .map(
@@ -69,6 +72,7 @@ public class ProcedimentoTesteServiceImpl implements ProcedimentoTesteService {
 
   @Override
   public Integer deletarTodosDoParametro(Long idParametro) throws Exception {
+    log.info("Deletando todos procedimentos de teste do parâmetro: {} ", idParametro);
     List<ProcedimentoTeste> procedimentos = buscarTodos(Optional.of(idParametro));
     procedimentoRep.deleteAll(procedimentos);
     return procedimentos.size();

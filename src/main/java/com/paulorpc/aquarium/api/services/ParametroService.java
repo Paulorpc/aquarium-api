@@ -7,14 +7,14 @@ import java.util.Optional;
 public interface ParametroService {
 
   /***
-   * Busca parametro pelo id
+   * Busca parâmetro pelo id
    *
    * @return Optional<Parametro>
    */
   Optional<Parametro> buscar(Long id);
 
   /***
-   * Busca parâmetro pelo id e recuperar os procedimentos para realização do teste para este parâmetro.
+   * Busca parâmetro pelo id e recuperar os procedimentosTeste do parâmetro.
    *
    * @return Optional<Parametro>
    */
@@ -28,21 +28,28 @@ public interface ParametroService {
   List<Parametro> buscarTodos();
 
   /***
-   * Busca todos parâmetros cadastrados recuperando todos os procedimentos para realização de testes para o parâmetro.
+   * Busca todos parâmetros cadastrados recuperando os procedimentosTeste do parâmetro.
    *
    * @return List<Parametro>
    */
   List<Parametro> buscarTodosRetornandoProcedimentosTeste();
 
   /***
-   * Busca todos parametros de um determinado aquário.
+   * Busca todos parâmetros de um determinado aquário.
    *
    * @return List<Parametro>
    */
   List<Parametro> buscarTodosDoAquario(Long idAquario);
 
   /***
-   * Cadastra novo parâmetro
+   * Busca todos parâmetros de um determinado aquário recuperando todos os procedimentosTeste do parâmetro.
+   *
+   * @return List<Parametro>
+   */
+  List<Parametro> buscarTodosDoAquarioRetornandoProcedimentosTeste(Long idAquario);
+
+  /***
+   * Cadastra um novo parâmetro
    *
    * @param parametro
    * @return Parametro
@@ -59,7 +66,7 @@ public interface ParametroService {
   List<Parametro> persistirTodos(List<Parametro> parametros) throws Exception;
 
   /***
-   * Atualiza cadastro de parâmetro
+   * Atualiza um parâmetro
    *
    * @param Parametro
    * @return Parametro
@@ -68,10 +75,18 @@ public interface ParametroService {
   Parametro alterar(Parametro Parametro) throws Exception;
 
   /***
-   * Deleta um parâmetro cadastrado pelo id.
+   * Deleta um parâmetro pelo id.
    *
    * @param id
    * @return Parametro
    */
   Parametro deletar(Long id) throws Exception;
+
+  /***
+   * Deleta todos parâmetros de um determinado aquário.
+   *
+   * @param IdAquario
+   * @return Integer qtde registros deletados
+   */
+  Integer deletarTodosDoAquario(Long idAquario) throws Exception;
 }

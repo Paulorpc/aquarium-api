@@ -46,13 +46,9 @@ public class ProcedimentoTesteRepositoryTest {
   public void should_save() {
     try {
       List<ProcedimentoTeste> procedimentos = new ArrayList<>();
-      Parametro parametro = parametroRep.save(ParametroFactory.seed());
+      Parametro parametro = parametroRep.save(ParametroFactory.INSTANCE.seed());
 
-      procedimentos.addAll(
-          List.of(
-              ProcedimentoTesteFactory.seed(),
-              ProcedimentoTesteFactory.seed(),
-              ProcedimentoTesteFactory.seed()));
+      procedimentos.addAll(ProcedimentoTesteFactory.INSTANCE.seed(3));
       procedimentos.forEach(p -> p.setParametro(parametro));
 
       List<ProcedimentoTeste> procedimentosDb = procedimentoRep.saveAll(procedimentos);
@@ -68,12 +64,7 @@ public class ProcedimentoTesteRepositoryTest {
     try {
       List<ProcedimentoTeste> procedimentos = new ArrayList<>();
 
-      procedimentos.addAll(
-          List.of(
-              ProcedimentoTesteFactory.seed(),
-              ProcedimentoTesteFactory.seed(),
-              ProcedimentoTesteFactory.seed()));
-
+      procedimentos.addAll(ProcedimentoTesteFactory.INSTANCE.seed(3));
       List<ProcedimentoTeste> procedimentosDb = procedimentoRep.saveAll(procedimentos);
       assertThat(procedimentosDb).isNotNull();
       assertEquals(procedimentos.size(), procedimentosDb.size());

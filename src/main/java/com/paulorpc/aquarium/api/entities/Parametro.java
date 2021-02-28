@@ -157,6 +157,7 @@ public class Parametro {
 
   public void addProcedimentoTeste(ProcedimentoTeste procedimentoTeste) {
     this.procedimentosTeste.add(procedimentoTeste);
+    procedimentoTeste.setParametro(this);
   }
 
   public void removeProcedimentoTeste(ProcedimentoTeste procedimentoTeste) {
@@ -171,11 +172,11 @@ public class Parametro {
     this.dtCadastro = dtCadastro;
   }
 
-  public LocalDateTime getDtAtualização() {
+  public LocalDateTime getDtAtualizacao() {
     return dtAtualizacao;
   }
 
-  public void setDtAtualização(LocalDateTime dtAtualização) {
+  public void setDtAtualizacao(LocalDateTime dtAtualização) {
     this.dtAtualizacao = dtAtualização;
   }
 
