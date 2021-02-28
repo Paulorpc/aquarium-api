@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class EquipamentoServiceImpl implements EquipamentoService {
 
-  private final Logger log = LoggerFactory.getLogger(BiotaServiceImpl.class);
+  private final Logger log = LoggerFactory.getLogger(EquipamentoServiceImpl.class);
 
   @Autowired EquipamentoRepository equipamentoRep;
 

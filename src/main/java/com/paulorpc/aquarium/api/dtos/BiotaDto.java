@@ -113,7 +113,7 @@ public class BiotaDto {
     this.nivelCuidado = nivelCuidado;
   }
 
-  public Boolean getReefSafe() {
+  public Boolean isReefSafe() {
     return reefSafe;
   }
 
