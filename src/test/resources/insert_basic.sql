@@ -23,8 +23,6 @@ insert into parametro (idAquario, nome, abreviacaoNome, escalaInicio, escalaFim,
 insert into parametro (idAquario, nome, abreviacaoNome, escalaInicio, escalaFim, vlrIdealInicio, vlrIdealFim, unidadeMedida, dtcadastro, dtatualizacao) values (2, 'Cálcio', 'ca', 300.0, 500, 410.0, 420.00, 'ppm', now(), now())
 insert into parametro (idAquario, nome, abreviacaoNome, escalaInicio, escalaFim, vlrIdealInicio, vlrIdealFim, unidadeMedida, dtcadastro, dtatualizacao) values (2, 'Magnésio', 'mg', 800.0, 1800.0, 1400.0, 1500.0, 'ppm', now(), now())
 insert into parametro (idAquario, nome, abreviacaoNome, escalaInicio, escalaFim, vlrIdealInicio, vlrIdealFim, unidadeMedida, dtcadastro, dtatualizacao) values (2, 'Alcalinidade', 'KH', 6.0, 9.0, 7.5, 8.0, 'dKh', now(), now())
-insert into parametro (idAquario, nome, abreviacaoNome, escalaInicio, escalaFim, vlrIdealInicio, vlrIdealFim, unidadeMedida, dtcadastro, dtatualizacao) values (2, 'Fosfato', 'po4', 0.0, 0.08, 0.02, 0.03, 'ppm', now(), now())
-insert into parametro (idAquario, nome, abreviacaoNome, escalaInicio, escalaFim, vlrIdealInicio, vlrIdealFim, unidadeMedida, dtcadastro, dtatualizacao) values (2, 'Nitrato', 'No3', 0.0, 50.0, 20.0, 25.0, 'ppm', now(), now())
 
 insert into procedimentoTeste (idParametro, nroEtapa, procedimento, dtcadastro, dtatualizacao) values (1, 1, 'Adicionar 2 gotas reagente A', now(), now())
 insert into procedimentoTeste (idParametro, nroEtapa, procedimento, dtcadastro, dtatualizacao) values (1, 2, 'Verificar valor siringa e comparar com cartela', now(), now())
