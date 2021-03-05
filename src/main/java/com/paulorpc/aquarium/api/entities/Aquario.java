@@ -93,11 +93,15 @@ public class Aquario implements Serializable {
 
   @ManyToMany(mappedBy = "aquarios")
   @Builder.Default
-  private Set<Equipamento> equipamentos = new LinkedHashSet<Equipamento>();
+  private Set<Equipamento> equipamentos = new LinkedHashSet<>();
 
   @OneToMany(mappedBy = "aquario")
   @Builder.Default
-  private List<Parametro> parametros = new ArrayList<Parametro>();
+  private List<Parametro> parametros = new ArrayList<>();
+
+  @OneToMany(mappedBy = "aquario")
+  @Builder.Default
+  private List<Teste> historicoTestes = new ArrayList<>();
 
   // private Parametro parametros;
 
@@ -274,6 +278,24 @@ public class Aquario implements Serializable {
   public void removeParametro(Parametro parametro) {
     this.parametros.remove(parametro);
     parametro.setAquario(null);
+  }
+
+  public List<Teste> getHistoricoTestes() {
+    return historicoTestes;
+  }
+
+  public void setHistoricoTestes(List<Teste> historicoTestes) {
+    this.historicoTestes = historicoTestes;
+  }
+
+  public void addHistoricoTeste(Teste teste) {
+    this.historicoTestes.add(teste);
+    teste.setAquario(this);
+  }
+
+  public void removeHistoricoTeste(Teste teste) {
+    this.historicoTestes.add(teste);
+    teste.setAquario(null);
   }
 
   @Override

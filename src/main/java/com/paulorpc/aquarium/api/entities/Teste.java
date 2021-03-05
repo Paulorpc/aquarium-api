@@ -3,6 +3,7 @@ package com.paulorpc.aquarium.api.entities;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -27,11 +28,11 @@ public class Teste {
   @Column(name = "idTeste", nullable = false)
   private Long id;
 
-  @ManyToOne
+  @ManyToOne(optional = false, fetch = FetchType.LAZY)
   @JoinColumn(name = "idAquario")
   private Aquario aquario;
 
-  @ManyToOne
+  @ManyToOne(optional = false, fetch = FetchType.LAZY)
   @JoinColumn(name = "idParametro")
   private Parametro parametro;
 
@@ -107,5 +108,18 @@ public class Teste {
 
   public void setDtAtualizacao(LocalDateTime dtAtualizacao) {
     this.dtAtualizacao = dtAtualizacao;
+  }
+
+  @Override
+  public String toString() {
+    return "Teste [id="
+        + id
+        + ", vlrResultado="
+        + vlrResultado
+        + ", unidadeMedida="
+        + unidadeMedida
+        + ", dtCadastro="
+        + dtCadastro
+        + "]";
   }
 }

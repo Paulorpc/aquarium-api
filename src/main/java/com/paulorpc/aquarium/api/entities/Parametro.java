@@ -147,6 +147,16 @@ public class Parametro {
     this.historicoTestes = historicoTestes;
   }
 
+  public void addHistoricoTeste(Teste teste) {
+    historicoTestes.add(teste);
+    teste.setParametro(this);
+  }
+
+  public void removeHistoricoTeste(Teste teste) {
+    historicoTestes.remove(teste);
+    teste.setParametro(null);
+  }
+
   public List<ProcedimentoTeste> getProcedimentosTeste() {
     return procedimentosTeste;
   }

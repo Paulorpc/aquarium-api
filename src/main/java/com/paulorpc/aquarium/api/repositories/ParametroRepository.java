@@ -12,7 +12,10 @@ import org.springframework.stereotype.Repository;
 public interface ParametroRepository extends JpaRepository<Parametro, Long> {
 
   @Query(
-      value = "FROM Parametro p LEFT JOIN FETCH p.procedimentosTeste pt where p.id = :idParametro")
+      value =
+          "FROM Parametro p "
+              + "LEFT JOIN FETCH p.procedimentosTeste pt "
+              + "where p.id = :idParametro")
   Optional<Parametro> findByIdRetrieveProcedimentosTeste(@Param("idParametro") Long id);
 
   @Query(value = "FROM Parametro p LEFT JOIN FETCH p.procedimentosTeste pt")

@@ -1,9 +1,12 @@
 package com.paulorpc.aquarium.api.services.impl;
 
+import com.paulorpc.aquarium.api.entities.Aquario;
+import com.paulorpc.aquarium.api.entities.Parametro;
 import com.paulorpc.aquarium.api.entities.ProcedimentoTeste;
 import com.paulorpc.aquarium.api.exceptions.NotFoundException;
 import com.paulorpc.aquarium.api.repositories.ProcedimentoTesteRepository;
 import com.paulorpc.aquarium.api.services.ProcedimentoTesteService;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import javax.persistence.EntityExistsException;
@@ -26,14 +29,17 @@ public class ProcedimentoTesteServiceImpl implements ProcedimentoTesteService {
   }
 
   @Override
-  public List<ProcedimentoTeste> buscarTodos(Optional<Long> idParametro) {
-    String logInfo = "Buscando todos procedimento de teste";
-    if (idParametro.isEmpty()) {
-      log.info(logInfo + " filtrando por parâmetro: {}", idParametro.get());
-      return procedimentoRep.findAll();
+  public List<ProcedimentoTeste> buscarTodos(Long id, Class<?> classe) {
+    StringBuilder logInfo = new StringBuilder("Buscando todos procedimento de teste ");
+    if (classe.getClass().equals(Parametro.class)) {
+      logInfo.append("do parâmetro: " + id);
+      return procedimentoRep.findAllByParametroId(id);
+    } else if (classe.getClass().equals(Aquario.class)) {
+      logInfo.append("do aquário: " + id);
+      return procedimentoRep.findAllByAquarioId(id);
+    } else {
+      return new ArrayList<>();
     }
-    log.info(logInfo);
-    return procedimentoRep.findAllByParametroId(idParametro.get());
   }
 
   @Override
@@ -73,7 +79,15 @@ public class ProcedimentoTesteServiceImpl implements ProcedimentoTesteService {
   @Override
   public Integer deletarTodosDoParametro(Long idParametro) throws Exception {
     log.info("Deletando todos procedimentos de teste do parâmetro: {} ", idParametro);
-    List<ProcedimentoTeste> procedimentos = buscarTodos(Optional.of(idParametro));
+    List<ProcedimentoTeste> procedimentos = buscarTodos(idParametro, Parametro.class);
+    procedimentoRep.deleteAll(procedimentos);
+    return procedimentos.size();
+  }
+
+  @Override
+  public Integer deletarTodosDoAquario(Long idAquario) throws Exception {
+    log.info("Deletando todos procedimentos de teste do aquário: {} ", idAquario);
+    List<ProcedimentoTeste> procedimentos = buscarTodos(idAquario, Aquario.class);
     procedimentoRep.deleteAll(procedimentos);
     return procedimentos.size();
   }

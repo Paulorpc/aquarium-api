@@ -268,7 +268,7 @@ public class ParametroControllerTestIT {
     assertThat(parametros).isEmpty();
 
     List<ProcedimentoTeste> procedimentos =
-        procedimentosService.buscarTodos(Optional.of(idParametro));
+        procedimentosService.buscarTodos(idParametro, Parametro.class);
     assertThat(procedimentos).isEmpty();
   }
 }

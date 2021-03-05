@@ -18,7 +18,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.paulorpc.aquarium.api.dtos.AquarioDto;
 import com.paulorpc.aquarium.api.entities.Aquario;
 import com.paulorpc.aquarium.api.services.AquarioService;
-import com.paulorpc.aquarium.api.services.EquipamentoService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -50,8 +49,6 @@ public class AquarioControllerTestIT {
   @Autowired private MockMvc mvc;
 
   @Autowired private AquarioService aquarioService;
-
-  @Autowired private EquipamentoService equipamentoService;
 
   @Test
   public void should_get_one_aquarium() throws Exception {

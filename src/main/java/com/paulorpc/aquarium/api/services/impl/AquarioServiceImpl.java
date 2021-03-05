@@ -4,27 +4,28 @@ import com.paulorpc.aquarium.api.entities.Aquario;
 import com.paulorpc.aquarium.api.exceptions.NotFoundException;
 import com.paulorpc.aquarium.api.repositories.AquarioRepository;
 import com.paulorpc.aquarium.api.services.AquarioService;
+import com.paulorpc.aquarium.api.services.ParametroService;
 import com.paulorpc.aquarium.api.services.TipoAquarioService;
 import java.util.List;
 import java.util.Optional;
 import javax.transaction.Transactional;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class AquarioServiceImpl implements AquarioService {
-
-  private final Logger log = LoggerFactory.getLogger(AquarioServiceImpl.class);
 
   @Autowired private AquarioRepository aquarioRep;
 
   @Autowired private TipoAquarioService tipoAquarioService;
 
+  @Autowired private ParametroService parametroService;
+
   @Override
   public Optional<Aquario> buscar(Long id) {
-    log.info("Buscando aquário. Id: {} ", id);
+    log.info("Buscando aquário: {} ", id);
     return aquarioRep.findByIdAndStatusIsTrue(id);
   }
 
@@ -36,7 +37,7 @@ public class AquarioServiceImpl implements AquarioService {
 
   @Override
   public Aquario persistir(Aquario aquario) throws Exception {
-    log.info("Cadastrando um novo aquário. Aquário: {}", aquario.toString());
+    log.info("Cadastrando um novo aquário: {}", aquario.toString());
 
     Optional<Long> idTipoAquario = Optional.ofNullable(aquario.getTipoAquario().getId());
     if (idTipoAquario.isPresent()) {
@@ -53,7 +54,7 @@ public class AquarioServiceImpl implements AquarioService {
 
   @Override
   public Aquario alterar(Aquario aquario) throws Exception {
-    log.info("Alterando um aquário. Aquario: {}", aquario.toString());
+    log.info("Alterando um aquário: {}", aquario.toString());
 
     Optional<Aquario> aquarioOpt = aquarioRep.findById(aquario.getId());
     if (aquarioOpt.isPresent()) {
@@ -68,17 +69,18 @@ public class AquarioServiceImpl implements AquarioService {
   @Override
   @Transactional
   public Aquario deletar(Long id) throws Exception {
-    log.info("Deletando um aquário. Id: {}", id);
-    Optional<Aquario> aquario = aquarioRep.findById(id);
+    log.info("Deletando um aquário: {}", id);
 
-    if (aquario.isPresent()) {
-      aquario.get().getEquipamentos().forEach(e -> e.removeAquario(aquario.get()));
-      aquario.get().getParametros().forEach(p -> p.setAquario(null));
-      persistir(aquario.get());
-      aquarioRep.delete(aquario.get());
-    } else {
-      throw new NotFoundException("Não foi possível localizar o aquário. Id: " + id);
-    }
-    return aquario.get();
+    Aquario aquario =
+        aquarioRep
+            .findById(id)
+            .orElseThrow(
+                () -> new NotFoundException("Não foi possível localizar o aquário. Id: " + id));
+
+    aquario.getEquipamentos().forEach(e -> e.removeAquario(aquario));
+    parametroService.deletarTodosDoAquario(aquario.getId());
+    aquarioRep.delete(aquario);
+
+    return aquario;
   }
 }

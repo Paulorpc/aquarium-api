@@ -24,6 +24,8 @@ public class ParametroRepositoryTest {
 
   @Autowired private ProcedimentoTesteRepository procedimentosRep;
 
+  @Autowired private TesteRepository testeRep;
+
   @Test
   public void should_find_all_parametros() {
     List<Parametro> parametros = parametroRep.findAll();
@@ -85,11 +87,13 @@ public class ParametroRepositoryTest {
 
   @Test
   public void should_delete_one_parameter() {
-    Optional<Parametro> parametro = parametroRep.findByIdRetrieveProcedimentosTeste(1L);
+    Optional<Parametro> parametro = parametroRep.findById(1L);
     parametro.ifPresent(
         p -> {
           procedimentosRep.deleteAll(p.getProcedimentosTeste());
+          testeRep.deleteAll(p.getHistoricoTestes());
           p.setProcedimentosTeste(null);
+          p.setHistoricoTestes(null);
           parametroRep.delete(p);
         });
 
@@ -102,7 +106,13 @@ public class ParametroRepositoryTest {
     List<Parametro> parametros = parametroRep.findAllFromAquario(1L);
     Integer qtdeTuplasBef = parametros.size();
 
-    parametros.forEach(p -> procedimentosRep.deleteAll(p.getProcedimentosTeste()));
+    parametros.forEach(
+        p -> {
+          procedimentosRep.deleteAll(p.getProcedimentosTeste());
+          testeRep.deleteAll(p.getHistoricoTestes());
+          p.setHistoricoTestes(null);
+          p.setProcedimentosTeste(null);
+        });
     parametroRep.deleteAll(parametros);
     Integer qtdeTuplasAft = parametroRep.findAllFromAquario(1L).size();
 

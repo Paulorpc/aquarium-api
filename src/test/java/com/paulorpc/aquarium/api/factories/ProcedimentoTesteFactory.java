@@ -23,6 +23,7 @@ public class ProcedimentoTesteFactory
         .build();
   }
 
+  @Override
   public ProcedimentoTesteDto seedDto() {
     return ProcedimentoTesteDto.builder()
         .dtAtualizacao(data)

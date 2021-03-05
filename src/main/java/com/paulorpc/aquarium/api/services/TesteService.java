@@ -1,7 +1,7 @@
 package com.paulorpc.aquarium.api.services;
 
 import com.paulorpc.aquarium.api.entities.Teste;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,26 +15,35 @@ public interface TesteService {
   Optional<Teste> buscar(Long id);
 
   /***
-   * Busca todos testes cadastrados. O parâmetroId é opcional, caso tenha sido passado diferente de vazio, então irá filtrar apenas os testes do parâmetro desejado.
+   * Buscar todo histórico de testes de um aquário
    *
+   * @param idAquario
    * @return List<Teste>
    */
-  List<Teste> buscarTodos(Optional<Long> parametroId);
+  List<Teste> buscarTodosDoAquario(Long idAquario);
 
   /***
-   * Busca todos testes de um determinado aquário. O parâmetroId é opcional, caso tenha sido passado diferente de vazio, então irá filtrar apenas os testes do parâmetro desejado.
+   * Buscar todo histórico de testes de um aquário sendo possível especificar um período de pesquisa.
    *
+   * @param idAquario
    * @return List<Teste>
    */
-  List<Teste> buscarTodosDoAquario(Long idAquario, Optional<Long> parametroId);
+  List<Teste> buscarTodosDoAquario(Long idAquario, LocalDateTime dtInicio, LocalDateTime dtFim);
 
   /***
-   * Busca todos os testes em um determinado aquário em um período desejado. O parâmetroId é opcional, caso tenha sido passado diferente de vazio, então irá filtrar apenas os testes do parâmetro desejado.
+   * Busca todos testes de um determinado aquário e parâmetro específico.
    *
    * @return List<Teste>
    */
-  List<Teste> buscarTodosDoAquarioPorPeriodo(
-      Long aquarioId, LocalDate inicio, LocalDate fim, Optional<Long> parametroId);
+  List<Teste> buscarTodosDoAquarioEParametro(Long idAquario, Long idParametro);
+
+  /***
+   * Busca todos testes de um determinado aquário e parâmetro específico sendo possível especificar um período de pesquisa.
+   *
+   * @return List<Teste>
+   */
+  List<Teste> buscarTodosDoAquarioEParametro(
+      Long idAquario, Long idParametro, LocalDateTime dtInicio, LocalDateTime dtFim);
 
   /***
    * Cadastra novo teste
@@ -69,4 +78,18 @@ public interface TesteService {
    * @return Optional<Teste>
    */
   Teste deletar(Long id) throws Exception;
+
+  /***
+   * Deleta todos testes da lista.
+   *
+   * @param testes
+   */
+  void deletarTodos(List<Teste> testes);
+
+  /***
+   * Deleta todos testes de um aquário e parâmetro específicos.
+   *
+   * @param int qtde de registros deletados
+   */
+  int deletarTodosDoAquarioEParametro(Long idAquario, Long idParametro) throws Exception;
 }

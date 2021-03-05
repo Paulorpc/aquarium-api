@@ -14,11 +14,12 @@ public interface ProcedimentoTesteService {
   Optional<ProcedimentoTeste> buscar(Long id);
 
   /***
-   * Busca todos procedimentos de testes. O parâmetroId é opcional, caso tenha sido passado diferente de vazio, então irá filtrar apenas os testes do parâmetro desejado.
-   *
+   * Busca todos procedimentos de testes de um aquário ou parâmtro específico.
+   * @param id
+   * @param clazz Aquario.class ou Parametro.class
    * @return List<ProcedimentoTeste>
    */
-  List<ProcedimentoTeste> buscarTodos(Optional<Long> parametroId);
+  List<ProcedimentoTeste> buscarTodos(Long parametroId, Class<?> clazz);
 
   /***
    * Cadastra novo procedimento de teste
@@ -49,8 +50,16 @@ public interface ProcedimentoTesteService {
   /***
    * Deleta todos procedimento de teste de um determinado parâmetro.
    *
-   * @param parametroId
+   * @param idParametro
    * @return Integer qtde registros deletados
    */
-  Integer deletarTodosDoParametro(Long parametroId) throws Exception;
+  Integer deletarTodosDoParametro(Long idParametro) throws Exception;
+
+  /***
+   * Deleta todos procedimento de teste de um determinado aquário.
+   *
+   * @param idAquario
+   * @return Integer qtde registros deletados
+   */
+  Integer deletarTodosDoAquario(Long idAquario) throws Exception;
 }

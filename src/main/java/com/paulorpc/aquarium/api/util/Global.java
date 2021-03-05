@@ -2,7 +2,6 @@ package com.paulorpc.aquarium.api.util;
 
 import com.paulorpc.aquarium.api.exceptions.ApiDefaultException;
 import java.net.URI;
-import java.time.LocalDateTime;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 public class Global {
@@ -42,7 +41,7 @@ public class Global {
    * @return
    */
   public static String getDataHora() {
-    return LocalDateTime.now().toString();
+    return DataUtil.getDataHora();
   }
 
   /***

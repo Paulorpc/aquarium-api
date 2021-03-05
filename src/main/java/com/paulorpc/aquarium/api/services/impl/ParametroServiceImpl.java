@@ -2,11 +2,14 @@ package com.paulorpc.aquarium.api.services.impl;
 
 import com.paulorpc.aquarium.api.entities.Parametro;
 import com.paulorpc.aquarium.api.entities.ProcedimentoTeste;
+import com.paulorpc.aquarium.api.entities.Teste;
 import com.paulorpc.aquarium.api.exceptions.NotFoundException;
 import com.paulorpc.aquarium.api.repositories.ParametroRepository;
 import com.paulorpc.aquarium.api.repositories.ProcedimentoTesteRepository;
 import com.paulorpc.aquarium.api.services.AquarioService;
 import com.paulorpc.aquarium.api.services.ParametroService;
+import com.paulorpc.aquarium.api.services.ProcedimentoTesteService;
+import com.paulorpc.aquarium.api.services.TesteService;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -26,7 +29,11 @@ public class ParametroServiceImpl implements ParametroService {
 
   @Autowired ProcedimentoTesteRepository procedimentosRep;
 
+  @Autowired ProcedimentoTesteService procedimentoService;
+
   @Autowired AquarioService aquarioService;
+
+  @Autowired TesteService testeService;
 
   @Override
   public Optional<Parametro> buscar(Long id) {
@@ -106,42 +113,47 @@ public class ParametroServiceImpl implements ParametroService {
   }
 
   @Override
+  @Transactional
   public Parametro deletar(Long id) throws Exception {
     log.info("Deletando um parâmetro: {}", id);
 
     Parametro parametro =
         parametroRep
-            .findByIdRetrieveProcedimentosTeste(id)
+            .findById(id)
             .orElseThrow(
                 () -> new NotFoundException("Não foi possível localizar o parâmetro. Id: " + id));
 
     List<ProcedimentoTeste> procedimentos = parametro.getProcedimentosTeste();
+    List<Teste> historicoTestes = parametro.getHistoricoTestes();
 
-    procedimentosRep.deleteAll(parametro.getProcedimentosTeste());
+    procedimentosRep.deleteAll(procedimentos);
+    testeService.deletarTodos(historicoTestes);
     parametro.setProcedimentosTeste(null);
+    parametro.setHistoricoTestes(null);
     parametroRep.delete(parametro);
 
     parametro.setProcedimentosTeste(procedimentos);
+    parametro.setHistoricoTestes(historicoTestes);
     return parametro;
   }
 
   @Override
+  @Transactional
   public Integer deletarTodosDoAquario(Long idAquario) throws Exception {
     log.info("Deletando todos parâmetros do aquário: {}", idAquario);
 
     List<Parametro> parametros =
-        parametroRep.findAllFromAquarioRetrieveProcedimentosTeste(idAquario).stream()
-            .distinct()
-            .collect(Collectors.toList());
+        parametroRep.findAllFromAquario(idAquario).stream().distinct().collect(Collectors.toList());
 
     parametros.forEach(
         p -> {
           procedimentosRep.deleteAll(p.getProcedimentosTeste());
+          testeService.deletarTodos(p.getHistoricoTestes());
+          p.setHistoricoTestes(null);
           p.setProcedimentosTeste(null);
         });
 
     parametroRep.deleteAll(parametros);
-
     return parametros.size();
   }
 }

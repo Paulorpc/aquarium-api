@@ -121,6 +121,16 @@ public class TipoAquario implements Serializable {
     this.aquarios = aquarios;
   }
 
+  public void addAquario(Aquario aquario) {
+    this.aquarios.add(aquario);
+    aquario.setTipoAquario(this);
+  }
+
+  public void removeAquario(Aquario aquario) {
+    this.aquarios.remove(aquario);
+    aquario.setTipoAquario(null);
+  }
+
   @Override
   public String toString() {
     return "TipoAquario [id="
